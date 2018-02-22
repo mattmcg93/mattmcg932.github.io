@@ -10,13 +10,12 @@ parallax_image_one: assets/images/startup3.jpg # These are the images used for t
 parallax_image_two: assets/images/startup3.jpg
 
 project_one: "Imaging Solar Eclipse"
-project_one_description: In 2015 I was contacted to explain how to image the upcoming solar eclipse for my astrophotograpy which I had published on social media. The interview can be seen here.
+project_one_description: Describe your project!
 project_one_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
 project_one_icon: location_on
 
 project_two: PhD Project
-project_two_description: 
-My PhD involves the estimation and representation of an object’s shape, reflectance and surface topography from photographs, eventually implementing machine learning and artificial intelligence approaches to improve techniques.
+project_two_description: Describe your project!
 project_two_url: http://emps.exeter.ac.uk/computer-science/staff/mm757
 project_two_icon: photo_camera
 
