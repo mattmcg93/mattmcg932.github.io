@@ -9,14 +9,14 @@ url: ""
 parallax_image_one: assets/images/startup3.jpg # These are the images used for the parallax background
 parallax_image_two: assets/images/startup3.jpg
 
-project_one: "First Project"
+project_one: "Imaging Solar Eclipse"
 project_one_description: Describe your project!
-project_one_url: https://github.com/jameshamann/jekyll-material-theme
+project_one_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
 project_one_icon: location_on
 
-project_two: Second Project
+project_two: PhD Project
 project_two_description: Describe your project!
-project_two_url: https://github.com/jameshamann/jekyll-material-theme
+project_two_url: http://emps.exeter.ac.uk/computer-science/staff/mm757
 project_two_icon: photo_camera
 
 
