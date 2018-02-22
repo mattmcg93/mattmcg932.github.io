@@ -142,7 +142,7 @@ skills:
 icon_size: 50 # font-size of icons in px
 colored: colored # Leave blank for black and white icons
 
-project_button: Github
+project_button: SEE MORE
 
 github: https://github.com/jameshamann/jekyll-material-theme
 medium: https://medium.com
