@@ -15,7 +15,7 @@ project_one_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
 project_one_icon: location_on
 
 project_two: PhD Project
-project_two_description: 
+project_two_description: My PhD involves the estimation and representation of an object’s shape, reflectance and surface topography from photographs, eventually implementing machine learning and artificial intelligence approaches to improve techniques.
 project_two_url: http://emps.exeter.ac.uk/computer-science/staff/mm757
 project_two_icon: photo_camera
 
