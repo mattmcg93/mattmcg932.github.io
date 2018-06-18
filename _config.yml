@@ -22,7 +22,7 @@ project_two_icon: photo_camera
 
 project_three: Photography
 project_three_description: Describe your project!
-project_three_url: http://emps.exeter.ac.uk/computer-science/staff/mm757
+project_three_url: https://photos.app.goo.gl/JDyzvJJ9JCwH9u27A
 project_three_icon: hotel
 
 
@@ -37,7 +37,7 @@ portfolio_type: cards
 syntax_highlighting: true
 # Skill icons from https://konpa.github.io/devicon/
 
-skills:
+#skills:
   - name: amazonwebservices
   - name: android
   - name: angularjs
