@@ -12,12 +12,12 @@ parallax_image_two: assets/images/startup3.jpg
 project_one: PhD Project
 project_one_description: My PhD involves the estimation and representation of an object’s shape, reflectance and surface topography from photographs, eventually implementing machine learning and artificial intelligence approaches to improve techniques.
 project_one_url: http://emps.exeter.ac.uk/computer-science/staff/mm757 
-project_one_icon: photo_camera
+project_one_icon: location_on
 
 project_two: Solar Eclipse TV Interview
 project_two_description: In 2015 I was contacted to explain how to image the upcoming solar eclipse due to my astrophotograpy which I had published on social media. The interview can be seen here.
 project_two_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
-project_two_icon: location_on
+project_two_icon: photo_camera
 
 
 project_three: Photography
