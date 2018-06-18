@@ -9,25 +9,25 @@ url: ""
 parallax_image_one: assets/images/startup3.jpg # These are the images used for the parallax background
 parallax_image_two: assets/images/startup3.jpg
 
-project_one: "Imaging Solar Eclipse"
-project_one_description: In 2015 I was contacted to explain how to image the upcoming solar eclipse due to my astrophotograpy which I had published on social media. The interview can be seen here.
-project_one_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
-project_one_icon: location_on
+project_one: PhD Project
+project_one_description: My PhD involves the estimation and representation of an object’s shape, reflectance and surface topography from photographs, eventually implementing machine learning and artificial intelligence approaches to improve techniques.
+project_one_url: http://emps.exeter.ac.uk/computer-science/staff/mm757 
+project_one_icon: photo_camera
 
-project_two: PhD Project
-project_two_description: My PhD involves the estimation and representation of an object’s shape, reflectance and surface topography from photographs, eventually implementing machine learning and artificial intelligence approaches to improve techniques.
-project_two_url: http://emps.exeter.ac.uk/computer-science/staff/mm757
-project_two_icon: photo_camera
+project_two: Solar Eclipse TV Interview
+project_two_description: In 2015 I was contacted to explain how to image the upcoming solar eclipse due to my astrophotograpy which I had published on social media. The interview can be seen here.
+project_two_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
+project_two_icon: location_on
 
 
 project_three: Photography
-project_three_description: Describe your project!
+project_three_description: A few of my photographs
 project_three_url: https://photos.app.goo.gl/JDyzvJJ9JCwH9u27A
 project_three_icon: hotel
 
 
-project_four: Fourth Project
-project_four_description: Describe your project!
+project_four: _
+project_four_description: _
 project_four_url: http://emps.exeter.ac.uk/computer-science/staff/mm757
 project_four_icon: restaurant
 
@@ -144,8 +144,8 @@ colored: colored # Leave blank for black and white icons
 
 project_button: SEE MORE
 
-github: https://github.com/jameshamann/jekyll-material-theme
-medium: https://medium.com
+github: _
+medium: _
 
 baseurl: # if your site is located at /blog or /home, enter it here, otherwise leave it empty
 url: http://localhost:4000/ #the url of your site
