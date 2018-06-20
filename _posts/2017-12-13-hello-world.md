@@ -1,46 +1,20 @@
 ---
 layout: post
-title:  "Photography"
-date:   2017-12-04 21:15:05 +0000
-image: /assets/images/startup.jpg
+title:  "ESGI at University College Dublin"
+date:   2018-06-25 21:15:05 +0000
+image: /assets/images/ESGI-Dublin.png
 
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+This summer I will attend the [European Study Group with Industry (ESGI) 141 in at University College Dublin][esgi-dublin], Ireland. Originating in Oxford in 1968, and since having been held several times a year across Europe, ESGI is a 7 day problem-solving workshop where academics work together with industry to come up with solutions to specific problems the industrial partner attendees bring along which need addressing. 
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+Some of this year's [problems][ucd-problems] include Machine Learning for breeding genetics, Short term wind portfolio output forecasting, Liquid Wicking in Hierarchical Microstructures and Optimal Scheduling of Power Generation. 
 
-Jekyll also offers powerful support for code snippets:
+I am looking forward to this ESGI workshop very much since it will be my first time attending.
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
 
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+[esgi-dublin]: https://maths.ucd.ie/esgi141/
+[ucd-problems]: https://maths.ucd.ie/esgi141/problems.html
 
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
 
-Jekyll also offers powerful support for code snippets:
-
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
-
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
