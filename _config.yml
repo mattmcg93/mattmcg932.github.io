@@ -10,7 +10,8 @@ parallax_image_one: assets/images/startup3.jpg # These are the images used for t
 parallax_image_two: assets/images/startup3.jpg
 
 project_one: PhD Project
-project_one_description: My PhD involves the estimation of an object’s shape, reflectance and surface topography from photographs using machine learning and artificial intelligence approaches.
+project_one_description: My PhD involves the estimation of an object’s shape, reflectance and surface topography from 
+raphs using machine learning and artificial intelligence approaches.
 project_one_url: http://emps.exeter.ac.uk/computer-science/staff/mm757 
 project_one_icon: location_on
 
