@@ -19,17 +19,15 @@ project_two_description: I was contacted for an interview and asked to explain h
 project_two_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
 project_two_icon: photo_camera
 
+project_three: RTI Group at Exeter
+project_three_description: The group in which I am a postgraduate student consists of a range of personnel from various disciplines including computer science, natrual science and material science.
+project_three_url: https://sites.google.com/a/exeter.ac.uk/rti/home
+project_three_icon: restaurant
 
-project_three: Photography
-project_three_description: A few of my photographs
-project_three_url: https://photos.app.goo.gl/JDyzvJJ9JCwH9u27A
-project_three_icon: hotel
-
-
-project_four: RTI Group at Exeter
-project_four_description: The group in which I am a postgraduate student consists of a range of personnel from various disciplines including computer science, natrual science and material science.
-project_four_url: https://sites.google.com/a/exeter.ac.uk/rti/home
-project_four_icon: restaurant
+project_four: Photography
+project_four_description: A few of my photographs
+project_four_url: https://photos.app.goo.gl/JDyzvJJ9JCwH9u27A
+project_four_icon: hotel
 
 portfolio_heading: Portfolio
 portfolio_type: cards
