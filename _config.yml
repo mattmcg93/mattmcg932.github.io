@@ -10,12 +10,12 @@ parallax_image_one: assets/images/startup3.jpg # These are the images used for t
 parallax_image_two: assets/images/startup3.jpg
 
 project_one: PhD Project
-project_one_description: My PhD involves the estimation and representation of an object’s shape, reflectance and surface topography from photographs, eventually implementing machine learning and artificial intelligence approaches to improve techniques.
+project_one_description: My PhD involves the estimation of an object’s shape, reflectance and surface topography from photographs using machine learning and artificial intelligence approaches.
 project_one_url: http://emps.exeter.ac.uk/computer-science/staff/mm757 
 project_one_icon: location_on
 
 project_two: Solar Eclipse TV Interview
-project_two_description: In 2015 I was contacted to explain how to image the upcoming solar eclipse due to my astrophotograpy which I had published on social media. The interview can be seen here.
+project_two_description: I was contacted for an interview and asked to explain how to image the 2015 solar eclipse. I also discussed some astrophotograpy which I had posted online. 
 project_two_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
 project_two_icon: photo_camera
 
@@ -26,10 +26,10 @@ project_three_url: https://photos.app.goo.gl/JDyzvJJ9JCwH9u27A
 project_three_icon: hotel
 
 
-project_four: _
-project_four_description: _
-project_four_url: http://emps.exeter.ac.uk/computer-science/staff/mm757
-project_four_icon: restaurant
+#project_four: _
+#project_four_description: _
+#project_four_url: http://emps.exeter.ac.uk/computer-science/staff/mm757
+#project_four_icon: restaurant
 
 portfolio_heading: Portfolio
 portfolio_type: cards
