@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "SIAM Conference 2018"
-date:   2017-12-04 21:15:05 +0000
+date:   2018-06-09 21:15:05 +0000
 image: /assets/images/AN18-Logo-crop392x357.png
 ---
 This summer I will present at the Society for Industrial and Applied Mathematics [(SIAM) Annual Meeting (AN18)][SIAM-link] in Portland, Oregon, US. My abstract below was accepted and can be found [here][my-abstract].
