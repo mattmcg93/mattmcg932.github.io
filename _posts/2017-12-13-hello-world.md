@@ -5,7 +5,9 @@ date:   2018-06-25 21:15:05 +0000
 image: /assets/images/ESGI-Dublin.png
 
 ---
-This summer I will attend the [European Study Group with Industry (ESGI) 141 in at University College Dublin][esgi-dublin], Ireland. Originating in Oxford in 1968, and since having been held several times a year across Europe, ESGI is a 7 day problem-solving workshop where academics work together with industry to come up with solutions to specific problems the industrial partner attendees bring along which need addressing. 
+This summer I will attend the [European Study Group with Industry (ESGI) 141 in at University College Dublin][esgi-dublin], Ireland.
+
+Originating in Oxford in 1968, and since having been held several times a year across Europe, ESGI is a 7 day problem-solving workshop where academics work together with industry to come up with solutions to specific problems the industrial partner attendees bring along which need addressing. 
 
 Some of this year's [problems][ucd-problems] include Machine Learning for breeding genetics, Short term wind portfolio output forecasting, Liquid Wicking in Hierarchical Microstructures and Optimal Scheduling of Power Generation. 
 
