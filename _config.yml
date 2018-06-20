@@ -14,15 +14,15 @@ project_one_description: My PhD involves the estimation of an object’s shape, 
 project_one_url: http://emps.exeter.ac.uk/computer-science/staff/mm757 
 project_one_icon: location_on
 
-project_two: Solar Eclipse TV Interview
-project_two_description: I was contacted for an interview and asked to explain how to image the 2015 solar eclipse. I also discussed some astrophotograpy which I had posted online. 
-project_two_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
-project_two_icon: photo_camera
+project_two: RTI Group at Exeter
+project_two_description: The group in which I am a postgraduate student consists of a range of personnel from various disciplines including computer science, natrual science and material science.
+project_two_url: https://sites.google.com/a/exeter.ac.uk/rti/home
+project_two_icon: restaurant
 
-project_three: RTI Group at Exeter
-project_three_description: The group in which I am a postgraduate student consists of a range of personnel from various disciplines including computer science, natrual science and material science.
-project_three_url: https://sites.google.com/a/exeter.ac.uk/rti/home
-project_three_icon: restaurant
+project_three: Solar Eclipse TV Interview
+project_three_description: I was contacted for an interview and asked to explain how to image the 2015 solar eclipse. I also discussed some astrophotograpy which I had posted online. 
+project_three_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
+project_three_icon: photo_camera
 
 project_four: Photography
 project_four_description: A few of my photographs
