@@ -18,7 +18,7 @@ The program for the conference can be found [here][conf-prog].
 I look forward to visiting the United States for the first time and hearing about other presenter's research.
 
 
-[blog-link]: http://www.mattmcguigan.co.uk/2018/06/25/hello-world/
+[blog-link]: http://www.mattmcguigan.co.uk/2018/06/09/welcome-to-material-jekyll/
 [SIAM-link]: https://www.siam.org/Conferences/CM/Main/an18
 [my-abstract]: http://meetings.siam.org/sess/dsp_talk.cfm?p=92079
 [conf-prog]: http://meetings.siam.org/program.cfm?CONFCODE=AN18
