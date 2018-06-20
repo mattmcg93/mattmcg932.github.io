@@ -1,45 +1,23 @@
 ---
 layout: post
-title:  "Welcome to Jekyll!"
+title:  "SIAM Conference 2018"
 date:   2017-12-04 21:15:05 +0000
-image: /assets/images/twoscreen.jpg
+image: /assets/images/AN18-Logo-crop392x357.png
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+This summer I will present at the Society for Industrial and Applied Mathematics [(SIAM) Annual Meeting (AN18)][SIAM-link] in Portland, Oregon, US. My abstract below was accepted and can be found [here][my-abstract].
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+Abstract. Reflectance Transformation Imaging was developed in 2001 by Malzbender at HP Labs. The technique aims to model the reflectance of an object under varying light conditions using a simple bi-quadratic polynomial. The process involves capturing images of a static scene from a stationary camera whilst moving a light source around in an equidistant (hemispherical) sequence. The method is inexpensive as it only requires a camera and a light source, and can obtain surface normal measurements more accurate than laser scanning for low relief variances in a surface. The technique is popular with cultural heritage imagers, who often are interested in qualitative analysis rather than quantitative. For this reason the technique has remained largely unchanged with end users since its conception. Methods to improve the accuracy of the surface normals obtained from the technique have been investigated. Chiefly, the mathematics make a false assumption that the light rays from the illumination source (a handheld torch or LED in a dome rig) are parallel across the image plane. This incorrect assumption makes the computation time much faster, but can result in surface normals being severely distorted around the image periphery (particularly for larger scenes – as compared to close ups of ancient coinage). A method to correct these distortions has been developed, and the results show a marked improvement in surface normal data after correcting for the fact that the light rays are not parallel. 
 
-Jekyll also offers powerful support for code snippets:
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+The program for the conference can be found [here][conf-prog].
 
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+I look forward to visiting the United States for the first time and hearing about other presenter's research.
 
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
 
-Jekyll also offers powerful support for code snippets:
+[SIAM-link]: https://www.siam.org/Conferences/CM/Main/an18
+[my-abstract]: http://meetings.siam.org/sess/dsp_talk.cfm?p=92079
+[conf-prog]: http://meetings.siam.org/program.cfm?CONFCODE=AN18
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
