@@ -4,7 +4,7 @@ title:  "IDL Photo Competition"
 date:   2018-05-08 21:15:05 +0000
 image: /assets/images/img_20171221_141659_377.jpg
 ---
-[I entered a photograph into the Exeter University Optics and Photonics Society Photography competition and won the Audience Favourite prize. ][blog-link].
+[I entered a photograph into the Exeter University Optics and Photonics Society Photography competition and won the Audience Favourite prize. ][blog-link]
 
 
 
