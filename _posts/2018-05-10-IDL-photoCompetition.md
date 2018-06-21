@@ -8,7 +8,7 @@ I entered a photograph into the Exeter University Optics and Photonics Society P
 
 
 
-The Exeter University Optics and Photonics Society held a photo competition, for which the entries (including mine) can be found [here][gallery-link]. The society were kind enough to award me the prize for Audience Favourite which included my framed photograph (seen [here][fb-prize]) and an Amazon giftcard. I was very pleased to receive this. My photo of the Exeter University clocktower can be seen [here][my-pic] on the Optics and Photonics Society webiste.
+The Exeter University Optics and Photonics Society held a photo competition, for which the entries (including mine) can be found [here][gallery-link]. The society were kind enough to award me the prize for Audience Favourite which included my framed photograph (seen [here][fb-prize]) and an Amazon giftcard. I was very pleased to receive this. My photo of the Exeter University clocktower can be seen [here][my-pic] on the Optics and Photonics Society website.
 
 ![My photograph which won Audience Photo Favourite](/assets/images/SmallPic.png)
 
