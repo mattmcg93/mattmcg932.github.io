@@ -14,7 +14,7 @@ The Exeter University Optics and Photonics Society held a photo competition, for
 
 
 
-[blog-link]: http://www.mattmcguigan.co.uk/2017/12/04/IDL-photoCompetition/
+[blog-link]: http://www.mattmcguigan.co.uk/2018/05/08/IDL-photoCompetition/
 [gallery-link]: https://euops.wordpress.com/2018/05/08/idl-photo-competition-light-in-nature/
 [fb-prize]: https://www.facebook.com/EXETEROPS/photos/p.2064514590460263/2064514590460263/?type=3&theater
 [my-pic]: https://euops.files.wordpress.com/2018/05/img_20171221_141659_377.jpg
