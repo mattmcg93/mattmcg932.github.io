@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "SIAM Conference 2018"
+title:  "SIAM Conference 2018 in Portland, Oregon."
 date:   2018-06-09 21:15:05 +0000
 image: /assets/images/AN18-Logo-crop392x357.png
 ---
