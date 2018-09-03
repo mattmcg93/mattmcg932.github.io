@@ -3,7 +3,7 @@ layout: post
 title:  "CASTEP Training Workshop | University of Oxford"
 date:   2018-08-24 21:15:05 +0000
 excerpt: "I attended the CASTEP electron microscopy training workshop in Oxford"
-image: /assets/images/OxfordCameraBig.png
+image: /assets/images/OxfordCameraSmall.png
 ---
 I attended the CASTEP electron microscopy training workshop at the University of Oxford.
 
