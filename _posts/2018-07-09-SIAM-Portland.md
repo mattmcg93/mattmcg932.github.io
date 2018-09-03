@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "SIAM Conference 2018 in Portland"
+title:  "Society for Industrial and Applied Mathematics Conference 2018 in Portland"
 date:   2018-07-09 21:15:05 +0000
 excerpt: "This summer I will present at the Society for Industrial and Applied Mathematics (SIAM) Annual Meeting (AN18) in Portland, Oregon, US"
 image: /assets/images/AN18-Logo-crop392x357.png
