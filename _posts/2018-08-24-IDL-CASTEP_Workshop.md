@@ -2,7 +2,7 @@
 layout: post
 title:  "CASTEP Training Workshop | University of Oxford"
 date:   2018-08-24 21:15:05 +0000
-excerpt: "I attended the CASTEP electron microscopy training workshop at the University of Oxford. I refreshed my knowledge on solid state physics and enjoyed being updated on current research. I met plenty of interesting people from different disciplines here too."
+excerpt: "I attended the CASTEP electron microscopy training workshop at Oxford University. I refreshed my knowledge on solid state physics and enjoyed being updated on current research."
 image: /assets/images/OxfordCameraSmallPreview.png
 ---
 I attended the CASTEP electron microscopy training workshop at the University of Oxford. I refreshed my knowledge on solid state physics and enjoyed being updated on current research. I met plenty of interesting people from different disciplines here too.
