@@ -1,15 +1,15 @@
 ---
 layout: post
-title:  "CASTEP Training Workshop in Oxford"
+title:  "CASTEP Training Workshop | University of Oxford"
 date:   2018-08-24 21:15:05 +0000
 excerpt: "I attended the CASTEP electron microscopy training workshop in Oxford"
 image: /assets/images/img_20171221_141659_377.jpg
 ---
-I entered a photograph into the Exeter University Optics and Photonics Society Photography competition and won the Audience Favourite prize.
+I attended the CASTEP electron microscopy training workshop at the University of Oxford.
+
+The workshop was aimed at researchers who wish to learn about density functional theory (DFT) methods and simulating crystalline interactions for solid state physics and chemistry. The 2018 workshop also included simulations supporting electron microscopy which was more relevant to me, because given my background in physics I am interested in looking at ways of developing a reflectance technique which could be used in electron microscopy imaging. I found the workshop great to meet interesting people and useful to learn some new things about electron microscopy as well as refresh my knowledge on the area as a whole.
 
 
-
-The Exeter University Optics and Photonics Society held a photo competition, for which the entries (including mine) can be found [here][gallery-link]. The society were kind enough to award me the prize for Audience Favourite which included my framed photograph (seen [here][fb-prize]) and an Amazon giftcard. I was very pleased to receive this. My photo of the Exeter University clocktower can be seen [here][my-pic] on the Optics and Photonics Society website.
 
 ![My photograph which won Audience Photo Favourite](/assets/images/SmallPic.png)
 
@@ -18,9 +18,7 @@ The Exeter University Optics and Photonics Society held a photo competition, for
 
 
 
-[blog-link]: http://www.mattmcguigan.co.uk/2018/05/08/IDL-photoCompetition/
-[gallery-link]: https://euops.wordpress.com/2018/05/08/idl-photo-competition-light-in-nature/
-[fb-prize]: https://www.facebook.com/EXETEROPS/photos/p.2064514590460263/2064514590460263/?type=3&theater
-[my-pic]: https://euops.files.wordpress.com/2018/05/img_20171221_141659_377.jpg
+[castep-link]: http://www.castep.org/CASTEP/CASTEP
+
 
 
