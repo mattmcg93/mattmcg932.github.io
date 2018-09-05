@@ -4,7 +4,7 @@
       <div class="card-image">
         <img src="../assets/images/desk.jpg">
         <span class="card-title"><a style="color:white">{{ post.title | escape }}</a></span>
-         <p><a href="{{site.project_one_url}}">{{site.project_button}}</a></p>
+        <a id="{{site.project_one_url}}}" class="btn-floating halfway-fab waves-effect waves-light red" href="{{ site.project_one_url} | relative_url }}"><i class="material-icons">more_horiz</i></a>
       </div>
       <div class="card-content">
         <a href="{{ site.project_one_url | relative_url }}">
