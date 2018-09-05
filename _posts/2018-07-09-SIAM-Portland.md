@@ -2,10 +2,10 @@
 layout: post
 title:  "Industrial Maths (SIAM) Conference 2018 in Portland"
 date:   2018-07-09 21:15:05 +0000
-excerpt: "This summer I will present at the Society for Industrial and Applied Mathematics (SIAM) Annual Meeting (AN18) in Portland, Oregon, US"
+excerpt: "This summer I will present at the Society for Industrial and Applied Mathematics (SIAM) Annual Meeting (AN18) in Portland, Oregon, US. My abstract can be found here and on the SIAM website."
 image: /assets/images/AN18-Logo-crop392x357.png
 ---
-This summer I will present at the Society for Industrial and Applied Mathematics (SIAM) Annual Meeting (AN18) in Portland, Oregon, US
+This summer I will present at the Society for Industrial and Applied Mathematics (SIAM) Annual Meeting (AN18) in Portland, Oregon, US.
 
 SIAM are a community of 14500+ applied mathematicians and computational scientists worldwide. SIAM hosts conferences as well as publishing books and journals. At the [SIAM AN18 meeting][SIAM-link] I will discuss my PhD project and results I have achieved through my first and second year. 
 
