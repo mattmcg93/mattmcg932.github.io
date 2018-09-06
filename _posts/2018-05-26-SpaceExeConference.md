@@ -13,7 +13,7 @@ Video talks from the conference and information about what we do as a society an
  
 
 
-![Myself and the team at a stargazing social.](/assets/images/SpaceExeStarGaze.png)
+![Myself and the team at a stargazing social.](/assets/images/SpaceExeStarGaze2.png)
 ![Space Exe Conference 2018. Ian Jones, CEO of Goonhilly Earth Station Ltd - satellite and space communications.
 .](/assets/images/Goonhilly.jpg)
 
