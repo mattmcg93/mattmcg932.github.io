@@ -10,13 +10,13 @@ Space:Exe for which I am Outreach officer at the University of Exeter organised 
 Our student led conference was a resounding success, with engaging talks and a great turnout of students and interested members of the community, with some people even travelling down from Bristol.
 
 Video talks from the conference and information about what we do as a society and the speakers can be found [here][[conf-link].
- 
 
-
-![Myself and the team at a stargazing social.](/assets/images/SpaceExeStarGaze2.png)
 ![Space Exe Conference 2018. Ian Jones, CEO of Goonhilly Earth Station Ltd - satellite and space communications.
 .](/assets/images/Goonhilly2.jpg)
+Space Exe Conference 2018. Ian Jones, CEO of Goonhilly Earth Station Ltd - satellite and space communications.
 
+![Myself and the team at a stargazing social.](/assets/images/SpaceExeStarGaze2.png)
+ Myself and the team at a stargazing social.
 
 
 [conf-link]: https://spaceexe.org/conf/2018/
