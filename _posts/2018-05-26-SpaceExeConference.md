@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "Arranging the Space:Exe Space Science Conference"
+title:  "Arranging the Space Exe Space Science Conference"
 date:   2018-05-26 21:15:05 +0000
-excerpt: "Space:Exe for which I am Outreach officer at Exeter University organised a spectacular conference with speakers from Met Office, Goonhilly Earth Station & UK ambassador for NASA’s OSIRIS REx."
+excerpt: "I am Outreach officer Space Exe at Exeter University, who organised a spectacular conference with speakers from Met Office, Goonhilly Earth Station & UK ambassador for NASA’s OSIRIS REx."
 
-image: /assets/images/Goonhilly2.jpg
+image: /assets/images/Goonhilly.jpg
 ---
-Space:Exe for which I am Outreach officer at the University of Exeter organised a spectacular conference with speakers from Met Office, Goonhilly Earth Station, University of Exeter and the UK ambassador for NASA’s OSIRIS REx.
+I am the Outreach officer Space Exe at the University of Exeter, who organised a spectacular conference with speakers from Met Office, Goonhilly Earth Station, University of Exeter and the UK ambassador for NASA’s OSIRIS REx.
 Our student led conference was a resounding success, with engaging talks and a great turnout of students and interested members of the community, with some people even travelling down from Bristol.
 
 Video talks from the conference and information about what we do as a society and the speakers can be found [here][conf-link].
