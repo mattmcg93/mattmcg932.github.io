@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Space:Exe Space Science Conference"
+title:  "Arranging the Space:Exe Space Science Conference"
 date:   2018-05-26 21:15:05 +0000
 excerpt: "Space:Exe for which I am Outreach officer at Exeter University organised a spectacular conference with speakers from Met Office, Goonhilly Earth Station & UK ambassador for NASA’s OSIRIS REx."
 
