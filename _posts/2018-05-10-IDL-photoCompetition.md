@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "IDL Photo Competition"
+title:  "International Day of Light Photo Competition"
 date:   2018-05-08 21:15:05 +0000
 excerpt: "I entered a photograph into the Exeter University Optics and Photonics Society Photography competition and won the Audience Favourite prize."
 image: /assets/images/img_20171221_141659_377.jpg
