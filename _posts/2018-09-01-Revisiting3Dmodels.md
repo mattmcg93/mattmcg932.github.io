@@ -17,8 +17,8 @@ I aim to develop 3D models generated from RTI and post the results [here][models
  
 The original coin from one of the source images in the image set.
 
+![3D model of a coin in a VR environment I developed.](/assets/images/3D_coin.gif =10x)
 
-![3D model of a coin in a VR environment I developed.](/assets/images/3D_coin.gif)
  
 3D model of a coin in a VR environment I developed.
 
