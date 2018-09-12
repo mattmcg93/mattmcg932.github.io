@@ -11,12 +11,12 @@ Our student led conference was a resounding success, with engaging talks and a g
 
 Video talks from the conference and information about what we do as a society and the speakers can be found [here][conf-link].
 
-![Space Exe Conference 2018. Ian Jones, CEO of Goonhilly Earth Station Ltd - satellite and space communications.
-.](/assets/images/Goonhilly2.jpg)
+<img src="/assets/images/Goonhilly2.jpg" alt="drawing" width="350"/>
  
 Space Exe Conference 2018. Ian Jones, CEO of Goonhilly Earth Station Ltd - satellite and space communications.
 
-![Myself and the team at a stargazing social.](/assets/images/SpaceExeStarGaze2.png)
+<img src="/assets/images/SpaceExeStarGaze2.png" alt="drawing" width="350"/>
+
  
  Myself and the team at a stargazing social.
 
