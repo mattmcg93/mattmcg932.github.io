@@ -13,7 +13,7 @@ I have also developed a Virtual Reality (VR) environment to view these 3D models
 I aim to develop 3D models generated from RTI and post the results [here][models-link].
 
 
-![The original coin from one of the source images in the image set.](/assets/images/IMG_0817.jpg)
+![The original coin from one of the source images in the image set.](/assets/images/IMG_0817a.png)
  
 The original coin from one of the source images in the image set.
 
@@ -25,5 +25,5 @@ The original coin from one of the source images in the image set.
 
 
 
-[models-link]: https://spaceexe.org/conf/2018/
+[models-link]: https://sketchfab.com/MatthewMcGuigan
 
