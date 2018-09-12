@@ -11,7 +11,7 @@ The [CASTEP workshop][castep-link] was aimed at researchers who wish to learn ab
  
 
 
-![Quick snap of Radcliffe Camera I took during the group quiz.](/assets/images/OxfordCameraSmall.png)
+<img src="/assets/images/OxfordCameraSmall.png" alt="drawing" width="340"/>
  
 Quick snap of Radcliffe Camera I took during the group quiz.
 
