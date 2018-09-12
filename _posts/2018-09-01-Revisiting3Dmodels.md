@@ -4,7 +4,7 @@ title:  "Revisiting 3D Models from RTI"
 date:   2018-09-01 21:15:05 +0000
 excerpt: "Improving surface normal vectors from Reflectance Transformation Imaging (RTI) has been the primary focus of my PhD. However, I have intermittently spent some time developing 3D models"
 
-image: /assets/images/3D_ModelBanner
+image: /assets/images/3D_ModelBanner.png
 ---
 Improving surface normal vectors from Reflectance Transformation Imaging (RTI) has been the primary focus of my PhD. 
 However, I have intermittently spent some time developing 3D models from RTI surface normal data.
