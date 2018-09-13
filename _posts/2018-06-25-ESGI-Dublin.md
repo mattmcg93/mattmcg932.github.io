@@ -19,8 +19,9 @@ More information on the Workshop at University College Dublin can be found [here
 
 I thoroughly enjoyed this ESGI workshop, and would like to attend again given it was my first time attending.
 
-
+<div class="center">
 <img src="/assets/images/Dublin2.jpg" alt="drawing" width="340"/>
+</div>
  
 The campus sign during the amazing weather we had.
 
