@@ -16,15 +16,18 @@ I aim to develop 3D models generated from RTI and post the results [here][models
 <div class="center">
 <img src="/assets/images/IMG_0817a.png" alt="drawing" width="340" />
 </div>
- 
+
+<div class="center">
 The original coin from one of the source images in the image set.
+</div>
 
 <div class="center">
 <img src="/assets/images/3D_coin.gif" alt="drawing" width="340" />
 </div>
- 
-3D model of a coin in a VR environment I developed.
 
+ <div class="center">
+3D model of a coin in a VR environment I developed.
+</div>
 
 
 

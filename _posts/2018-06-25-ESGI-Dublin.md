@@ -23,8 +23,9 @@ I thoroughly enjoyed this ESGI workshop, and would like to attend again given it
 <img src="/assets/images/Dublin2.jpg" alt="drawing" width="340"/>
 </div>
  
+ <div class="center">
 The campus sign during the amazing weather we had.
-
+</div>
 
 [my-blog1]: http://www.mattmcguigan.co.uk/2018/06/25/hello-world/
 [esgi-dublin]: https://maths.ucd.ie/esgi141/

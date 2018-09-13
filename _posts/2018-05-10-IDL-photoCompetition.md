@@ -13,9 +13,10 @@ The Exeter University Optics and Photonics Society held a photo competition, for
 
 <div class="center">
 <img src="/assets/images/SmallPic.png" alt="drawing" width="340"/>
- </div>
+</div>
+<div class="center">
 My photograph which won Audience Photo Favourite
-
+</div>
 
 
 

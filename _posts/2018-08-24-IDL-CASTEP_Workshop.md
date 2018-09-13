@@ -12,11 +12,10 @@ The [CASTEP workshop][castep-link] was aimed at researchers who wish to learn ab
 
 <div class="center">
 <img src="/assets/images/OxfordCameraSmall.png" alt="drawing" width="340"/>
- 
+</div>
+<div class="center">
 Quick snap of Radcliffe Camera I took during the group quiz.
 </div>
-
-
 
 
 
