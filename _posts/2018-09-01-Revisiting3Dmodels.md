@@ -19,8 +19,9 @@ I aim to develop 3D models generated from RTI and post the results [here][models
  
 The original coin from one of the source images in the image set.
 
-<img src="/assets/images/3D_coin.gif" alt="drawing" width="340" class="center"/>
-
+<div class="center">
+<img src="/assets/images/3D_coin.gif" alt="drawing" width="340" />
+</div>
  
 3D model of a coin in a VR environment I developed.
 
