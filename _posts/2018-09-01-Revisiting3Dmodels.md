@@ -12,12 +12,12 @@ I have also developed a Virtual Reality (VR) environment to view these 3D models
 
 I aim to develop 3D models generated from RTI and post the results [here][models-link].
 
-<img src="/assets/images/IMG_0817a.png" alt="drawing" width="340"/ class="center">
+<img src="/assets/images/IMG_0817a.png" alt="drawing" width="340" class="center"/>
 
  
 The original coin from one of the source images in the image set.
 
-<img src="/assets/images/3D_coin.gif" alt="drawing" width="340"/ class="center">
+<img src="/assets/images/3D_coin.gif" alt="drawing" width="340" class="center"/>
 
  
 3D model of a coin in a VR environment I developed.
