@@ -1,0 +1,17 @@
+RTI Coin 3D Model (preliminary)
+
+Reflectance Transformation Imaging 3D Model (preliminary) of a coin on paper. There is a crease in the paper which has been represented accurately, however the edges of the coin are not well defined.
+
+This model is somewhat crude since it was generated very quickly, but I hope to improve this process soon.
+
+Uploaded 5 minutes ago September 12th 2018
+Cultural Heritage & History
+Science & Technology
+matthew
+imaging
+photogrammetry
+transformation
+rti
+exeter
+reflectance
+mcguigan
