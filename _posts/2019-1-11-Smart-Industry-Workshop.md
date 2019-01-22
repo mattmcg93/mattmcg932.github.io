@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "CASTEP Training Workshop | University of Oxford"
-date:   2019-01-21 21:15:05 +0000
-excerpt: "I attended the CASTEP electron microscopy training workshop at Oxford University. I refreshed my knowledge on solid state physics and enjoyed being updated on current research."
-image: /assets/images/OxfordCameraSmallPreview.png
+title:  "Smart Industry Robotics and Automation Workshop | Nottingham"
+date:   2019-1-11 21:15:05 +0000
+excerpt: "I was kindly awarded a travel bursary from Nottingham Trent University and presented at their Smart Industry Robotics and Automation Workshop."
+image: /assets/images/NottinghamRobotics.png
 ---
 I was kindly awarded a travel bursary from Nottingham Trent University and presented a talk at their Smart Industry Robotics and Automation Workshop. I found the workshop very interesting and learned from a variety of experts from industry and academia about how machine vision and robotics are being used to improve society and hopefully even save lives in the future in the case of forrest fires.
 
