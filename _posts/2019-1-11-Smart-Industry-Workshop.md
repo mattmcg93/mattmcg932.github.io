@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "CASTEP Training Workshop | University of Oxford"
+title:  "Smart Industry Robotics and Automation Workshop | Nottingham"
 date:   2019-1-11 21:15:05 +0000
 excerpt: "I attended the CASTEP electron microscopy training workshop at Oxford University. I refreshed my knowledge on solid state physics and enjoyed being updated on current research."
 image: /assets/images/OxfordCameraSmallPreview.png
