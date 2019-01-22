@@ -2,26 +2,32 @@
 layout: post
 title:  "Smart Industry Robotics and Automation Workshop | Nottingham"
 date:   2019-1-11 21:15:05 +0000
-excerpt: "I attended the CASTEP electron microscopy training workshop at Oxford University. I refreshed my knowledge on solid state physics and enjoyed being updated on current research."
+excerpt: "I was kindly awarded a travel bursary from Nottingham Trent University and presented a talk and poster at their Smart Industry Robotics and Automation Workshop. 
 image: /assets/images/NottinghamRobotics.png
 ---
-I attended the CASTEP electron microscopy training workshop at the University of Oxford. I refreshed my knowledge on solid state physics and enjoyed being updated on current research. I met plenty of interesting people from different disciplines here too.
+I was kindly awarded a travel bursary from Nottingham Trent University and presented a talk and poster at their Smart Industry Robotics and Automation Workshop. I found the workshop very interesting and learned from a variety of experts from industry and academia about how machine vision and robotics are being used to improve society and hopefully even save lives in the future in the case of forrest fires.
 
-The [CASTEP workshop][castep-link] was aimed at researchers who wish to learn about density functional theory (DFT) methods and simulating crystalline interactions for solid state physics and chemistry. The 2018 workshop also included simulations supporting electron microscopy which was more relevant to me given my background in physics; I am interested in looking at ways of developing a reflectance technique which could be used in electron microscopy imaging. I found the workshop great to meet interesting people and useful to learn some new things about electron microscopy as well as refresh my knowledge on the area as a whole.
- 
+The [Smart Industry Workshop][SmartWorkshop-link] was great for networking as it was aimed at bringing researchers and industry experts together who use automation and robotics in their work. The workshop also included a hands on tutorial on using the field-programmable gate array (FPGA) using the Sundance VCS-1. The workshop was thoroughly enjoyable and I met some very interesting people who's work I will follow and keep in touch with.
+
+My poster can be found on page 14 of their poster section [here.] [poster-link] 
+
 
 <div class="center">
-<img src="/assets/images/OxfordCameraSmall.png" alt="drawing" width="340"/>
+<img src="/assets/images/MePresentNottingham.JPG" alt="drawing" width="340"/>
 </div>
 <div class="center">
-Quick snap of Radcliffe Camera I took during the group quiz.
+Me presenting my current research of remote fingerprint extraction from specular surfaces using multi light imaging.
+</div>
+
+<div class="center">
+<img src="/assets/images/NottinghamGroupPic.JPG" alt="drawing" width="340"/>
+</div>
+<div class="center">
+The group from academia and industry who took part.
 </div>
 
 
-
-
-
-[castep-link]: http://www.castep.org/CASTEP/CASTEP
-
+[SmartWorkshop-link]: http://smartindustry4.uk/
+[poster-link] http://smartindustry4.uk/wp-content/uploads/2019/01/Smart-Industry-Workshop-Posters.pdf
 
 
