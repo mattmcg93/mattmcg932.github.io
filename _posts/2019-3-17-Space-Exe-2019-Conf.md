@@ -13,11 +13,7 @@ Featuring talks from
 
 <img src="/assets/images/Speaker1.png" alt="drawing" width="100"/> <img src="/assets/images/Speaker2.png" alt="drawing" width="100"/> <img src="/assets/images/Speaker3.png" alt="drawing" width="100"/> <img src="/assets/images/Speaker4.png" alt="drawing" width="100"/>
 
-Alexis Lau - University of Exeter, Rungployphan Kieokaew - University of Exeter, Kyle Lamb - University of Plymouth
-
-
-
-Freddy Wordingham - University of Exeter
+Alexis Lau - University of Exeter, Rungployphan Kieokaew - University of Exeter, Kyle Lamb - University of Plymouth, Freddy Wordingham - University of Exeter
 
 <img src="/assets/images/Speaker5.png" alt="drawing" width="100"/> <img src="/assets/images/Speaker6.png" alt="drawing" width="100"/> 
 <img src="/assets/images/Speaker7.png" alt="drawing" width="100"/> <img src="/assets/images/Speaker8.png" alt="drawing" width="100"/>
