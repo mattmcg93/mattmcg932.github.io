@@ -5,7 +5,7 @@ date:   2019-1-11 21:15:05 +0000
 excerpt: "In my role as Outreach officer for Space Exe at Exeter University, myself and the rest of the committee are organising another ambitious conference with speakers from Met Office, various universities and various observatories."
 image: /assets/images/NottinghamRobotics.png
 ---
-Tickets Available from: https://spaceexe.org/conf/2019
+Tickets Available from the [conference website.][Conference-link] 
 17th March 2019 9:30 - 17:30
 
 Featuring talks from 
@@ -69,7 +69,7 @@ The group from academia and industry who took part.
 </div>
 
 
-[SmartWorkshop-link]: http://smartindustry4.uk/
+[Conference-link]: https://spaceexe.org/conf/2019
 [poster-link]: http://smartindustry4.uk/wp-content/uploads/2019/01/Smart-Industry-Workshop-Posters.pdf
 
 
