@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Smart Industry Robotics and Automation Workshop | Nottingham"
+title:  "Robotics and Automation Workshop | Nottingham"
 date:   2019-1-11 21:15:05 +0000
 excerpt: "I was kindly awarded a travel bursary from Nottingham Trent University and presented at their Smart Industry Robotics and Automation Workshop."
 image: /assets/images/NottinghamRobotics.png
