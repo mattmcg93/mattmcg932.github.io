@@ -18,7 +18,7 @@ Tickets Available from the [conference website.][Conference-link]
 This is our flyer for this year's conference:
 
 <div class="center">
-<img src="/assets/images/poster.pdf" alt="drawing" width="340"/>
+<img src="/assets/images/poster-1.png" alt="drawing" width="340"/>
 </div>
 
 
