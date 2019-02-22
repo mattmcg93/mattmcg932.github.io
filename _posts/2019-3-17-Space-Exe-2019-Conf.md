@@ -2,8 +2,8 @@
 layout: post
 title:  "Space Exe 2019 Conference "
 date:   2019-3-17 21:15:05 +0000
-excerpt: "In my role as Outreach officer for Space Exe at Exeter University, myself and the rest of the committee are organising another ambitious conference with speakers from Met Office, various universities and various observatories."
-image: /assets/images/NottinghamRobotics.png
+excerpt: "Myself and the rest of the committee are organising another ambitious conference with speakers from Met Office, various universities and various observatories."
+image: /assets/images/SpaceExe2019conf(1).png
 ---
 Following the resounding success of our 2018 conference, myself and the rest of the committee are organising another ambitious event. In my role as Outreach officer for Space Exe at the University of Exeter, we have reached out to speakers from the Met Office, various universities and various observatories. Our student led conference hopes to be as successful as last year, with engaging talks and a great turnout of students and interested members of the community, with some people even travelling down from Bristol.
 
