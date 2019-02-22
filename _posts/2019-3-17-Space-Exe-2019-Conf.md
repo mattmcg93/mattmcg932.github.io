@@ -2,7 +2,7 @@
 layout: post
 title:  "Space Exe 2019 Conference "
 date:   2019-1-11 21:15:05 +0000
-excerpt: "I was kindly awarded a travel bursary from Nottingham Trent University and presented at their Smart Industry Robotics and Automation Workshop."
+excerpt: "In my role as Outreach officer for Space Exe at Exeter University, myself and the rest of the committee are organising another ambitious conference with speakers from Met Office, various universities and various observatories."
 image: /assets/images/NottinghamRobotics.png
 ---
 I was kindly awarded a travel bursary from Nottingham Trent University and presented a talk at their Smart Industry Robotics and Automation Workshop. I found the workshop very interesting and learned from a variety of experts from industry and academia about how machine vision and robotics are being used to improve society and hopefully even save lives in the future in the case of forrest fires.
