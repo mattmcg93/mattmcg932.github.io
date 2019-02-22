@@ -12,13 +12,21 @@ Featuring talks from
 
 
 <img src="/assets/images/Speaker1.png" alt="drawing" width="100"/>Alexis Lau - University of Exeter
+
 <img src="/assets/images/Speaker2.png" alt="drawing" width="100"/>Rungployphan Kieokaew - University of Exeter
+
 <img src="/assets/images/Speaker3.png" alt="drawing" width="100"/>Kyle Lamb - University of Plymouth
+
 <img src="/assets/images/Speaker4.png" alt="drawing" width="100"/>Freddy Wordingham - University of Exeter
+
 <img src="/assets/images/Speaker5.png" alt="drawing" width="100"/>Mike Willmott - Caradon Observatory
+
 <img src="/assets/images/Speaker6.png" alt="drawing" width="100"/>Martin Young - Met Office
+
 <img src="/assets/images/Speaker7.png" alt="drawing" width="100"/>David Strange - Norman Lockyer Observatory
+
 <img src="/assets/images/Speaker8.png" alt="drawing" width="100"/>Dr. Eric Hébrard - University of Exeter
+
 
 
 The [Smart Industry Workshop][SmartWorkshop-link] was great for networking as it was aimed at bringing researchers and industry experts together who use automation and robotics in their work. The workshop also included a hands on tutorial on using the field-programmable gate array (FPGA) using the Sundance VCS-1. The workshop was thoroughly enjoyable and I met some very interesting people who's work I will follow and keep in touch with.
