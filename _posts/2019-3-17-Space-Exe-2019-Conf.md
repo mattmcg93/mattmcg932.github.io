@@ -5,7 +5,26 @@ date:   2019-1-11 21:15:05 +0000
 excerpt: "In my role as Outreach officer for Space Exe at Exeter University, myself and the rest of the committee are organising another ambitious conference with speakers from Met Office, various universities and various observatories."
 image: /assets/images/NottinghamRobotics.png
 ---
-I was kindly awarded a travel bursary from Nottingham Trent University and presented a talk at their Smart Industry Robotics and Automation Workshop. I found the workshop very interesting and learned from a variety of experts from industry and academia about how machine vision and robotics are being used to improve society and hopefully even save lives in the future in the case of forrest fires.
+Tickets Available from: https://spaceexe.org/conf/2019
+17th March 2019 9:30 - 17:30
+
+Featuring talks from 
+
+
+<img src="/assets/images/Speaker1.png" alt="drawing" width="340"/>Alexis Lau - University of Exeter
+<img src="/assets/images/Speaker2.png" alt="drawing" width="340"/>Rungployphan Kieokaew - University of Exeter
+<img src="/assets/images/Speaker3.png" alt="drawing" width="340"/>Kyle Lamb - University of Plymouth
+<img src="/assets/images/Speaker4.png" alt="drawing" width="340"/>Freddy Wordingham - University of Exeter
+<img src="/assets/images/Speaker5.png" alt="drawing" width="340"/>Mike Willmott - Caradon Observatory
+<img src="/assets/images/Speaker6.png" alt="drawing" width="340"/>Martin Young - Met Office
+<img src="/assets/images/Speaker7.png" alt="drawing" width="340"/>David Strange - Norman Lockyer Observatory
+<img src="/assets/images/Speaker8.png" alt="drawing" width="340"/>Dr. Eric Hébrard - University of Exeter
+
+
+The [Smart Industry Workshop][SmartWorkshop-link] was great for networking as it was aimed at bringing researchers and industry experts together who use automation and robotics in their work. The workshop also included a hands on tutorial on using the field-programmable gate array (FPGA) using the Sundance VCS-1. The workshop was thoroughly enjoyable and I met some very interesting people who's work I will follow and keep in touch with.
+
+A poster I also presented can be found on page 14 of their poster section [here.][poster-link] 
+
 
 <div class="center">
 <img src="/assets/images/MePresentNottingham.JPG" alt="drawing" width="340"/>
@@ -14,9 +33,7 @@ I was kindly awarded a travel bursary from Nottingham Trent University and prese
 I presented my current research of remote fingerprint extraction from specular surfaces using multi light imaging.
 </div>
 
-The [Smart Industry Workshop][SmartWorkshop-link] was great for networking as it was aimed at bringing researchers and industry experts together who use automation and robotics in their work. The workshop also included a hands on tutorial on using the field-programmable gate array (FPGA) using the Sundance VCS-1. The workshop was thoroughly enjoyable and I met some very interesting people who's work I will follow and keep in touch with.
 
-A poster I also presented can be found on page 14 of their poster section [here.][poster-link] 
 
 
 
