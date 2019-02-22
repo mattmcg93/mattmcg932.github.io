@@ -5,10 +5,17 @@ date:   2019-1-11 21:15:05 +0000
 excerpt: "In my role as Outreach officer for Space Exe at Exeter University, myself and the rest of the committee are organising another ambitious conference with speakers from Met Office, various universities and various observatories."
 image: /assets/images/NottinghamRobotics.png
 ---
-Tickets Available from the [conference website.][Conference-link] 
-17th March 2019 9:30 - 17:30
+Following the resounding success of our 2018 conference, myself and the rest of the committee are organising another ambitious event. In my role as Outreach officer for Space Exe at the University of Exeter, we have reached out to speakers from the Met Office, various universities and various observatories. Our student led conference hopes to be as successful as last year, with engaging talks and a great turnout of students and interested members of the community, with some people even travelling down from Bristol.
 
-Featuring talks from 
+Video talks from last year's conference and information about what we do as a society and the speakers can be found [here][conf-link].
+
+
+This year the conference is 17th March 2019 9:30 - 17:30.
+
+Tickets Available from the [conference website.][Conference-link] 
+
+
+This year the conference features talks from:
 
 
 <img src="/assets/images/Speaker1.png" alt="drawing" width="100"/> <img src="/assets/images/Speaker2.png" alt="drawing" width="100"/> <img src="/assets/images/Speaker3.png" alt="drawing" width="100"/> <img src="/assets/images/Speaker4.png" alt="drawing" width="100"/>
@@ -22,31 +29,9 @@ Mike Willmott - Caradon Observatory, Martin Young - Met Office, David Strange - 
 
 
 
-The [Smart Industry Workshop][SmartWorkshop-link] was great for networking as it was aimed at bringing researchers and industry experts together who use automation and robotics in their work. The workshop also included a hands on tutorial on using the field-programmable gate array (FPGA) using the Sundance VCS-1. The workshop was thoroughly enjoyable and I met some very interesting people who's work I will follow and keep in touch with.
-
-A poster I also presented can be found on page 14 of their poster section [here.][poster-link] 
-
-
-<div class="center">
-<img src="/assets/images/MePresentNottingham.JPG" alt="drawing" width="340"/>
-</div>
-<div class="center">
-I presented my current research of remote fingerprint extraction from specular surfaces using multi light imaging.
-</div>
-
-
-
-
-
-<div class="center">
-<img src="/assets/images/NottinghamGroupPic.JPG" alt="drawing" width="340"/>
-</div>
-<div class="center">
-The group from academia and industry who took part.
-</div>
-
 
 [Conference-link]: https://spaceexe.org/conf/2019
-[poster-link]: http://smartindustry4.uk/wp-content/uploads/2019/01/Smart-Industry-Workshop-Posters.pdf
+[conf-link]: https://spaceexe.org/conf/2018/
+
 
 
