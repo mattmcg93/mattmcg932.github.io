@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Space Exe 2019 Conference "
-date:   2019-1-11 21:15:05 +0000
+date:   2019-3-17 21:15:05 +0000
 excerpt: "In my role as Outreach officer for Space Exe at Exeter University, myself and the rest of the committee are organising another ambitious conference with speakers from Met Office, various universities and various observatories."
 image: /assets/images/NottinghamRobotics.png
 ---
