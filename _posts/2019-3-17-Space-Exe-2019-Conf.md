@@ -19,17 +19,10 @@ Alexis Lau - University of Exeter, Rungployphan Kieokaew - University of Exeter,
 
 Freddy Wordingham - University of Exeter
 
-<img src="/assets/images/Speaker5.png" alt="drawing" width="100"/>
-
-Mike Willmott - Caradon Observatory
-
-<img src="/assets/images/Speaker6.png" alt="drawing" width="100"/>
-
-Martin Young - Met Office
-
+<img src="/assets/images/Speaker5.png" alt="drawing" width="100"/><img src="/assets/images/Speaker6.png" alt="drawing" width="100"/>
 <img src="/assets/images/Speaker7.png" alt="drawing" width="100"/>
 
-David Strange - Norman Lockyer Observatory
+Mike Willmott - Caradon Observatory, Martin Young - Met Office, David Strange - Norman Lockyer Observatory
 
 <img src="/assets/images/Speaker8.png" alt="drawing" width="100"/>
 
