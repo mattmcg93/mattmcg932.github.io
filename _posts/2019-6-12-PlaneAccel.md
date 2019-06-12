@@ -1,0 +1,85 @@
+---
+layout: post
+title:  "Plane Accelerometer"
+date:   2019-05-24 21:15:05 +0000
+excerpt: "Following some suspected feline break-ins I set up a motion sensing night vision camera using a Raspberry Pi Zero W (~£20) and..."
+image: /assets/images/RasPiCam.png
+---
+
+
+
+
+<html>
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .imgbox {
+            display: grid;
+            height: 100%;
+        }
+        .center-fit {
+            max-width: 100%;
+            max-height: 100vh;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+Following some suspected feline break-ins, instead of closing the cat flap I set up a motion sensing night vision camera using a Raspberry Pi Zero W (~£20) and a camera module with infrared torches (~£20). The camera is running 24/7 and executes a script uploading video to Dropbox using the Pi's onboard WiFi.
+
+
+This page is a work in progress so the camera link below may be intermittent. 
+🦇📸🐈
+
+
+
+</body>
+</html>
+
+
+<div class="center">
+<img src="/assets/images/20-38-09.gif" alt="drawing" height="200"/><img src="/assets/images/Slide1aa.jpg" alt="drawing" height="200"/>
+</div>
+
+The video shows a cat successfully detected through motion detection, and the image shows a diagram of the constructed night vision camera. Below is the (intermittent) link to the camera stream.
+
+    
+        
+
+
+<html>
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .imgbox {
+            display: grid;
+            height: 100%;
+        }
+        .center-fit {
+            max-width: 100%;
+            max-height: 100vh;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+
+   
+<div class="imgbox">
+    <img class="center-fit" src='https://tinyurl.com/y47ef33r'>    
+</div>
+</body>
+</html>
+
+
+
+
+
+
