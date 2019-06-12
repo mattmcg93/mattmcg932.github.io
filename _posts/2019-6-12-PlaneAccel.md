@@ -6,80 +6,21 @@ excerpt: "Following some suspected feline break-ins I set up a motion sensing ni
 image: /assets/images/RasPiCam.png
 ---
 
+On a plane from Greece to Scotland our pilot said that the landing into Glasgow would be turbulent - so I decided to use my phones inbuilt accelerometer to record the changes in acceleration to a CSV file.
 
+Accelerometer [problems][ucd-problems] 
 
+ [here][esgi-dublin].
 
-<html>
-<head>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-        .imgbox {
-            display: grid;
-            height: 100%;
-        }
-        .center-fit {
-            max-width: 100%;
-            max-height: 100vh;
-            margin: auto;
-        }
-    </style>
-</head>
-<body>
-Following some suspected feline break-ins, instead of closing the cat flap I set up a motion sensing night vision camera using a Raspberry Pi Zero W (~£20) and a camera module with infrared torches (~£20). The camera is running 24/7 and executes a script uploading video to Dropbox using the Pi's onboard WiFi.
-
-
-This page is a work in progress so the camera link below may be intermittent. 
-🦇📸🐈
-
-
-
-</body>
-</html>
 
 
 <div class="center">
-<img src="/assets/images/20-38-09.gif" alt="drawing" height="200"/><img src="/assets/images/Slide1aa.jpg" alt="drawing" height="200"/>
+<img src="/assets/images/Dublin2.jpg" alt="drawing" width="340"/>
 </div>
+ 
 
-The video shows a cat successfully detected through motion detection, and the image shows a diagram of the constructed night vision camera. Below is the (intermittent) link to the camera stream.
-
-    
-        
-
-
-<html>
-<head>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-        .imgbox {
-            display: grid;
-            height: 100%;
-        }
-        .center-fit {
-            max-width: 100%;
-            max-height: 100vh;
-            margin: auto;
-        }
-    </style>
-</head>
-<body>
-
-
-   
-<div class="imgbox">
-    <img class="center-fit" src='https://tinyurl.com/y47ef33r'>    
-</div>
-</body>
-</html>
-
-
-
+[esgi-dublin]: https://maths.ucd.ie/esgi141/
+[ucd-problems]: https://maths.ucd.ie/esgi141/problems.html
 
 
 
