@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Scraping Data from Twitter"
+title:  "Data Scraping and AI Tweets"
 date:   2019-12-01 21:15:05 +0000
 excerpt: "I decided to try out scraping tweets from Twitter and generaing tweets based upon the input"
 
