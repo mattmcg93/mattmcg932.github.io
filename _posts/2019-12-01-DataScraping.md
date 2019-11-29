@@ -10,7 +10,7 @@ I decided to make a post about AI generated tweets using data scrapings from twi
 Data (or web) scraping is a way of extracting information from a website (in this case Twitter) automatically onto a file stored locally on your computer. 
 It can be used for numerous purposes in machine learning where the scraped data is analysed such as market analysis and sentiment analysis. Sentiment analysis attempts to algorithmically categorises and identifies the underlying opinion, or sentiment, behind a piece of text. 
 I won’t go into sentiment analysis in this post, as I’m just looking for a quick and dirty way to pull some posts down from twitter with certain key phrases, input them into a neural network and generate text based upon these input tweets. 
-## Choosing which machine learning library
+# Choosing which machine learning library
 Our first task is to decide which machine learning library to use. Arguably the two most popular (and open source) libraries available are Tensorflow and PyTorch.
 Tensorflow (developed by Google) is based on the Theano library and PyTorch (developed by Facebook) is based on the Torch library.
 I decided to use Tensorflow simply because I’ve used it recently, and thought it was relatively painless to use (after a slightly painful installation).
@@ -34,7 +34,7 @@ TweetTextArray = [] # create empty list to save tweets
 
 ```
 We then choose to write this array of the text content of the tweets to a text file in order to feed this into a neural network. This step is not essential since you could store the list as a variable in memory,  but I wanted to do this so I could save the tweet contents and I already had a machine learning module in mind which works well with text files.
-## Cleaning the data
+### Cleaning the data
 There are a few things to note here with regards the text output of these tweets in terms of cleaning the data. It is often estimated that data scientists spend up to 60 percent of their time cleaning data, so this is an important step in the process. For the sake of simplicity, I decided to remove any tweets with mentions (i.e. @username) and URLs as well as removing any duplicates (should there be any). This is done easily enough with the following lines of code.
 ```python
 #removing tweets with URLs
