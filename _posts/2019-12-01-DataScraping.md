@@ -52,7 +52,7 @@ TweetTextArray=[ x for x in TweetTextArray if "@" not in x ] #remove tweets with
 TweetTextArray = list(dict.fromkeys(TweetTextArray)) #remove duplicate tweets
 
 ```
-Our next cleaning task involves converting between character encoding standards. An example of how a tweet stored in a text file looks is shown below for a tweet about Exeter.
+Our next cleaning task involves converting between character encoding standards. An example of how a tweet stored in a text file looks is shown below for a tweet scraped from the search term "Exeter".
 ```python
 "b'Current Temp: 15.8\xc2\xb0C. Wind 0.0 m/s S. Barometer 1019.5 hPa - Falling. #exeter #ukweather'"
 ```
@@ -84,7 +84,39 @@ We can also enter the following line if we want to save the trained network to a
 ```python
 textgen.save(SearchTerm+'_network.hdf5').
 ```
-Some results I’ve generated are shown below.
+#### AI generated tweets
+The neural network outputs text based on its input every full pass of the data it processes, in our case generating tweets at different levels of creativity, called temperatures (between zero and one).
+The tweets generated after the network learned from tweets based on my search terms "Glasgow OR Scotland OR unicorn" are shown below.
+```python
+####################
+Temperature: 0.2
+####################
+I want to see you a state of the probable to the state in Scotland in the probably the probably the state of the stations and the pretty the live in the first the probably the support in Scotland the pretty the probably probably the pretty the probably like a princess in Scotland and it was a unico
+
+The pretty in Scotland in the first thing and the fire in the story in the bit of the probably pretty think the people in the first thing in Scotland and it was a unicorn and should stay to the pretty they want to see it in Scotland and the state in Scotland and stay in the fact to the people in th
+
+The protest and in the probably difference in Scotland in Scotland and the last time in Scotland and see you and it was a plane of the pretty in the probably think the stations and the present state of the first time to see it in Scotland and the state in Scotland in the first thing and see it in S
+
+####################
+Temperature: 0.5
+####################
+The Night as like it as a stand to cheet to be a unicorn to didgeve shite to the end of the UK from a good from the pride and idea all some difference in the night the next time things that is a steps in the fire state of the state and so the police and playing my story again. I can do think the sa
+
+Scotland are from Britain about a little great time to all the fireth everything in the proud of the first thing this day and it is about the way about spenties out of the independence in Scotland in Scotland and and is a live in the final in Glasgow it think it is so the story playing that it is a
+
+I not a unicorn for the day. I every teach time in Scotland the pretting as scotland in the only the independence it did you need to see the political in Glasgow Scotland is like Scotland to one of the rost in the way they was in Scotland and that they be a please in the Scotland in glasgow the pre
+
+####################
+Temperature: 1.0
+####################
+Hey the Unicorn & 4 Gard to Scotland pnease infer unicorn. party in this night here the people but they have a big skir. But people to ask a like hurd) #ycashaggerof2
+
+Mysecort, that how i avate if that you'll probably go babe to. sake the please last such call the News Producera PL. Cincest, waiting aproods who potters outsidence when it convicteshouddered to gladymonises of no they isinging as #birned the data why a genuin in Scotland but Isog of Kills Not brid
+
+on one: Scotland Glasgow are going to think threavf from a stupident #bester for my dote rights inter unicorn?
+
+North income and the fire in Scotland in the restande things and see it and better to think the current and scotland the start in the story in Scotland stay
+```
 
 
 [Tensorflow-link]: https://www.tensorflow.org/
