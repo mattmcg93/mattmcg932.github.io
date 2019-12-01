@@ -12,7 +12,7 @@ image: /assets/images/laptop_1.png
 Image source: Giphy
 
 
-I decided to make a post about AI generated tweets using data scrapings from twitter since I didn't actually know much about it and thought it sounded interesting.
+I decided to make a post about AI generated tweets using data scrapings from twitter since I didn't actually know much about it and thought it sounded interesting. There are many ways to do this so there's no need to try the specific modules I've listed - I'm just doing this for fun and these modules worked well for me.
 Data (or web) scraping is a way of extracting information from a website (in this case Twitter) automatically onto a file stored locally on your computer. 
 It can be used for numerous purposes in machine learning where the scraped data is analysed such as market analysis and sentiment analysis. Sentiment analysis attempts to algorithmically categorises and identifies the underlying opinion, or sentiment, behind a piece of text. 
 I won’t go into sentiment analysis in this post, as I’m just looking for a quick and dirty way to pull some posts down from twitter with certain key phrases, input them into a neural network and generate text based upon these input tweets. 
