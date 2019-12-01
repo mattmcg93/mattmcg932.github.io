@@ -17,6 +17,12 @@ Data (or web) scraping is a way of extracting information from a website (in thi
 It can be used for numerous purposes in machine learning where the scraped data is analysed such as market analysis and sentiment analysis. Sentiment analysis attempts to algorithmically categorises and identifies the underlying opinion, or sentiment, behind a piece of text. 
 I won’t go into sentiment analysis in this post, as I’m just looking for a quick and dirty way to pull some posts down from twitter with certain key phrases, input them into a neural network and generate text based upon these input tweets. 
 #### Selecting a machine learning library
+<div class="center">
+<img src="/assets/images/tf_logo_social.png" alt="drawing" width="200"/>
+</div>
+<div class="center">
+<img src="/assets/images/Pytorch.jpeg" alt="drawing" width="200"/>
+</div>
 Our first task is to decide which machine learning library to use. Arguably the two most popular (and open source) libraries available are [Tensorflow][Tensorflow-link] and [PyTorch][Pytorch-Link].
 Tensorflow (developed by Google) is based on the Theano library and PyTorch (developed by Facebook) is based on the Torch library.
 I decided to use Tensorflow simply because I’ve used it recently, and thought it was relatively painless to use (after a slightly painful installation).
