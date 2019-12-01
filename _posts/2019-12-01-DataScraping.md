@@ -4,10 +4,10 @@ title:  "Data Scraping and AI Tweets"
 date:   2019-12-01 21:15:05 +0000
 excerpt: "I decided to try out scraping tweets from Twitter and generaing tweets based upon the input"
 
-image: /assets/images/Keyboard_Mouse_top-down_view_German.png
+image: /assets/images/laptop.png
 ---
 <div class="center">
-<img src="Keyboard_Mouse_top-down_view_German.png" alt="drawing" height="200"/>
+<img src="/assets/images/Keyboard_Mouse_top-down_view_German.png" alt="drawing" height="200"/>
 </div>
 
 I decided to make a post about AI generated tweets using data scrapings from twitter since I didn't actually know much about it and thought it sounded cool.
