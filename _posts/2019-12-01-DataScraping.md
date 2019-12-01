@@ -26,9 +26,9 @@ From the Twitterscraper module I imported the query_tweets function. For the pur
 ```python
 from twitterscraper import query_tweets
 ```
-Now we simply decide on a search term, and how many tweets we’d like to scrape. The Twitterscraper module interfaces with [Twitter's API][TwitterAPI], so we can use the operators AND and OR between search terms. The current version of Twitterscraper doesn’t have inbuilt functionality to discern between different languages of the tweet, but since it interfaces with Twitter’s API so we can use the additional search term ‘%20lang%3Aen’, just to ensure our tweets are in English. For a full list of different languages and their syntax see Twitter’s documentation. See below for an example on searching three search terms with an OR operator and the additional argument of choosing only English language tweets, with a tweet limit of ten thousand. The connection between these terms is that the unicorn is Scotland's national animal, but the AI won't know that so we'll probably get some weird results 🦄.
+Now we simply decide on a search term, and how many tweets we’d like to scrape. The Twitterscraper module interfaces with [Twitter's API][TwitterAPI], so we can use the operators AND and OR between search terms. The current version of Twitterscraper doesn’t have inbuilt functionality to discern between different languages of the tweet, but since it interfaces with Twitter’s API so we can use the additional search term ‘%20lang%3Aen’, just to ensure our tweets are in English. For a full list of different languages and their syntax see Twitter’s documentation. See below for an example on searching four search terms with an OR operator and the additional argument of choosing only English language tweets, with a tweet limit of ten thousand. The connection between these terms is that the unicorn is Scotland's national animal, but the AI won't know that so we'll probably get some weird results 🦄. And Darth Vader is in there because why not.
 ```python
-SearchTerm=' Glasgow OR Scotland OR unicorn %20lang%3Aen'
+SearchTerm=' Glasgow OR Scotland OR unicorn OR Darth Vader%20lang%3Aen'
 TweetLimit=10000
 list_of_tweets = query_tweets(SearchTerm, limit=TweetLimit)
 ```
