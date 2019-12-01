@@ -21,7 +21,12 @@ Our first task is to decide which machine learning library to use. Arguably the 
 Tensorflow (developed by Google) is based on the Theano library and PyTorch (developed by Facebook) is based on the Torch library.
 I decided to use Tensorflow simply because I’ve used it recently, and thought it was relatively painless to use (after a slightly painful installation).
 #### Selecting a Python module
-I decided to use Python to interface with Tensorflow, so our next step is to simply decide which python module to use since there is no point in reinventing the wheel. After some browsing, the standout option seemed to be Ahmet Taspinar’s (Github user taspinar) [Twitterscraper module][TS-link]. It’s really easy to use and does exactly what it says on the tin.
+I decided to use Python to interface with Tensorflow, so our next step is to simply decide which python module to use since there is no point in reinventing the wheel. After some browsing, the standout option seemed to be Ahmet Taspinar’s (Github user taspinar) [Twitterscraper module][TS-link]. It’s really easy to use and does exactly what it says on the tin, and can be installed using pip as follows.
+
+```console
+pip install twitterscraper
+```
+
 From the Twitterscraper module I imported the query_tweets function. For the purposes of this example the input arguments we care about are just our search term (string) and the number of tweets (integer).
 
 
