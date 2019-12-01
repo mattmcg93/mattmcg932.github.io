@@ -8,8 +8,10 @@ image: /assets/images/laptop_1.png
 ---
 <div class="center">
 <img src="/assets/images/robot.gif" alt="drawing" width="200"/>
- Source: Giphy
+ 
+Image source: Giphy
 </div>
+
 
 I decided to make a post about AI generated tweets using data scrapings from twitter since I didn't actually know much about it and thought it sounded interesting.
 Data (or web) scraping is a way of extracting information from a website (in this case Twitter) automatically onto a file stored locally on your computer. 
