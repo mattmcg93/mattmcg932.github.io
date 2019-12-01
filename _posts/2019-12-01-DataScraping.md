@@ -7,7 +7,7 @@ excerpt: "I decided to make a post about AI generated tweets using data scraping
 image: /assets/images/laptop_1.png
 ---
 <div class="center">
-<img src="/assets/images/Keyboard_Mouse_top-down_view_German.png" alt="drawing" height="200"/>
+<img src="/assets/images/robot.gif" alt="drawing" width="200"/>
 </div>
 
 I decided to make a post about AI generated tweets using data scrapings from twitter since I didn't actually know much about it and thought it sounded interesting.
@@ -67,6 +67,9 @@ with open(FileName, "w", encoding="utf-8") as f:
         f.write("%s\n" % item) 
 ```
 #### Selecting a neural network
+<div class="center">
+<img src="/assets/images/brain.gif" alt="drawing" width="200"/>
+</div>
 Now we have a collection of clean tweets consisting of just text, ideal for training a recurrent neural network to produce new tweets based upon them. I decided to use Max Woolf’s (Github user minimaxir) [textgenrnn module][textgenrnn-link]. Recurrent neural networks are different from regular neural networks as they remember (or learn) things from the past (from their training phase), but also uses new information being input to update it’s model. This module is fantastically simple to train, only requiring a few lines to execute using the default parameters. We simply import the module and run as shown below.
 ```python
 from textgenrnn import textgenrnn
