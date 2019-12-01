@@ -4,7 +4,7 @@ title:  "Data Scraping and AI Generated Tweets"
 date:   2019-12-01 21:15:05 +0000
 excerpt: "I decided to make a post about AI generated tweets using data scrapings from twitter since I didn't actually know much about it and thought it sounded..."
 
-image: /assets/images/laptop.png
+image: /assets/images/laptop_1.png
 ---
 <div class="center">
 <img src="/assets/images/Keyboard_Mouse_top-down_view_German.png" alt="drawing" height="200"/>
