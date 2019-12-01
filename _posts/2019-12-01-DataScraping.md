@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Data Scraping and AI Tweets"
+title:  "Data Scraping and AI Generated Tweets"
 date:   2019-12-01 21:15:05 +0000
-excerpt: "I decided to try out scraping tweets from Twitter and generaing tweets based upon the input"
+excerpt: "I decided to make a post about AI generated tweets using data scrapings from twitter since I didn't actually know much about it and thought it sounded..."
 
 image: /assets/images/laptop.png
 ---
