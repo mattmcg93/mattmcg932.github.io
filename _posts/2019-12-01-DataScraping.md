@@ -88,6 +88,7 @@ textgen.save(SearchTerm+'_network.hdf5').
 The neural network outputs text based on its input every full pass of the data it processes, in our case generating tweets at different levels of creativity, called temperatures (between zero and one).
 The tweets generated after the network learned from tweets based on my search terms "Glasgow OR Scotland OR unicorn" are shown below.
 ```python
+"
 ####################
 Temperature: 0.2
 ####################
@@ -116,6 +117,7 @@ Mysecort, that how i avate if that you'll probably go babe to. sake the please l
 on one: Scotland Glasgow are going to think threavf from a stupident #bester for my dote rights inter unicorn?
 
 North income and the fire in Scotland in the restande things and see it and better to think the current and scotland the start in the story in Scotland stay
+"
 ```
 
 
