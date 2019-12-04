@@ -7,7 +7,7 @@ excerpt: "I decided to make a post about AI generated tweets using data scraping
 image: /assets/images/laptop_1.png
 ---
 <div class="center">
-<img src="/assets/images/AI.gif" alt="drawing" width="360"/>
+<img src="/assets/images/AI.gif" alt="drawing" width="340"/>
 </div>
 Image source: Giphy
 
