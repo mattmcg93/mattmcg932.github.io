@@ -7,7 +7,7 @@ excerpt: "I decided to make a post about AI generated tweets using data scraping
 image: /assets/images/laptop_1.png
 ---
 <div class="center">
-<img src="/assets/images/robot.gif" alt="drawing" width="200"/>
+<img src="/assets/images/AI.gif" alt="drawing" width="200"/>
 </div>
 Image source: Giphy
 
@@ -16,13 +16,18 @@ I decided to make a post about AI generated tweets using data scrapings from twi
 Data (or web) scraping is a way of extracting information from a website (in this case Twitter) automatically onto a file stored locally on your computer. 
 It can be used for numerous purposes in machine learning where the scraped data is analysed such as market analysis and sentiment analysis. Sentiment analysis attempts to algorithmically categorises and identifies the underlying opinion, or sentiment, behind a piece of text. 
 I won’t go into sentiment analysis in this post, as I’m just looking for a quick and dirty way to pull some posts down from twitter with certain key phrases, input them into a neural network and generate text based upon these input tweets. 
-#### Selecting a machine learning library
+#### Different Machine Learning Libraries
 <div class="center">
 <img src="/assets/images/tf_logo_social.png" alt="drawing" width="200"/>
 </div>
 <div class="center">
 <img src="/assets/images/Pytorch.jpeg" alt="drawing" width="200"/>
 </div>
+
+<div class="center">
+<img src="/assets/images/robot.gif" alt="drawing" width="200"/>
+</div>
+Image source: Giphy
 Our first task is to decide which machine learning library to use. Arguably the two most popular (and open source) libraries available are [Tensorflow][Tensorflow-link] and [PyTorch][Pytorch-Link].
 Tensorflow (developed by Google) is based on the Theano library and PyTorch (developed by Facebook) is based on the Torch library.
 I decided to use Tensorflow simply because I’ve used it recently, and thought it was relatively painless to use (after a slightly painful installation).
@@ -39,10 +44,10 @@ From the Twitterscraper module I imported the query_tweets function. For the pur
 ```python
 from twitterscraper import query_tweets
 ```
-Now we simply decide on a search term, and how many tweets we’d like to scrape. The Twitterscraper module interfaces with [Twitter's API][TwitterAPI], so we can use the operators AND and OR between search terms. The current version of Twitterscraper doesn’t have inbuilt functionality to discern between different languages of the tweet, but since it interfaces with Twitter’s API so we can use the additional search term ‘%20lang%3Aen’, just to ensure our tweets are in English. For a full list of different languages and their syntax see Twitter’s documentation. See below for an example on searching four search terms with an OR operator and the additional argument of choosing only English language tweets, with a tweet limit of ten thousand. The connection between these terms is that the unicorn is Scotland's national animal, but the AI won't know that so we'll probably get some weird results 🦄. And Darth Vader is in there because why not.
+Now we simply decide on a search term, and how many tweets we’d like to scrape. The Twitterscraper module interfaces with [Twitter's API][TwitterAPI], so we can use the operators AND and OR between search terms. The current version of Twitterscraper doesn’t have inbuilt functionality to discern between different languages of the tweet, but since it interfaces with Twitter’s API so we can use the additional search term ‘%20lang%3Aen’, just to ensure our tweets are in English. For a full list of different languages and their syntax see Twitter’s documentation. See below for an example on searching four search terms with an OR operator and the additional argument of choosing only English language tweets, with a tweet limit of one hundred thousand. The connection between these terms is that the unicorn is Scotland's national animal, but the AI won't know that so we'll probably get some weird results 🦄. And Voldemort is in there to mix things up.
 ```python
-SearchTerm=' Glasgow OR Scotland OR unicorn OR Darth Vader%20lang%3Aen'
-TweetLimit=10000
+SearchTerm=' Glasgow OR Scotland OR unicorn OR Voldemort %20lang%3Aen'
+TweetLimit=100000
 list_of_tweets = query_tweets(SearchTerm, limit=TweetLimit)
 ```
 The tweets are stored in a list (called list_of_tweets here), which contains lots of metadata such as Twitter handles, the number of likes and retweets. We don't care about this metadata, so next we choose to set up and empty list called TweetTextArray, in which we extract only the text content of the tweets. 
