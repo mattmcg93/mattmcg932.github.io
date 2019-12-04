@@ -3,11 +3,6 @@ name: Matthew McGuigan
 email: matthew.g.mcguigan@gmail.com
 description: I am a Computer Science PhD student at the University of Exeter.
 
-project_three: Solar Eclipse TV Interview
-project_three_description: I was contacted for an interview and asked to explain how to image the 2015 solar eclipse. I also discussed some astrophotograpy which I had posted online. 
-project_three_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
-project_three_icon: photo_camera
-
 baseurl: "/blog"
 url: ""
 
