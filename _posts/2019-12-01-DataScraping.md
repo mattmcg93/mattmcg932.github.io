@@ -18,10 +18,7 @@ It can be used for numerous purposes in machine learning where the scraped data 
 I won’t go into sentiment analysis in this post, as I’m just looking for a quick and dirty way to pull some posts down from twitter with certain key phrases, input them into a neural network and generate text based upon these input tweets. 
 #### Different Machine Learning Libraries
 <div class="center">
-<img src="/assets/images/tf_logo_social.png" alt="drawing" width="200"/>
-</div>
-<div class="center">
-<img src="/assets/images/Pytorch.jpeg" alt="drawing" width="200"/>
+<img src="/assets/images/tf_logo_social.png" alt="drawing" width="200"/> <img src="/assets/images/Pytorch.jpeg" alt="drawing" width="200"/>
 </div>
 
 <div class="center">
