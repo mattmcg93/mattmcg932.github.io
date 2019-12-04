@@ -41,9 +41,9 @@ From the Twitterscraper module I imported the query_tweets function. For the pur
 ```python
 from twitterscraper import query_tweets
 ```
-Now we simply decide on a search term, and how many tweets we’d like to scrape. The Twitterscraper module interfaces with [Twitter's API][TwitterAPI], so we can use the operators AND and OR between search terms. The current version of Twitterscraper doesn’t have inbuilt functionality to discern between different languages of the tweet, but since it interfaces with Twitter’s API so we can use the additional search term ‘%20lang%3Aen’, just to ensure our tweets are in English. For a full list of different languages and their syntax see Twitter’s documentation. See below for an example on searching four search terms with an OR operator and the additional argument of choosing only English language tweets, with a tweet limit of one hundred thousand. The connection between these terms is that the unicorn is Scotland's national animal, but the AI won't know that so we'll probably get some weird results 🦄. And Voldemort is in there to mix things up.
+Now we simply decide on a search term, and how many tweets we’d like to scrape. The Twitterscraper module interfaces with [Twitter's API][TwitterAPI], so we can use the operators AND and OR between search terms. The current version of Twitterscraper doesn’t have inbuilt functionality to discern between different languages of the tweet, but since it interfaces with Twitter’s API so we can use the additional search term ‘%20lang%3Aen’, just to ensure our tweets are in English. For a full list of different languages and their syntax see Twitter’s documentation. See below for an example on searching four search terms with an OR operator and the additional argument of choosing only English language tweets, with a tweet limit of one hundred thousand. The connection between these terms is that the unicorn is Scotland's national animal, but the AI won't know that so we'll hopefully get some weird results 🦄. And Voldemort is in there to mix things up.
 ```python
-SearchTerm=' Glasgow OR Scotland OR unicorn OR Voldemort %20lang%3Aen'
+SearchTerm=' Glasgow  OR unicorn OR Voldemort %20lang%3Aen'
 TweetLimit=100000
 list_of_tweets = query_tweets(SearchTerm, limit=TweetLimit)
 ```
@@ -105,16 +105,12 @@ We can also enter the following line if we want to save the trained network to a
 textgen.save(SearchTerm+'_network.hdf5').
 ```
 #### AI generated tweets
-The neural network outputs text based on its input every full pass of the data it processes, in our case generating tweets at different levels of creativity, called temperatures (between zero and one).
-The tweets generated after the network learned from tweets based on my search terms "Glasgow OR Scotland OR unicorn" are shown below.
+The neural network outputs text based on its input every full pass of the data it processes, in our case generating tweets at different levels of creativity, called temperatures (between zero and one). For example, to generate 3 tweets at temperature 0.5 we execute the following.
 ```python
-"Scotland result by the state in Scotland in Glasgow Libya 
-and Scotland are a pretty to see a unicorn in your!"
-
-"The people in this pretting special hour."
-
-
+textgen_2.generate(3, temperature=0.5)
 ```
+The tweets generated after the network learned from tweets based on my search terms "Glasgow OR unicorn OR Voldemort" are shown below.
+
 
 
 [Tensorflow-link]: https://www.tensorflow.org/
