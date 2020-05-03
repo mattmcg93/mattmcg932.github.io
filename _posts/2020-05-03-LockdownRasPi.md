@@ -2,7 +2,7 @@
 layout: post
 title:  "Pi Projects During Lockdown"
 date:   2020-05-03 21:15:05 +0000
-excerpt: "Development page for current projects during lockdown..."
+excerpt: "During the current lockdown I'm working on a few side projects to try and learn a little bit about robotics and running machine learning algorithms"
 image: /assets/images/RasPiCam.png
 ---
 
