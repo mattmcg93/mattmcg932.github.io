@@ -20,9 +20,9 @@ So far I'm running these on a Raspberry Pi 1st Edition (which are all in various
 <b> 1) Controlling my telescope's motorised mount using Python with a webcam to track objects by using the webcam video to guide the motors.</b>
 This is different from conventional tracking methods which track "blind", where the mount moves without knowing what the telescope can actually see, meaning that after a while the object being tracked often drifts out of view. The conventional tracking methods also require a slightly complex and unreliable configuration method where stars are used to "align" the telescope and help it figure out it's orientation. This method has always failed a lot for me, and proved more hassle than it is worth.
 
-2) Running TensorFlow object recognition on my Raspberry Pi 1st Edition (so basically a slow antique) with a PlayStation 2 EyeToy Camera. This is quite self explanatory, and easy to do on a Raspberry Pi 4 but I want to see what I can get out of my existing equipment.
+<b>2) Running TensorFlow object recognition on my Raspberry Pi 1st Edition (so basically a slow antique) with a PlayStation 2 EyeToy Camera.</b> This is quite self explanatory, and easy to do on a Raspberry Pi 4 but I want to see what I can get out of my existing equipment.
 
-3) Creating an autonomous Raspberry Pi Wi-Fi remote control car which will (hopefully) drive itself. This largely fits in with 2) from above. I need to first wire up the remote control car to be controlled over Wi-Fi using the Pi, then look at attaching a camera in order to use the camera to attempt to drive the car itself.
+<b>3) Creating an autonomous Raspberry Pi Wi-Fi remote control car which will (hopefully) drive itself.</b> This largely fits in with 2) from above. I need to first wire up the remote control car to be controlled over Wi-Fi using the Pi, then look at attaching a camera in order to use the camera to attempt to drive the car itself.
 
 
 
