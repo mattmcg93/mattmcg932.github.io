@@ -3,7 +3,7 @@ layout: post
 title:  "Pi Projects During Lockdown"
 date:   2020-05-03 21:15:05 +0000
 excerpt: "During the current lockdown I'm working on a few side projects to try and learn a little bit about robotics and running machine learning algorithms"
-image: /assets/images/RasPiCam.png
+image: /assets/images/Venus.png
 ---
 
 
@@ -13,7 +13,7 @@ So far I'm running these on a Raspberry Pi 1st Edition (which are all in various
 
 <b> 1) Controlling my telescope's motorised mount using Python with a webcam to track objects by using the webcam video to guide the motors.</b>
 <div class="center">
-<img src="/assets/images/Capture.PNG" alt="drawing" width="340"/>
+<img src="/assets/images/Venus.gif" alt="drawing" width="340"/>
 </div>
 The above image shows the current version of my code successfully tracking a crescent Venus. This is different from conventional tracking methods which track "blind", where the mount moves without knowing what the telescope can actually see, meaning that after a while the object being tracked often drifts out of view. The conventional tracking methods also require a slightly complex and unreliable configuration method where stars are used to "align" the telescope and help it figure out it's orientation. This method has always failed a lot for me, and proved more hassle than it is worth.
 
