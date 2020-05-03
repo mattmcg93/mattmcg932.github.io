@@ -18,8 +18,6 @@ This page is a work in progress so the camera link below (running from a Playsta
 
 
 
-</body>
-</html>
 
 
 
@@ -32,8 +30,7 @@ This page is a work in progress so the camera link below (running from a Playsta
 <div class="imgbox">
     <img class="center-fit" src='https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'>    
 </div>
-</body>
-</html>
+
 
 
 
