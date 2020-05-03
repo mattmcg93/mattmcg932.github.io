@@ -7,13 +7,11 @@ image: /assets/images/RasPiCam.png
 ---
 
 
-During the current lockdown I'm working on a few side projects to try and learn a little bit about robotics and running machine learning algorithms using limited resources (an old Raspberry Pi). I thought I'd try and use what I have lying around the house - a slightly old motorised telescope, remote control car and an old PlayStation 2 EyeToy Camera.
-
+During the current lockdown I'm working on a few side projects to try and learn a little bit about robotics and running machine learning algorithms using limited resources (an old Raspberry Pi). I thought I'd try and use what I have lying around the house - a slightly old motorised telescope, remote control car and an old PlayStation 2 EyeToy Camera. <b>Code and more details coming soon...</b>
 
 <div class="imgbox">
     <img class="center-fit" src='https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'>    
 </div>
-This page is a work in progress so the camera link below (running from a PlayStation 2 EyeToy Camera and Raspberry Pi 1st Edition) may be intermittent. Code and more details coming soon...
 
 So far I'm running these on a Raspberry Pi 1st Edition (which are all in various stages of completion) during the lockdown: 
 
