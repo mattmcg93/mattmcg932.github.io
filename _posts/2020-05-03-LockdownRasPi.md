@@ -13,7 +13,7 @@ image: /assets/images/RasPiCam.png
 
 
 
-This page is a work in progress so the camera link below may be intermittent. 
+This page is a work in progress so the camera link below (running from a Playstation 2 EyeToy and raspberry) may be intermittent. Code and more details coming soon...
 
 
 
