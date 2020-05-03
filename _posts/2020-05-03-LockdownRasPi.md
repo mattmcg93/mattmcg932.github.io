@@ -1,23 +1,29 @@
 ---
 layout: post
-title:  "Lockdown Raspberry Pi Projects"
+title:  "Pi Projects During Lockdown"
 date:   2020-05-03 21:15:05 +0000
 excerpt: "Development page for current projects during lockdown..."
 image: /assets/images/RasPiCam.png
 ---
 
 
-I'm currently working on three side projects (which are all in various stages of completion) during the lockdown: 
-
-1) Controlling my telescope motors using Python a webcam to track objects photographically (different from conventional tracking methods).
-
-2) Creating an autonomous Raspberry Pi Wi-Fi remote control car which will (hopefully) drive itself.
-
-3) Running TensorFlow object recognition on my Raspberry Pi 1st edition (so basically a slow antique) with a PlayStation 2 EyeToy.
+During the current lockdown I'm working on a few side projects to try and learn a little bit about robotics and running machine learning algorithms using limited resources (an old Raspberry Pi). I thought I'd try and use what I have lying around the house - a slightly old motorised telescope, remote control car and an old PlayStation 2 EyeToy Camera.
 
 
+<div class="imgbox">
+    <img class="center-fit" src='https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'>    
+</div>
+This page is a work in progress so the camera link below (running from a PlayStation 2 EyeToy Camera and Raspberry Pi 1st Edition) may be intermittent. Code and more details coming soon...
 
-This page is a work in progress so the camera link below (running from a PlayStation 2 EyeToy and Raspberry Pi 1st edition) may be intermittent. Code and more details coming soon...
+So far I'm running these on a Raspberry Pi 1st Edition (which are all in various stages of completion) during the lockdown: 
+
+<b> 1) Controlling my telescope's motorised mount using Python with a webcam to track objects by using the webcam video to guide the motors.<b>
+This is different from conventional tracking methods which track "blind", where the mount moves without knowing what the telescope can actually see, meaning that after a while the object being tracked often drifts out of view. The conventional tracking methods also require a slightly complex and unreliable configuration method where stars are used to "align" the telescope and help it figure out it's orientation. This method has always failed a lot for me, and proved more hassle than it is worth.
+
+2) Running TensorFlow object recognition on my Raspberry Pi 1st Edition (so basically a slow antique) with a PlayStation 2 EyeToy Camera. This is quite self explanatory, and easy to do on a Raspberry Pi 4 but I want to see what I can get out of my existing equipment.
+
+3) Creating an autonomous Raspberry Pi Wi-Fi remote control car which will (hopefully) drive itself. This largely fits in with 2) from above. I need to first wire up the remote control car to be controlled over Wi-Fi using the Pi, then look at attaching a camera in order to use the camera to attempt to drive the car itself.
+
 
 
 
@@ -32,9 +38,7 @@ This page is a work in progress so the camera link below (running from a PlaySta
 
 
    
-<div class="imgbox">
-    <img class="center-fit" src='https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'>    
-</div>
+
 
 
 
