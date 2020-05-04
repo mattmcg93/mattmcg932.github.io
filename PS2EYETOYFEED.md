@@ -21,7 +21,7 @@ var reloadcam = setInterval("ChangeMedia()",2000);
 
 <div class="center">
 <div class="imgbox">
-<img src="'https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'" alt="Loading..." name="camara" width="340" height="255" border="0" id="camara" />
+<img src="'https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'" alt="Loading..." name="camara" width=50% height="255" border="0" id="camara" />
 
 </div>
 </div>
