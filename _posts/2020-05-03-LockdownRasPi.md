@@ -33,6 +33,18 @@ The above image shows the current version of my code successfully tracking a cre
 
 
 
+<script language="javascript" type="text/javascript" >
+<!--
+function ChangeMedia(){
+	var d = new Date();
+	var t = d.getTime();
+	document.getElementById('camara').src = "_streaming/cam0.jpg?"+t;
+}
+var reloadcam = setInterval("ChangeMedia()",2000);
+-->
+</script>
+
+<img src="'https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'" alt="Loading..." name="camara" width="450" height="335" border="0" id="camara" />
 
 
 
