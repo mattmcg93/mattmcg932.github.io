@@ -38,7 +38,7 @@ The above image shows the current version of my code successfully tracking a cre
 function ChangeMedia(){
 	var d = new Date();
 	var t = d.getTime();
-	document.getElementById('camara').src = "_streaming/cam0.jpg?"+t;
+	document.getElementById('camara').src = "'https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'"+t;
 }
 var reloadcam = setInterval("ChangeMedia()",2000);
 -->
