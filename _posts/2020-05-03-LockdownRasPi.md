@@ -21,8 +21,8 @@ The above image shows the current version of my code successfully tracking a cre
 
 <b>3) Creating an autonomous Raspberry Pi Wi-Fi remote control car which will (hopefully) drive itself.</b> This largely fits in with 2) from above. I need to first wire up the remote control car to be controlled over Wi-Fi using the Pi, then look at attaching a camera in order to use the camera to attempt to drive the car itself.
 
-<p class="ex1"> PlayStation 2 EyeToy Camera feed.</p>
- PlayStation 2 EyeToy Camera feed.
+
+<b>PlayStation 2 EyeToy Camera feed:</b>
 
 
 
