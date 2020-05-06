@@ -28,21 +28,25 @@ The above image shows the current version of my code successfully tracking a cre
 
 
 
-<script language="javascript" type="text/javascript" >
-<!--
-function ChangeMedia(){
-	var d = new Date();
-	var t = d.getTime();
-	document.getElementById('camara').src = "https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download"+t;
-}
-var reloadcam = setInterval("ChangeMedia()",2000);
--->
-</script>
+<!<script language="javascript" type="text/javascript" >
+<!<!--
+<!function ChangeMedia(){
+<!	var d = new Date();
+<!	var t = d.getTime();
+<!	document.getElementById('camara').src = "https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download"+t;
+<!}
+<!var reloadcam = setInterval("ChangeMedia()",2000);
+<!-->
+<!</script>
 
 
 <div class="center">
 <div class="imgbox">
-<img src="'https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'" alt="Loading..." name="camara" width="340" height="255" border="0" id="camara" />
+
+<! <img src="'https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'" alt="Loading..." name="camara" width="340" height="255" border="0" id="camara" />
+
+<img src="/assets/images/SunRise.gif" alt="Loading..." name="camara" width="340" height="255" border="0" id="camara" />
+
 
 </div>
 </div>
