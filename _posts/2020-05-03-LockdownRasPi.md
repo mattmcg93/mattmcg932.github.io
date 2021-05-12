@@ -42,8 +42,9 @@ The above image shows the current version of my code successfully tracking a cre
 
 <div class="center">
 <div class="imgbox">
-
+<!--
 <! <img src="'https://drive.google.com/uc?id=1g7hKykFXuAQ5-Or2tYNEsvyTTqy6461Z&export=download'" alt="Loading..." name="camara" width="340" height="255" border="0" id="camara" />
+-->
 
 <img src="/assets/images/SunRise.gif" alt="Loading..." name="camara" width="340" height="255" border="0" id="camara" />
 
