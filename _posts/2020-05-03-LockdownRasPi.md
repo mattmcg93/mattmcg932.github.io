@@ -28,7 +28,7 @@ The above image shows the current version of my code successfully tracking a cre
 
 
 
-<!<script language="javascript" type="text/javascript" >
+<script language="javascript" type="text/javascript" >
 <!<!--
 <!function ChangeMedia(){
 <!	var d = new Date();
