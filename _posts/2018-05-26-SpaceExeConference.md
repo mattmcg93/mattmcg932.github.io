@@ -2,7 +2,7 @@
 layout: post
 title:  "Arranging the Space Exe Space Science Conference"
 date:   2018-05-26 21:15:05 +0000
-excerpt: "I am Outreach officer for Space Exe at Exeter University, who organised a spectacular conference with speakers from Met Office, Goonhilly Earth Station & UK ambassador for NASA’s OSIRIS REx."
+excerpt: "I am Outreach officer for Space Exe at Exeter University, who organised a spectacular conference with speakers from Met Office..."
 
 image: /assets/images/Goonhilly.jpg
 ---
