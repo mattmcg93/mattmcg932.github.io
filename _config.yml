@@ -3,6 +3,8 @@ name: Matthew McGuigan
 email: matthew.g.mcguigan@gmail.com
 description: I am a Computer Science PhD student at the University of Exeter.
 
+baseurl: "/blog"
+url: ""
 
 parallax_image_one: assets/images/startup3.jpg # These are the images used for the parallax background
 parallax_image_two: assets/images/startup3.jpg
