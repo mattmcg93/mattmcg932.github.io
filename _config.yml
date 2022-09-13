@@ -1,7 +1,7 @@
-title: Matthew McGuigan, BSc, MSc.
+title: Matthew McGuigan
 name: Matthew McGuigan
 email: matthew.g.mcguigan@gmail.com
-description: I am a Computer Science PhD student at the University of Exeter.
+description: I am a researher in Computer Science at the University of Exeter.
 
 baseurl: "/blog"
 url: ""
@@ -9,8 +9,8 @@ url: ""
 parallax_image_one: assets/images/startup3.jpg # These are the images used for the parallax background
 parallax_image_two: assets/images/startup3.jpg
 
-project_one: My PhD Project
-project_one_description: My PhD involves the estimation of an object’s shape, reflectance and surface topography from photographs using machine learning and artificial intelligence approaches.
+project_one: My Research
+project_one_description: My research involves the estimation of an object’s shape and the contactless detection of fingerprints from photographs using machine learning and artificial intelligence approaches.
 project_one_url: http://emps.exeter.ac.uk/computer-science/staff/mm757 
 project_one_icon: location_on
 
