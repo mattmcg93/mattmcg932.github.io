@@ -8,7 +8,7 @@ image: /assets/images/Venus.PNG
 
 <div class="center">
     <div class="imgbox">
-        <img id="camara" src="/assets/images/Venus.PNG" alt="Image" width="100%" height="100%" />
+        <img id="camara" src="https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihZuwnTXvAUq6y4jhD88v8UFENrwXzaUgmrmzi6jAoqO__SSfb8gS_uhIgl5vm0AHOK8EWxhhudjFgFAmPwt0NvVTHIF=w958-h934" alt="Image" width="100%" height="100%" />
     </div>
 </div>
 
@@ -16,7 +16,7 @@ image: /assets/images/Venus.PNG
 function updateImage() {
     var imgElement = document.getElementById('camara');
     var timestamp = new Date().getTime(); // Add timestamp to prevent caching
-    imgElement.src = "/assets/images/Venus.PNG?t=" + timestamp;
+    imgElement.src = "https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihZuwnTXvAUq6y4jhD88v8UFENrwXzaUgmrmzi6jAoqO__SSfb8gS_uhIgl5vm0AHOK8EWxhhudjFgFAmPwt0NvVTHIF=w958-h934?t=" + timestamp;
 }
 
 // Update the image every second
