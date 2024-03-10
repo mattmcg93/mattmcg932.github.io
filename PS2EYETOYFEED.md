@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "DOUGHROCK2"
+title: "DOUGHROCKa"
 date: 2020-05-03 21:15:05 +0000
-excerpt: "DOUGHROCK"
+excerpt: "DOUGHROCKa"
 image: /assets/images/Venus.PNG
 ---
 
