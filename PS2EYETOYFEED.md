@@ -1,32 +1,28 @@
 ---
 layout: post
-title: "DOUGHROCK"
+title: "DOUGHROCKb"
 date: 2020-05-03 21:15:05 +0000
-excerpt: "DOUGHROCK"
+excerpt: "DOUGHROCKb"
 image: /assets/images/Venus.PNG
 ---
 
-<div id="imageContainer"></div>
-
-<script>
-function loadImage() {
-    var imageUrl = "https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihZuwnTXvAUq6y4jhD88v8UFENrwXzaUgmrmzi6jAoqO__SSfb8gS_uhIgl5vm0AHOK8EWxhhudjFgFAmPwt0NvVTHIF=w958-h934";
-    var timestamp = new Date().getTime();
-    var imageElement = document.createElement('img');
-    imageElement.onload = function() {
-        console.log("Image loaded successfully.");
-    };
-    imageElement.onerror = function() {
-        console.error("Failed to load image.");
-    };
-    imageElement.src = imageUrl + "&t=" + timestamp;
-    imageElement.width = "100%";
-    imageElement.height = "100%";
-    var imageContainer = document.getElementById('imageContainer');
-    imageContainer.innerHTML = '';
-    imageContainer.appendChild(imageElement);
-    setTimeout(loadImage, 1000); // Refresh every second
+<script language="javascript" type="text/javascript">
+<!--
+function ChangeMedia() {
+    var d = new Date();
+    var t = d.getTime();
+    var imgElement = document.getElementById('camara');
+    imgElement.src = "https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihZuwnTXvAUq6y4jhD88v8UFENrwXzaUgmrmzi6jAoqO__SSfb8gS_uhIgl5vm0AHOK8EWxhhudjFgFAmPwt0NvVTHIF=w958-h934&t=" + t;
 }
-
-loadImage();
+var reloadcam = setInterval("ChangeMedia()", 2000);
+-->
 </script>
+
+<div class="center">
+    <div class="imgbox">
+        <img src="https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihZuwnTXvAUq6y4jhD88v8UFENrwXzaUgmrmzi6jAoqO__SSfb8gS_uhIgl5vm0AHOK8EWxhhudjFgFAmPwt0NvVTHIF=w958-h934" alt="Image" name="camara" width="100%" height="100%" border="0" id="camara" />
+    </div>
+</div>
+
+
+<html lang="en">
