@@ -1,28 +1,24 @@
 ---
 layout: post
-title: "DOUGHROCKb"
-date: 2020-05-03 21:15:05 +0000
-excerpt: "DOUGHROCKb"
+title:  "DOUGHROCK"
+date:   2020-05-03 21:15:05 +0000
+excerpt: "DOUGHROCK"
 image: /assets/images/Venus.PNG
 ---
 
-<script language="javascript" type="text/javascript">
-<!--
-function ChangeMedia() {
-    var d = new Date();
-    var t = d.getTime();
-    var imgElement = document.getElementById('camara');
-    imgElement.src = "https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihZuwnTXvAUq6y4jhD88v8UFENrwXzaUgmrmzi6jAoqO__SSfb8gS_uhIgl5vm0AHOK8EWxhhudjFgFAmPwt0NvVTHIF=w958-h934&t=" + t;
-}
-var reloadcam = setInterval("ChangeMedia()", 2000);
--->
-</script>
-
 <div class="center">
     <div class="imgbox">
-        <img src="https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihZuwnTXvAUq6y4jhD88v8UFENrwXzaUgmrmzi6jAoqO__SSfb8gS_uhIgl5vm0AHOK8EWxhhudjFgFAmPwt0NvVTHIF=w958-h934" alt="Image" name="camara" width="100%" height="100%" border="0" id="camara" />
+        <img id="camara" src="/assets/images/Venus.PNG" alt="Image" width="100%" height="100%" />
     </div>
 </div>
 
+<script>
+function updateImage() {
+    var imgElement = document.getElementById('camara');
+    var timestamp = new Date().getTime(); // Add timestamp to prevent caching
+    imgElement.src = "/assets/images/Venus.PNG?t=" + timestamp;
+}
 
-<html lang="en">
+// Update the image every second
+setInterval(updateImage, 1000);
+</script>
