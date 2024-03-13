@@ -33,4 +33,15 @@ function toggleLED() {
         ledStatus.textContent = "LED is ON";
     }
 }
+
+function updateImages() {
+    var imgElements = document.querySelectorAll('.imgbox img');
+    var timestamp = new Date().getTime(); // Add timestamp to prevent caching
+    imgElements.forEach(function(img) {
+        img.src = img.src.split('?')[0] + '?' + timestamp; // Append timestamp to URL
+    });
+}
+
+// Update the images every second
+setInterval(updateImages, 1000);
 </script>
