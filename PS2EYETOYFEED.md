@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "DOUGHROCK"
-excerpt: "DOUGHROCK"
+title:  "DOUGHROCKk"
+excerpt: "DOUGHROCKk"
 image: /assets/images/Venus.PNG
 ---
 
@@ -35,9 +35,8 @@ function toggleLED() {
 }
 
 function updateImage() {
-    var imgBox = document.querySelector('.imgbox');
     var oldImg = document.getElementById('camara2');
-    var newImg = document.createElement('img');
+    var newImg = new Image();
     var timestamp = new Date().getTime(); // Add timestamp to prevent caching
 
     newImg.src = 'https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1' + '&t=' + timestamp;
@@ -45,7 +44,9 @@ function updateImage() {
     newImg.width = oldImg.width;
     newImg.id = 'camara2';
 
-    imgBox.replaceChild(newImg, oldImg);
+    newImg.onload = function() {
+        oldImg.src = newImg.src;
+    }
 }
 
 // Update the image every 15 seconds
