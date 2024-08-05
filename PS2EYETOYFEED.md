@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "DOUGHROCK CAMS"
-excerpt: "DOUGHROCK CAMS"
+title:  "DOUGHROCK"
+excerpt: "DOUGHROCK"
 image: /assets/images/Venus.PNG
 ---
 
