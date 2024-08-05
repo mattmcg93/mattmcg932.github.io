@@ -34,14 +34,12 @@ function toggleLED() {
     }
 }
 
-function updateImages() {
-    var imgElements = document.querySelectorAll('.imgbox img');
+function updateImage() {
+    var img = document.getElementById('camara2');
     var timestamp = new Date().getTime(); // Add timestamp to prevent caching
-    imgElements.forEach(function(img) {
-        img.src = img.src.split('?')[0] + '?' + timestamp; // Append timestamp to URL
-    });
+    img.src = 'https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1' + '&t=' + timestamp;
 }
 
-// Update the images every second
-setInterval(updateImages, 1000);
+// Update the image every 15 seconds
+setInterval(updateImage, 15000);
 </script>
