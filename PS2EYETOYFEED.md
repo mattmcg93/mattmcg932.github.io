@@ -1,14 +1,14 @@
 ---
 layout: post
-title:  "DOUGHROCKk"
-excerpt: "DOUGHROCKk"
+title:  "DOUGHROCK"
+excerpt: "DOUGHROCK"
 image: /assets/images/Venus.PNG
 ---
 
 <div class="center">
     <div class="imgbox">
         <img id="camara2" src="https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1" alt="Image 2" width="100%" />
-        <img id="camara3" src="https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihY75BKpmVeErJejpyZmyo8KFS3Kh5EtjcS6tSuEFnHqion2q0H7Ez0EtT16KbW-DMxgIPIVUIwKGRMGoc78Dmean4b7=w1920-h937?_=" alt="Image 3" width="100%" />
+        <img id="camara3" src="https://dl.dropbox.com/scl/fi/gfsafvb07kt4ymeu3fe3p/captureEthernet.jpg?rlkey=e1pl61w40gj3uzkkp0cw6qe6t&st=ezs0fdvr&dl=1" alt="Image 3" width="100%" />
     </div>
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
     <p id="ledStatus">LED is OFF</p>
@@ -34,21 +34,28 @@ function toggleLED() {
     }
 }
 
-function updateImage() {
-    var oldImg = document.getElementById('camara2');
+function updateImage(imageId, imageUrl) {
+    var oldImg = document.getElementById(imageId);
     var newImg = new Image();
     var timestamp = new Date().getTime(); // Add timestamp to prevent caching
 
-    newImg.src = 'https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1' + '&t=' + timestamp;
-    newImg.alt = 'Image 2';
+    newImg.src = imageUrl + '&t=' + timestamp;
+    newImg.alt = oldImg.alt;
     newImg.width = oldImg.width;
-    newImg.id = 'camara2';
+    newImg.id = imageId;
 
     newImg.onload = function() {
         oldImg.src = newImg.src;
     }
 }
 
-// Update the image every 15 seconds
-setInterval(updateImage, 15000);
+// Update the camara2 image every 15 seconds
+setInterval(function() {
+    updateImage('camara2', 'https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1');
+}, 15000);
+
+// Update the camara3 image every 15 seconds
+setInterval(function() {
+    updateImage('camara3', 'https://www.dropbox.com/scl/fi/gfsafvb07kt4ymeu3fe3p/captureEthernet.jpg?rlkey=e1pl61w40gj3uzkkp0cw6qe6t&st=ezs0fdvr&dl=1');
+}, 15000);
 </script>
