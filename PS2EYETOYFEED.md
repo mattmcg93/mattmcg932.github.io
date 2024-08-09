@@ -46,7 +46,12 @@ function updateImage(imageId, imageUrl) {
     newImg.id = imageId;
 
     newImg.onload = function() {
+        // Replace the old image source only after the new image has successfully loaded
         oldImg.src = newImg.src;
+    }
+
+    newImg.onerror = function() {
+        console.error("Failed to load image: " + newImg.src);
     }
 }
 
