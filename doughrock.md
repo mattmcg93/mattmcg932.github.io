@@ -10,6 +10,7 @@ image: /assets/images/Venus.PNG
         <img id="camara2" src="https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1" alt="Image 2" width="100%" />
         <img id="camara3" src="https://dl.dropbox.com/scl/fi/gfsafvb07kt4ymeu3fe3p/captureEthernet.jpg?rlkey=e1pl61w40gj3uzkkp0cw6qe6t&st=ezs0fdvr&dl=1" alt="Image 3" width="100%" />
         <img id="camara4" src="https://dl.dropbox.com/scl/fi/7bgvdfr7uqm0jhf6wnyt5/capture2.jpg?rlkey=vbtm8501gs5ofil646bxh2w5r&st=o8y85ozb&dl=1" alt="Image 4" width="100%" />
+        <img id="camara5" src="https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1" alt="Image 5" width="100%" />
     </div>
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
     <p id="ledStatus">LED is OFF</p>
@@ -68,5 +69,10 @@ setInterval(function() {
 // Update the camara4 image every 15 seconds
 setInterval(function() {
     updateImage('camara4', 'https://dl.dropbox.com/scl/fi/7bgvdfr7uqm0jhf6wnyt5/capture2.jpg?rlkey=vbtm8501gs5ofil646bxh2w5r&st=o8y85ozb&dl=1');
+}, 15000);
+
+// Update the camara5 image every 15 seconds
+setInterval(function() {
+    updateImage('camara5', 'https://www.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=0');
 }, 15000);
 </script>
