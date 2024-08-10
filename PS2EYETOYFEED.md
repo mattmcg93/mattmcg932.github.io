@@ -1,7 +1,7 @@
 ---
 layout: default
-title:  "DOUGHROCK"
-excerpt: "DOUGHROCK"
+title:  "DOUGHROCKa"
+excerpt: "DOUGHROCKa"
 image: /assets/images/Venus.PNG
 ---
 
