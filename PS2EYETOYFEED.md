@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: doughrock
 title:  "DOUGHROCKa"
 excerpt: "DOUGHROCKa"
 image: /assets/images/Venus.PNG
