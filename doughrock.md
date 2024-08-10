@@ -1,7 +1,7 @@
 ---
 layout: doughrock
-title:  "DOUGHROCKa"
-excerpt: "DOUGHROCKa"
+title:  "DOUGHROCK"
+excerpt: "DOUGHROCK"
 image: /assets/images/Venus.PNG
 ---
 
