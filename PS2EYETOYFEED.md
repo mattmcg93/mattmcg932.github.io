@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title:  "DOUGHROCKa"
 excerpt: "DOUGHROCKa"
 image: /assets/images/Venus.PNG
