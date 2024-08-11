@@ -64,7 +64,7 @@ setInterval(function() {
     updateImage('camara3', 'https://dl.dropbox.com/scl/fi/7bgvdfr7uqm0jhf6wnyt5/capture2.jpg?rlkey=vbtm8501gs5ofil646bxh2w5r&st=o8y85ozb&dl=1');
     updateImage('camara4', 'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1');
     updateImage('camara5', 'https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1');
-}, 15000);
+}, 7500);
 
 function arrangeImages() {
     const imageContainer = document.getElementById('image-container');
