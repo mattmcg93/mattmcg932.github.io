@@ -6,6 +6,7 @@ image: /assets/images/Venus.PNG
 ---
 
 <div class="center">
+    <h1 style="text-align:center;">Welcome to Doughrock</h1>
     <div class="imgbox" id="image-container">
         <img id="camara1" src="https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1" alt="Image 1" />
         <img id="camara2" src="https://dl.dropbox.com/scl/fi/gfsafvb07kt4ymeu3fe3p/captureEthernet.jpg?rlkey=e1pl61w40gj3uzkkp0cw6qe6t&st=ezs0fdvr&dl=1" alt="Image 2" />
