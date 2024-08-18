@@ -65,15 +65,35 @@ setInterval(function() {
 function arrangeImages() {
     const imageContainer = document.getElementById('image-container');
     const images = imageContainer.getElementsByTagName('img');
+    const isPortrait = window.innerHeight > window.innerWidth;
 
-    for (let i = 0; i < images.length; i++) {
-        images[i].style.display = 'block';
-        images[i].style.width = '100%';
-        images[i].style.marginBottom = '10px';
+    if (isPortrait) {
+        // Portrait mode: Display images in a column
+        imageContainer.style.flexDirection = 'column';
+        for (let i = 0; i < images.length; i++) {
+            images[i].style.display = 'block';
+            images[i].style.width = 'auto';
+            images[i].style.height = 'calc(100vh / ' + images.length + ')';
+            images[i].style.marginBottom = '10px';
+        }
+    } else {
+        // Landscape mode: Display images in a row
+        imageContainer.style.flexDirection = 'row';
+        for (let i = 0; i < images.length; i++) {
+            images[i].style.display = 'block';
+            images[i].style.width = 'calc(100vw / ' + images.length + ')';
+            images[i].style.height = 'auto';
+            images[i].style.marginBottom = '0';
+        }
     }
-
-    imageContainer.style.textAlign = 'center';
 }
 
+function handleOrientationChange() {
+    arrangeImages();
+}
+
+window.addEventListener('resize', handleOrientationChange);
+
+// Initial arrangement on page load
 arrangeImages();
 </script>
