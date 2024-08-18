@@ -19,12 +19,57 @@
     <meta name="twitter:image" content="https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1">
 
     <link rel="stylesheet" href="/assets/css/style.css">
+
+    <style>
+        /* Default styles */
+        #image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #image-container img {
+            width: 100%;
+            height: auto;
+            margin: 5px 0;
+        }
+
+        /* Landscape mode styles */
+        @media (min-width: 768px) {
+            #image-container.landscape img {
+                width: calc(100% / 3);
+                height: auto;
+                margin: 0 5px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="content">
         {{ content }}
     </div>
 
-    <!-- Footer is removed -->
+    <script>
+        function arrangeImages() {
+            const imageContainer = document.getElementById('image-container');
+            const screenWidth = window.innerWidth;
+
+            if (screenWidth < 768) {
+                // Small screen (e.g., phones in portrait mode): Display images in a column
+                imageContainer.classList.remove('landscape');
+            } else {
+                // Larger screens (e.g., tablets/PCs in landscape mode): Display images in a row
+                imageContainer.classList.add('landscape');
+            }
+        }
+
+        function handleOrientationChange() {
+            arrangeImages();
+        }
+
+        window.addEventListener('resize', handleOrientationChange);
+        window.addEventListener('load', arrangeImages);
+    </script>
 </body>
 </html>
