@@ -65,10 +65,10 @@ setInterval(function() {
 function arrangeImages() {
     const imageContainer = document.getElementById('image-container');
     const images = imageContainer.getElementsByTagName('img');
-    const isPortrait = window.innerHeight > window.innerWidth;
+    const screenWidth = window.innerWidth;
 
-    if (isPortrait || window.innerWidth < 768) {
-        // Portrait mode or small screen: Display images in a column
+    if (screenWidth < 768) {
+        // Small screen (e.g., phones in portrait mode): Display images in a column
         imageContainer.style.flexDirection = 'column';
         for (let i = 0; i < images.length; i++) {
             images[i].style.display = 'block';
@@ -77,7 +77,7 @@ function arrangeImages() {
             images[i].style.marginBottom = '10px';
         }
     } else {
-        // Landscape mode: Display images in a row
+        // Larger screens (e.g., tablets/PCs in landscape mode): Display images in a row
         imageContainer.style.flexDirection = 'row';
         for (let i = 0; i < images.length; i++) {
             images[i].style.display = 'block';
