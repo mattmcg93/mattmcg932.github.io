@@ -67,8 +67,8 @@ function arrangeImages() {
     const images = imageContainer.getElementsByTagName('img');
     const isPortrait = window.innerHeight > window.innerWidth;
 
-    if (isPortrait) {
-        // Portrait mode: Display images in a column
+    if (isPortrait || window.innerWidth < 768) {
+        // Portrait mode or small screen: Display images in a column
         imageContainer.style.flexDirection = 'column';
         for (let i = 0; i < images.length; i++) {
             images[i].style.display = 'block';
