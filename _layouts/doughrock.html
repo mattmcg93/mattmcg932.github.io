@@ -21,11 +21,10 @@
     <link rel="stylesheet" href="/assets/css/style.css">
 
     <style>
-        /* Default styles */
+        /* Default styles for mobile view (portrait mode) */
         #image-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
         }
 
@@ -35,10 +34,15 @@
             margin: 5px 0;
         }
 
-        /* Landscape mode styles */
+        /* Landscape mode styles for larger screens */
         @media (min-width: 768px) {
+            #image-container.landscape {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
             #image-container.landscape img {
-                width: calc(100% / 3);
+                width: calc(100% / 3 - 10px); /* Adjust for spacing */
                 height: auto;
                 margin: 0 5px;
             }
