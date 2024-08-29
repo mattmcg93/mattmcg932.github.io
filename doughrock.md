@@ -16,7 +16,7 @@ image: /assets/images/Venus.PNG
 
     <h2 style="text-align:center;">Most recently detected object:</h2>
     <div class="imgbox" id="detected-image-container" style="display: flex; justify-content: center;">
-        <img id="detectedImage" src="https://dl.dropbox.com/scl/fi/qm2b8lkw8nl3qeyt2ec1e/detected_image.jpg?rlkey=m94wsep66665jrfuv3n688hfe&st=jz2pm357&dl=1" alt="Most Recently Detected Object" style="display: block; margin: 0 auto;" />
+        <img id="detectedImage" src="https://dl.dropbox.com/scl/fi/xlzeauxyfl6y92qnhpyuq/latest_detection.gif?rlkey=0irbs19icrryih1ceas720h82&st=2xcy3viw&dl=1" alt="Most Recently Detected Object" style="display: block; margin: 0 auto;" />
     </div>
 
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
