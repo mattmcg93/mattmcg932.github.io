@@ -67,7 +67,7 @@ setInterval(function() {
     updateImage('camara2', 'https://dl.dropbox.com/scl/fi/gfsafvb07kt4ymeu3fe3p/captureEthernet.jpg?rlkey=e1pl61w40gj3uzkkp0cw6qe6t&st=ezs0fdvr&dl=1');
     updateImage('camara4', 'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1');
     updateImage('camara5', 'https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1');
-    updateImage('detectedImage', 'https://dl.dropbox.com/scl/fi/qm2b8lkw8nl3qeyt2ec1e/detected_image.jpg?rlkey=m94wsep66665jrfuv3n688hfe&st=jz2pm357&dl=1');
+    updateImage('detectedImage', 'https://dl.dropbox.com/scl/fi/xlzeauxyfl6y92qnhpyuq/latest_detection.gif?rlkey=0irbs19icrryih1ceas720h82&st=2xcy3viw&dl=1');
 }, 4500);
 
 function arrangeImages() {
