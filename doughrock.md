@@ -14,7 +14,7 @@ image: /assets/images/Venus.PNG
         <img id="camara5" src="https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1" alt="Image 5" />
     </div>
 
-    <h2 style="text-align:center;">Most recently detected object:</h2>
+    <h2 style="text-align:center;">Most recently detected object (last 24H):</h2>
     <div class="imgbox" id="detected-image-container" style="display: flex; justify-content: center;">
         <img id="detectedImage" src="https://dl.dropbox.com/scl/fi/xlzeauxyfl6y92qnhpyuq/latest_detection.gif?rlkey=0irbs19icrryih1ceas720h82&st=2xcy3viw&dl=1" alt="Most Recently Detected Object" style="display: block; margin: 0 auto;" />
     </div>
