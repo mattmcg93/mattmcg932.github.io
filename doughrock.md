@@ -16,7 +16,10 @@ image: /assets/images/Venus.PNG
 
     <h2 style="text-align:center;">Most recently detected object (last 24H):</h2>
     <div class="imgbox" id="detected-image-container" style="display: flex; justify-content: center;">
-        <img id="detectedImage" src="https://dl.dropbox.com/scl/fi/xlzeauxyfl6y92qnhpyuq/latest_detection.gif?rlkey=0irbs19icrryih1ceas720h82&st=2xcy3viw&dl=1" alt="Most Recently Detected Object" style="display: block; margin: 0 auto;" />
+        <video id="detectedVideo" controls style="display: block; margin: 0 auto;">
+            <source src="https://www.dropbox.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
     </div>
 
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
@@ -62,19 +65,25 @@ function updateImage(imageId, imageUrl) {
     }
 }
 
+function updateVideo(videoId, videoUrl) {
+    var videoElement = document.getElementById(videoId);
+    var timestamp = new Date().getTime(); // Add timestamp to prevent caching
+    videoElement.src = videoUrl + '&t=' + timestamp;
+}
+
 // Update each camera image every 15 seconds
 setInterval(function() {
     updateImage('camara2', 'https://dl.dropbox.com/scl/fi/15ptzc387q1f7mqd79l83/captureEthernet.jpg?rlkey=mppr5vg8j0u7rii9dsxsasszg&st=4uujot64&dl=1');
     updateImage('camara4', 'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1');
     updateImage('camara5', 'https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1');
-    updateImage('detectedImage', 'https://dl.dropbox.com/scl/fi/xlzeauxyfl6y92qnhpyuq/latest_detection.gif?rlkey=0irbs19icrryih1ceas720h82&st=2xcy3viw&dl=1');
+    updateVideo('detectedVideo', 'https://www.dropbox.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1');
 }, 4500);
 
 function arrangeImages() {
     const imageContainer = document.getElementById('image-container');
     const detectedImageContainer = document.getElementById('detected-image-container');
     const images = imageContainer.getElementsByTagName('img');
-    const detectedImage = document.getElementById('detectedImage');
+    const detectedVideo = document.getElementById('detectedVideo');
     const screenWidth = window.innerWidth;
 
     if (screenWidth < 768) {
@@ -87,10 +96,10 @@ function arrangeImages() {
             images[i].style.height = 'calc(100vh / ' + images.length + ')';
             images[i].style.marginBottom = '10px';
         }
-        detectedImage.style.display = 'block';
-        detectedImage.style.width = 'auto';
-        detectedImage.style.height = 'calc(100vh / 4)'; // Adjust height for detected image
-        detectedImage.style.marginBottom = '10px';
+        detectedVideo.style.display = 'block';
+        detectedVideo.style.width = 'auto';
+        detectedVideo.style.height = 'calc(100vh / 4)'; // Adjust height for detected video
+        detectedVideo.style.marginBottom = '10px';
     } else {
         // Larger screens (e.g., tablets/PCs in landscape mode): Display images in a row
         imageContainer.style.flexDirection = 'row';
@@ -101,10 +110,10 @@ function arrangeImages() {
             images[i].style.height = 'auto';
             images[i].style.marginBottom = '0';
         }
-        detectedImage.style.display = 'block';
-        detectedImage.style.width = 'calc(100vw / 4)'; // Adjust width for detected image
-        detectedImage.style.height = 'auto';
-        detectedImage.style.marginBottom = '0';
+        detectedVideo.style.display = 'block';
+        detectedVideo.style.width = 'calc(100vw / 4)'; // Adjust width for detected video
+        detectedVideo.style.height = 'auto';
+        detectedVideo.style.marginBottom = '0';
     }
 }
 
