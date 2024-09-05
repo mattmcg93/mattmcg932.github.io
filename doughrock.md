@@ -17,7 +17,8 @@ image: /assets/images/Venus.PNG
     <h2 style="text-align:center;">Most recently detected object (last 24H):</h2>
     <div class="imgbox" id="detected-image-container" style="display: flex; justify-content: center;">
         <video id="detectedVideo" controls style="display: block; margin: 0 auto;">
-            <source src="https://www.dropbox.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1" type="video/mp4">
+            <!-- Timestamp prevents caching -->
+            <source src="https://www.dropbox.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1&t=" + new Date().getTime() type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
@@ -65,7 +66,8 @@ function updateImage(imageId, imageUrl) {
     }
 }
 
-function updateVideo(videoId, videoUrl) {
+// Load video only once without caching
+function loadVideoOnce(videoId, videoUrl) {
     var videoElement = document.getElementById(videoId);
     var timestamp = new Date().getTime(); // Add timestamp to prevent caching
     videoElement.src = videoUrl + '&t=' + timestamp;
@@ -76,8 +78,12 @@ setInterval(function() {
     updateImage('camara2', 'https://dl.dropbox.com/scl/fi/15ptzc387q1f7mqd79l83/captureEthernet.jpg?rlkey=mppr5vg8j0u7rii9dsxsasszg&st=4uujot64&dl=1');
     updateImage('camara4', 'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1');
     updateImage('camara5', 'https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1');
-    updateVideo('detectedVideo', 'https://www.dropbox.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1');
 }, 4500);
+
+// Load the video once when the page loads
+window.onload = function() {
+    loadVideoOnce('detectedVideo', 'https://www.dropbox.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1');
+};
 
 function arrangeImages() {
     const imageContainer = document.getElementById('image-container');
