@@ -14,7 +14,7 @@ image: /assets/images/Venus.PNG
         <img id="camara5" src="https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1" alt="Image 5" />
     </div>
 
-    <h2 style="text-align:center;">Most recently detected object (last 24H):</h2>
+    <h2 style="text-align:center;">Most recently detected object (last 24hrs):</h2>
     <div class="imgbox" id="detected-image-container" style="display: flex; justify-content: center;">
         <video id="detectedVideo" controls style="display: block; margin: 0 auto;">
             <!-- Timestamp prevents caching -->
