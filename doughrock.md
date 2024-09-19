@@ -9,7 +9,7 @@ image: /assets/images/Venus.PNG
     <h1 style="text-align:center;">Welcome to Doughrock</h1>
 
     <div class="imgbox" id="image-container" style="display: flex; justify-content: center;">
-        <img id="camara2" src="https://dl.dropbox.com/scl/fi/ny4n7jpq8f4s2miofbmer/captureEthernet.jpg?rlkey=i2blc0ytp341q3owb7xnsakt6&st=m15lnn23&dl=1" alt="Image 2" />
+        <img id="camara2" src="https://dl.dropbox.com/scl/fi/73ys130q6n6wm6hvuf0ue/captureEthernet.jpg?rlkey=vqrx23dgjps7uzhxgjzgymn96&st=8qs9k7ip&dl=1" alt="Image 2" />
         <img id="camara4" src="https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1" alt="Image 4" />
         <img id="camara5" src="https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1" alt="Image 5" />
     </div>
@@ -98,7 +98,7 @@ function loadVideoOnce(videoId, videoUrl) {
 
 // Update each camera image and temperature plot every 15 seconds
 setInterval(function() {
-    updateImage('camara2', 'https://dl.dropbox.com/scl/fi/ny4n7jpq8f4s2miofbmer/captureEthernet.jpg?rlkey=i2blc0ytp341q3owb7xnsakt6&st=m15lnn23&dl=1');
+    updateImage('camara2', 'https://dl.dropbox.com/scl/fi/73ys130q6n6wm6hvuf0ue/captureEthernet.jpg?rlkey=vqrx23dgjps7uzhxgjzgymn96&st=8qs9k7ip&dl=1');
     updateImage('camara4', 'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1');
     updateImage('camara5', 'https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1');
     updateTemperaturePlot('temperaturePlot1', 'https://dl.dropbox.com/scl/fi/eigsn29f0l6gjidwvf39i/raspiEth_temperature_plot.png?rlkey=oh1iibifer1cnozskt6xipk1k&st=3hxg6thl&dl=1');
