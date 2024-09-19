@@ -9,7 +9,7 @@ image: /assets/images/Venus.PNG
     <h1 style="text-align:center;">Welcome to Doughrock</h1>
 
     <div class="imgbox" id="image-container" style="display: flex; justify-content: center;">
-        <img id="camara2" src="https://dl.dropbox.com/scl/fi/ny4n7jpq8f4s2miofbmer/captureEthernet.jpg?rlkey=i2blc0ytp341q3owb7xnsakt6&st=m15lnn23&dl=1" alt="Image 2" />
+        <img id="camara2" src="https://dl.dropbox.com/scl/fi/73ys130q6n6wm6hvuf0ue/captureEthernet.jpg?rlkey=vqrx23dgjps7uzhxgjzgymn96&st=8qs9k7ip&dl=1" alt="Image 2" />
         <img id="camara4" src="https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1" alt="Image 4" />
     </div>
 
@@ -58,7 +58,7 @@ function updateImage(imageId, imageUrl) {
 
 // Update each camera image every 15 seconds
 setInterval(function() {
-    updateImage('camara2', 'https://dl.dropbox.com/scl/fi/15ptzc387q1f7mqd79l83/captureEthernet.jpg?rlkey=mppr5vg8j0u7rii9dsxsasszg&st=4uujot64&dl=1');
+    updateImage('camara2', 'https://dl.dropbox.com/scl/fi/73ys130q6n6wm6hvuf0ue/captureEthernet.jpg?rlkey=vqrx23dgjps7uzhxgjzgymn96&st=8qs9k7ip&dl=1');
     updateImage('camara4', 'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1');
 }, 4500);
 
