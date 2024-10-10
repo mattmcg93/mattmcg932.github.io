@@ -10,31 +10,9 @@ image: /assets/images/Venus.PNG
         <img id="camara2" src="https://dl.dropbox.com/scl/fi/l8xbeyhn7x0tyru79s8p1/captureEthernet.jpg?rlkey=sbs9kzxctced7zgwki4ylqgkc&st=t6drd9pr&dl=1" alt="Image 2" style="width: 100%; margin-bottom: 20px;" />
         <img id="camara4" src="https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1" alt="Image 4" style="width: 100%;" />
     </div>
-
-    <button id="toggleButton" onclick="toggleLED()" style="margin-top: 20px;">Toggle LED</button>
-    <p id="ledStatus" style="color: white;">LED is OFF</p>
 </div>
 
 <script>
-var ledState = false;
-
-function toggleLED() {
-    var toggleButton = document.getElementById('toggleButton');
-    var ledStatus = document.getElementById('ledStatus');
-
-    if (ledState) {
-        // Turn LED off
-        ledState = false;
-        toggleButton.textContent = "Turn LED On";
-        ledStatus.textContent = "LED is OFF";
-    } else {
-        // Turn LED on
-        ledState = true;
-        toggleButton.textContent = "Turn LED Off";
-        ledStatus.textContent = "LED is ON";
-    }
-}
-
 function updateImage(imageId, imageUrl) {
     var oldImg = document.getElementById(imageId);
     var newImg = new Image();
