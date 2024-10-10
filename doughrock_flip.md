@@ -1,42 +1,18 @@
 ---
 layout: doughrock
-title:  "DOUGHROCK FLIP"
-excerpt: "DOUGHROCK FLIP"
+title:  "DOUGHROCK FLIP2"
+excerpt: "DOUGHROCK FLIP2"
 image: /assets/images/Venus.PNG
 ---
 
-<div class="center">
-    <h1 style="text-align:center;">Welcome to Doughrock</h1>
-
-    <div class="imgbox" id="image-container" style="display: flex; justify-content: center;">
-        <img id="camara2" src="https://dl.dropbox.com/scl/fi/l8xbeyhn7x0tyru79s8p1/captureEthernet.jpg?rlkey=sbs9kzxctced7zgwki4ylqgkc&st=t6drd9pr&dl=1" alt="Image 2" />
-        <img id="camara4" src="https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1" alt="Image 4" />
+<div class="center" style="background-color: black; padding: 0; margin: 0; height: 100vh; width: 100vw;">
+    <div class="imgbox" id="image-container" style="display: flex; flex-direction: row; align-items: center; justify-content: center; height: 100%; width: 100%;">
+        <img id="camara2" src="https://dl.dropbox.com/scl/fi/l8xbeyhn7x0tyru79s8p1/captureEthernet.jpg?rlkey=sbs9kzxctced7zgwki4ylqgkc&st=t6drd9pr&dl=1" alt="Image 2" style="width: 50vw; height: 100vh; object-fit: fill; margin: 0;" />
+        <img id="camara4" src="https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1" alt="Image 4" style="width: 50vw; height: 100vh; object-fit: fill; margin: 0;" />
     </div>
-
-    <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
-    <p id="ledStatus">LED is OFF</p>
 </div>
 
 <script>
-var ledState = false;
-
-function toggleLED() {
-    var toggleButton = document.getElementById('toggleButton');
-    var ledStatus = document.getElementById('ledStatus');
-
-    if (ledState) {
-        // Turn LED off
-        ledState = false;
-        toggleButton.textContent = "Turn LED On";
-        ledStatus.textContent = "LED is OFF";
-    } else {
-        // Turn LED on
-        ledState = true;
-        toggleButton.textContent = "Turn LED Off";
-        ledStatus.textContent = "LED is ON";
-    }
-}
-
 function updateImage(imageId, imageUrl) {
     var oldImg = document.getElementById(imageId);
     var newImg = new Image();
@@ -65,26 +41,13 @@ setInterval(function() {
 function arrangeImages() {
     const imageContainer = document.getElementById('image-container');
     const images = imageContainer.getElementsByTagName('img');
-    const screenWidth = window.innerWidth;
-
-    if (screenWidth < 768) {
-        // Small screen (e.g., phones in portrait mode): Display images in a column
-        imageContainer.style.flexDirection = 'column';
-        for (let i = 0; i < images.length; i++) {
-            images[i].style.display = 'block';
-            images[i].style.width = 'auto';
-            images[i].style.height = 'calc(100vh / ' + images.length + ')';
-            images[i].style.marginBottom = '10px';
-        }
-    } else {
-        // Larger screens (e.g., tablets/PCs in landscape mode): Display images in a row
-        imageContainer.style.flexDirection = 'row';
-        for (let i = 0; i < images.length; i++) {
-            images[i].style.display = 'block';
-            images[i].style.width = 'calc(100vw / ' + images.length + ')';
-            images[i].style.height = 'auto';
-            images[i].style.marginBottom = '0';
-        }
+    
+    // Display images horizontally with each image taking 50% of the width and 100% of the height
+    for (let i = 0; i < images.length; i++) {
+        images[i].style.display = 'block';
+        images[i].style.width = '50vw';   // 50% of the viewport width
+        images[i].style.height = '100vh'; // 100% of the viewport height
+        images[i].style.objectFit = 'fill';  // Squash/stretch the images to fit the container
     }
 }
 
