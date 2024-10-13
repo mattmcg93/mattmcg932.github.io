@@ -103,8 +103,8 @@ setInterval(function() {
     updateImage('camara2', 'https://dl.dropbox.com/scl/fi/l8xbeyhn7x0tyru79s8p1/captureEthernet.jpg?rlkey=sbs9kzxctced7zgwki4ylqgkc&st=t6drd9pr&dl=1');
     updateImage('camara4', 'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1');
     updateImage('camara5', 'https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1');
-    updateTemperaturePlot('temperaturePlot1', 'https://dl.dropbox.com/scl/fi/eigsn29f0l6gjidwvf39i/raspiEth_temperature_plot.png?rlkey=oh1iibifer1cnozskt6xipk1k&st=3hxg6thl&dl=1');
-    updateTemperaturePlot('temperaturePlot2', 'https://dl.dropbox.com/scl/fi/32h51p1ote83yb3hmy4kq/raspi3_temperature_plot.png?rlkey=br3v0tj6fg8cci6uf9p0txwtu&st=i0r6p7kg&dl=1');
+    updateTemperaturePlot('temperaturePlot1', 'https://dl.dropbox.com/scl/fi/2jwf4t0ci2odajrpnvjop/raspi1temp_temperature_plot.png?rlkey=20p7prqvvdabblqrx447ucdzi&st=01iqgo0r&dl=1');
+    updateTemperaturePlot('temperaturePlot2', 'https://dl.dropbox.com/scl/fi/14o1yqgxpvabidjc9sgw3/raspi1humid_temperature_plot.png?rlkey=uov2z8zjqt3rd8x6kdi6gpsf6&st=6yyjwchh&dl=1');
 }, 15000); // 15 seconds interval
 
 // Load the video once when the page loads
