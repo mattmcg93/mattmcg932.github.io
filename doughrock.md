@@ -25,8 +25,8 @@ image: /assets/images/Venus.PNG
 
     <h2 style="text-align:center;">Temperature Plots:</h2>
     <div class="imgbox" id="temperature-plots-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <img id="temperaturePlot1" src="https://dl.dropbox.com/scl/fi/eigsn29f0l6gjidwvf39i/raspiEth_temperature_plot.png?rlkey=oh1iibifer1cnozskt6xipk1k&st=3hxg6thl&dl=1" alt="Temperature Plot 1" style="max-width: 100%; height: auto; margin: 5px;" />
-        <img id="temperaturePlot2" src="https://dl.dropbox.com/scl/fi/32h51p1ote83yb3hmy4kq/raspi3_temperature_plot.png?rlkey=br3v0tj6fg8cci6uf9p0txwtu&st=i0r6p7kg&dl=1" alt="Temperature Plot 2" style="max-width: 100%; height: auto; margin: 5px;" />
+        <img id="temperaturePlot1" src="https://dl.dropbox.com/scl/fi/2jwf4t0ci2odajrpnvjop/raspi1temp_temperature_plot.png?rlkey=20p7prqvvdabblqrx447ucdzi&st=01iqgo0r&dl=1" alt="Temperature Plot 1" style="max-width: 100%; height: auto; margin: 5px;" />
+        <img id="temperaturePlot2" src="https://dl.dropbox.com/scl/fi/14o1yqgxpvabidjc9sgw3/raspi1humid_temperature_plot.png?rlkey=uov2z8zjqt3rd8x6kdi6gpsf6&st=6yyjwchh&dl=1" alt="Temperature Plot 2" style="max-width: 100%; height: auto; margin: 5px;" />
     </div>
 
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
