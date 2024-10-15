@@ -9,10 +9,10 @@ image: /assets/images/Venus.PNG
     <h1 style="text-align:center;">Welcome to Doughrock</h1>
 
     <div class="imgbox" id="image-container" style="display: flex; justify-content: center;">
-        <img id="camara1" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?rlkey=kc2kwu9ntn4h4atdta0h4bz3q&st=gpqpb66w&dl=1" alt="Image 1" />
-        <img id="camara2" src="https://dl.dropbox.com/scl/fi/l8xbeyhn7x0tyru79s8p1/captureEthernet.jpg?rlkey=sbs9kzxctced7zgwki4ylqgkc&st=t6drd9pr&dl=1" alt="Image 2" />
-        <img id="camara4" src="https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1" alt="Image 4" />
-        <img id="camara5" src="https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1" alt="Image 5" />
+        <img id="camara1" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?rlkey=kc2kwu9ntn4h4atdta0h4bz3q&st=gpqpb66w&dl=1" alt="Image 1" class="aspect-ratio" />
+        <img id="camara2" src="https://dl.dropbox.com/scl/fi/l8xbeyhn7x0tyru79s8p1/captureEthernet.jpg?rlkey=sbs9kzxctced7zgwki4ylqgkc&st=t6drd9pr&dl=1" alt="Image 2" class="aspect-ratio" />
+        <img id="camara4" src="https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1" alt="Image 4" class="aspect-ratio" />
+        <img id="camara5" src="https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1" alt="Image 5" class="aspect-ratio" />
     </div>
 
     <h2 style="text-align:center;">Most recently detected object (last 24hrs):</h2>
@@ -32,6 +32,16 @@ image: /assets/images/Venus.PNG
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
     <p id="ledStatus">LED is OFF</p>
 </div>
+
+<style>
+    .aspect-ratio {
+        width: 100%; /* Adjust this value as per your layout needs */
+        height: auto;
+        aspect-ratio: 4 / 3; /* Set the aspect ratio */
+        object-fit: cover; /* This ensures the image maintains its aspect ratio */
+    }
+</style>
+
 
 <script>
 var ledState = false;
