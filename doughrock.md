@@ -8,7 +8,7 @@ image: /assets/images/Venus.PNG
 <div class="center">
     <h1 style="text-align:center;">Welcome to Doughrock</h1>
 
-    <div class="imgbox" id="image-container" style="display: flex; justify-content: center;">
+    <div class="imgbox" id="image-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
         <img id="camara1" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?rlkey=kc2kwu9ntn4h4atdta0h4bz3q&st=gpqpb66w&dl=1" alt="Image 1" class="squeeze-aspect-ratio" />
         <img id="camara2" src="https://dl.dropbox.com/scl/fi/l8xbeyhn7x0tyru79s8p1/captureEthernet.jpg?rlkey=sbs9kzxctced7zgwki4ylqgkc&st=t6drd9pr&dl=1" alt="Image 2" class="squeeze-aspect-ratio" />
         <img id="camara4" src="https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1" alt="Image 4" class="squeeze-aspect-ratio" />
@@ -41,6 +41,14 @@ image: /assets/images/Venus.PNG
         max-width: 100%;
         aspect-ratio: 4 / 3;
         object-fit: fill; /* Squeeze the image to fit exactly in a 4:3 ratio */
+    }
+
+    /* Style for a 2x2 grid layout when in widescreen */
+    .widescreen-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 columns */
+        grid-template-rows: repeat(2, 1fr); /* 2 rows */
+        gap: 10px;
     }
 </style>
 
@@ -130,6 +138,7 @@ function arrangeImages() {
     const images = imageContainer.getElementsByTagName('img');
     const detectedVideo = document.getElementById('detectedVideo');
     const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
 
     if (screenWidth < 768) {
         // Small screen (e.g., phones in portrait mode): Display images in a column
@@ -149,24 +158,22 @@ function arrangeImages() {
         temperaturePlotsContainer.style.display = 'block';
         temperaturePlotsContainer.style.width = 'auto';
         temperaturePlotsContainer.style.height = 'calc(100vh / 4)'; // Adjust height for temperature plots
-    } else {
-        // Larger screens (e.g., tablets/PCs in landscape mode): Display images in a row
-        imageContainer.style.flexDirection = 'row';
-        detectedImageContainer.style.flexDirection = 'row';
-        temperaturePlotsContainer.style.flexDirection = 'row';
+    } else if (screenWidth > screenHeight) {
+        // Widescreen mode (e.g., tablets/PCs in landscape mode): Display images in a 2x2 grid
+        imageContainer.classList.add('widescreen-grid');
         for (let i = 0; i < images.length; i++) {
-            images[i].style.display = 'block';
+            images[i].style.width = '100%'; // Fit within grid cells
+            images[i].style.height = 'auto';
+        }
+    } else {
+        // Normal larger screen (but not widescreen): Display images in a row
+        imageContainer.classList.remove('widescreen-grid');
+        imageContainer.style.flexDirection = 'row';
+        for (let i = 0; i < images.length; i++) {
             images[i].style.width = 'calc(100vw / ' + images.length + ')';
             images[i].style.height = 'auto';
             images[i].style.marginBottom = '0';
         }
-        detectedVideo.style.display = 'block';
-        detectedVideo.style.width = 'calc(100vw / 4)'; // Adjust width for detected video
-        detectedVideo.style.height = 'auto';
-        detectedVideo.style.marginBottom = '0';
-        temperaturePlotsContainer.style.display = 'flex';
-        temperaturePlotsContainer.style.width = 'calc(100vw / 2)'; // Adjust width for temperature plots
-        temperaturePlotsContainer.style.height = 'auto';
     }
 }
 
