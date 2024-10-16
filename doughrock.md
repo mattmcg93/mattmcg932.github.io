@@ -17,7 +17,7 @@ image: /assets/images/Venus.PNG
 
     <h2 style="text-align:center;">Most recently detected object (last 24hrs):</h2>
     <div class="imgbox" id="detected-image-container" style="display: flex; justify-content: center;">
-        <video id="detectedVideo" controls style="display: block; margin: 0 auto;">
+        <video id="detectedVideo" controls style="display: block; margin: 0 auto; max-width: 100%; height: auto;">
             <source src="https://dl.dropboxusercontent.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -63,6 +63,14 @@ image: /assets/images/Venus.PNG
     .column-layout {
         display: flex;
         flex-direction: column;
+    }
+
+    /* Ensure the video fits the screen width in portrait mode */
+    @media screen and (max-width: 768px) {
+        #detectedVideo {
+            width: 100%;
+            height: auto;
+        }
     }
 </style>
 
@@ -158,15 +166,21 @@ function arrangeImages() {
         // Small screen (e.g., phones in portrait mode): Display images in a column
         imageContainer.classList.remove('widescreen-grid');
         imageContainer.classList.add('column-layout');
+        detectedVideo.style.width = "100%"; // Ensure video fits the screen in portrait
+        detectedVideo.style.height = "auto";
     } else if (screenWidth > screenHeight) {
         // Widescreen mode (e.g., tablets/PCs in landscape mode): Display images in a 2x2 grid
         imageContainer.classList.remove('column-layout');
         imageContainer.classList.add('widescreen-grid');
+        detectedVideo.style.width = "50%"; // Adjust video width for widescreen
+        detectedVideo.style.height = "auto";
     } else {
         // Larger screens in portrait or non-widescreen mode: Display images in a row
         imageContainer.classList.remove('widescreen-grid');
         imageContainer.classList.remove('column-layout');
         imageContainer.classList.add('row-layout');
+        detectedVideo.style.width = "100%"; // Ensure video fits the screen in portrait
+        detectedVideo.style.height = "auto";
     }
 }
 
