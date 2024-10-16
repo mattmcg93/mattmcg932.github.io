@@ -18,7 +18,7 @@ image: /assets/images/Venus.PNG
     <h2 style="text-align:center;">Most recently detected object (last 24hrs):</h2>
     <div class="imgbox" id="detected-image-container" style="display: flex; justify-content: center;">
         <video id="detectedVideo" controls style="display: block; margin: 0 auto;">
-            <source src="https://www.dropbox.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1" type="video/mp4">
+            <source src="https://dl.dropboxusercontent.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
@@ -142,7 +142,7 @@ setInterval(function() {
 
 // Load the video once when the page loads
 window.onload = function() {
-    loadVideoOnce('detectedVideo', 'https://www.dropbox.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1');
+    loadVideoOnce('detectedVideo', 'https://dl.dropboxusercontent.com/scl/fi/9d060e35st618r3n8bchs/latest_detection.mp4?rlkey=e4b13p40ryxw5aicwm9pnnd3b&st=ss4e4uf3&dl=1');
 };
 
 function arrangeImages() {
