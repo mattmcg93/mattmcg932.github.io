@@ -50,6 +50,20 @@ image: /assets/images/Venus.PNG
         grid-template-rows: repeat(2, 1fr); /* 2 rows */
         gap: 10px;
     }
+
+    /* Adjust the flex layout for larger screens */
+    .row-layout {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* Column layout for small screens */
+    .column-layout {
+        display: flex;
+        flex-direction: column;
+    }
 </style>
 
 <script>
@@ -142,38 +156,17 @@ function arrangeImages() {
 
     if (screenWidth < 768) {
         // Small screen (e.g., phones in portrait mode): Display images in a column
-        imageContainer.style.flexDirection = 'column';
-        detectedImageContainer.style.flexDirection = 'column';
-        temperaturePlotsContainer.style.flexDirection = 'column';
-        for (let i = 0; i < images.length; i++) {
-            images[i].style.display = 'block';
-            images[i].style.width = 'auto';
-            images[i].style.height = 'calc(100vh / ' + images.length + ')';
-            images[i].style.marginBottom = '10px';
-        }
-        detectedVideo.style.display = 'block';
-        detectedVideo.style.width = 'auto';
-        detectedVideo.style.height = 'calc(100vh / 4)'; // Adjust height for detected video
-        detectedVideo.style.marginBottom = '10px';
-        temperaturePlotsContainer.style.display = 'block';
-        temperaturePlotsContainer.style.width = 'auto';
-        temperaturePlotsContainer.style.height = 'calc(100vh / 4)'; // Adjust height for temperature plots
+        imageContainer.classList.remove('widescreen-grid');
+        imageContainer.classList.add('column-layout');
     } else if (screenWidth > screenHeight) {
         // Widescreen mode (e.g., tablets/PCs in landscape mode): Display images in a 2x2 grid
+        imageContainer.classList.remove('column-layout');
         imageContainer.classList.add('widescreen-grid');
-        for (let i = 0; i < images.length; i++) {
-            images[i].style.width = '100%'; // Fit within grid cells
-            images[i].style.height = 'auto';
-        }
     } else {
-        // Normal larger screen (but not widescreen): Display images in a row
+        // Larger screens in portrait or non-widescreen mode: Display images in a row
         imageContainer.classList.remove('widescreen-grid');
-        imageContainer.style.flexDirection = 'row';
-        for (let i = 0; i < images.length; i++) {
-            images[i].style.width = 'calc(100vw / ' + images.length + ')';
-            images[i].style.height = 'auto';
-            images[i].style.marginBottom = '0';
-        }
+        imageContainer.classList.remove('column-layout');
+        imageContainer.classList.add('row-layout');
     }
 }
 
