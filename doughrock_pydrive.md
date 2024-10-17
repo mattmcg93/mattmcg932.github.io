@@ -9,16 +9,16 @@ image: /assets/images/Venus.PNG
     <h1 style="text-align:center;">Welcome to Doughrock</h1>
 
     <div class="imgbox" id="image-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <iframe class="camera-iframe" src="https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview"></iframe>
-        <iframe class="camera-iframe" src="https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview"></iframe>
-        <iframe class="camera-iframe" src="https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview"></iframe>
-        <iframe class="camera-iframe" src="https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview"></iframe>
+        <iframe class="camera-iframe" id="camera1" width="640" height="480"></iframe>
+        <iframe class="camera-iframe" id="camera2" width="640" height="480"></iframe>
+        <iframe class="camera-iframe" id="camera3" width="640" height="480"></iframe>
+        <iframe class="camera-iframe" id="camera4" width="640" height="480"></iframe>
     </div>
 
     <h2 style="text-align:center;">Temperature Plots:</h2>
     <div class="imgbox" id="temperature-plots-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <iframe class="temperature-iframe" src="https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview"></iframe>
-        <iframe class="temperature-iframe" src="https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview"></iframe>
+        <iframe class="temperature-iframe" id="temperature1" width="640" height="360"></iframe>
+        <iframe class="temperature-iframe" id="temperature2" width="640" height="360"></iframe>
     </div>
 
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
@@ -93,6 +93,27 @@ function toggleLED() {
     }
 }
 
+function appendTimestampToUrl(url) {
+    const timestamp = new Date().getTime(); // Get current timestamp
+    return `${url}?t=${timestamp}`; // Append timestamp to URL
+}
+
+function updateIframeSources() {
+    document.getElementById('camera1').src = appendTimestampToUrl('https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview');
+    document.getElementById('camera2').src = appendTimestampToUrl('https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview');
+    document.getElementById('camera3').src = appendTimestampToUrl('https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview');
+    document.getElementById('camera4').src = appendTimestampToUrl('https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview');
+
+    document.getElementById('temperature1').src = appendTimestampToUrl('https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview');
+    document.getElementById('temperature2').src = appendTimestampToUrl('https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview');
+}
+
+// This function updates the image sources when the page loads
+window.onload = function() {
+    updateIframeSources();
+    arrangeImages();
+}
+
 function arrangeImages() {
     const imageContainer = document.getElementById('image-container');
     const temperaturePlotsContainer = document.getElementById('temperature-plots-container');
@@ -121,6 +142,4 @@ function handleOrientationChange() {
 
 window.addEventListener('resize', handleOrientationChange);
 
-// Initial arrangement on page load
-arrangeImages();
 </script>
