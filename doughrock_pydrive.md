@@ -1,6 +1,6 @@
 ---
 layout: doughrock
-title: "DOUGHROCK_PYDRIVE"
+title: "DOUGHROCK PYDRIVE"
 excerpt: "DOUGHROCK PYDRIVE"
 image: /assets/images/Venus.PNG
 ---
@@ -9,16 +9,16 @@ image: /assets/images/Venus.PNG
     <h1 style="text-align:center;">Welcome to Doughrock</h1>
 
     <div class="imgbox" id="image-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <iframe class="camera-iframe" src="https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview" width="640" height="480"></iframe>
-        <iframe class="camera-iframe" src="https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview" width="640" height="480"></iframe>
-        <iframe class="camera-iframe" src="https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview" width="640" height="480"></iframe>
-        <iframe class="camera-iframe" src="https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview" width="640" height="480"></iframe>
+        <iframe class="camera-iframe" src="https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview"></iframe>
+        <iframe class="camera-iframe" src="https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview"></iframe>
+        <iframe class="camera-iframe" src="https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview"></iframe>
+        <iframe class="camera-iframe" src="https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview"></iframe>
     </div>
 
     <h2 style="text-align:center;">Temperature Plots:</h2>
     <div class="imgbox" id="temperature-plots-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <iframe class="temperature-iframe" src="https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview" width="640" height="360"></iframe>
-        <iframe class="temperature-iframe" src="https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview" width="640" height="360"></iframe>
+        <iframe class="temperature-iframe" src="https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview"></iframe>
+        <iframe class="temperature-iframe" src="https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview"></iframe>
     </div>
 
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
@@ -26,41 +26,25 @@ image: /assets/images/Venus.PNG
 </div>
 
 <style>
-    .squeeze-aspect-ratio {
-        width: auto;
-        height: auto;
-        display: block;
-        max-width: 100%;
-        aspect-ratio: 4 / 3;
-        object-fit: fill; /* Squeeze the image to fit exactly in a 4:3 ratio */
-    }
-
     /* Common iframe styling */
     iframe {
         border: none;
+        width: 100%;
+        height: auto;
+        max-width: 640px; /* Prevents exceeding the original dimensions */
     }
 
-    /* Camera iframes with 4:3 ratio */
+    /* Camera iframes with a 4:3 ratio */
     .camera-iframe {
-        width: 640px;
-        height: 480px;
+        aspect-ratio: 4 / 3; /* Maintains 4:3 aspect ratio */
     }
 
-    /* Temperature plot iframes with 16:9 ratio to avoid black bars */
+    /* Temperature plot iframes with a 16:9 ratio */
     .temperature-iframe {
-        width: 640px;
-        height: 360px; /* Set to 16:9 ratio to avoid letterboxing */
+        aspect-ratio: 16 / 9; /* Maintains 16:9 aspect ratio */
     }
 
-    /* 2x2 grid layout in widescreen */
-    .widescreen-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); /* 2 columns */
-        grid-template-rows: repeat(2, 1fr); /* 2 rows */
-        gap: 10px;
-    }
-
-    /* Flex row layout for larger screens */
+    /* Flex layout for larger screens */
     .row-layout {
         display: flex;
         flex-direction: row;
@@ -77,8 +61,14 @@ image: /assets/images/Venus.PNG
     /* Portrait mode adjustments for smaller screens */
     @media screen and (max-width: 768px) {
         iframe {
-            width: 90%; /* Make the iframes take 90% of the screen width in portrait mode */
-            height: auto;
+            width: 90%; /* Make iframes take up 90% of the screen width */
+            height: auto; /* Keep height proportional to width */
+        }
+
+        .imgbox {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the iframes on smaller screens */
         }
     }
 </style>
