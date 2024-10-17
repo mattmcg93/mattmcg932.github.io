@@ -1,7 +1,7 @@
 ---
 layout: doughrock
-title: "DOUGHROCK"
-excerpt: "DOUGHROCK"
+title: "DOUGHROCK PYDRIVE"
+excerpt: "DOUGHROCK PYDRIVE"
 image: /assets/images/Venus.PNG
 ---
 
