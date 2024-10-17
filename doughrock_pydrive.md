@@ -1,7 +1,7 @@
 ---
 layout: doughrock
-title: "DOUGHROCK PYDRIVE"
-excerpt: "DOUGHROCK PYDRIVE"
+title: "DOUGHROCK PYDRIVE2"
+excerpt: "DOUGHROCK PYDRIVE2"
 image: /assets/images/Venus.PNG
 ---
 
@@ -9,16 +9,16 @@ image: /assets/images/Venus.PNG
     <h1 style="text-align:center;">Welcome to Doughrock</h1>
 
     <div class="imgbox" id="image-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <img id="camara1" alt="Image 1" class="squeeze-aspect-ratio" />
-        <img id="camara2" alt="Image 2" class="squeeze-aspect-ratio" />
-        <img id="camara4" alt="Image 4" class="squeeze-aspect-ratio" />
-        <img id="camara5" alt="Image 5" class="squeeze-aspect-ratio" />
+        <iframe src="https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview" width="640" height="480"></iframe>
+        <iframe src="https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview" width="640" height="480"></iframe>
+        <iframe src="https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview" width="640" height="480"></iframe>
+        <iframe src="https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview" width="640" height="480"></iframe>
     </div>
 
     <h2 style="text-align:center;">Temperature Plots:</h2>
     <div class="imgbox" id="temperature-plots-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <img id="temperaturePlot1" alt="Temperature Plot 1" style="max-width: 100%; height: auto; margin: 5px;" />
-        <img id="temperaturePlot2" alt="Temperature Plot 2" style="max-width: 100%; height: auto; margin: 5px;" />
+        <iframe src="https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview" width="640" height="480"></iframe>
+        <iframe src="https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview" width="640" height="480"></iframe>
     </div>
 
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
@@ -84,32 +84,6 @@ function toggleLED() {
         toggleButton.textContent = "Turn LED Off";
         ledStatus.textContent = "LED is ON";
     }
-}
-
-// Function to fetch image and convert to base64
-function fetchImageAsBase64(imageId, driveUrl) {
-    fetch(driveUrl)
-        .then(response => response.blob())
-        .then(blob => {
-            const reader = new FileReader();
-            reader.onloadend = function() {
-                document.getElementById(imageId).src = reader.result; // Set base64 as image source
-            };
-            reader.readAsDataURL(blob); // Convert blob to base64
-        })
-        .catch(error => {
-            console.error('Error fetching image:', error);
-        });
-}
-
-// Fetch images from Google Drive and convert to base64
-window.onload = function() {
-    fetchImageAsBase64('camara1', 'https://drive.google.com/uc?export=view&id=10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI');
-    fetchImageAsBase64('camara2', 'https://drive.google.com/uc?export=view&id=19KHRWco6o_U3SB1Zsof58MvGyPbO6j__');
-    fetchImageAsBase64('camara4', 'https://drive.google.com/uc?export=view&id=11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ');
-    fetchImageAsBase64('camara5', 'https://drive.google.com/uc?export=view&id=1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq');
-    fetchImageAsBase64('temperaturePlot1', 'https://drive.google.com/uc?export=view&id=1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r');
-    fetchImageAsBase64('temperaturePlot2', 'https://drive.google.com/uc?export=view&id=1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH');
 }
 
 function arrangeImages() {
