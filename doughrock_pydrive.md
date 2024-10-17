@@ -1,6 +1,6 @@
 ---
 layout: doughrock
-title: "DOUGHROCK PYDRIVE"
+title: "DOUGHROCK_PYDRIVE"
 excerpt: "DOUGHROCK PYDRIVE"
 image: /assets/images/Venus.PNG
 ---
@@ -9,16 +9,16 @@ image: /assets/images/Venus.PNG
     <h1 style="text-align:center;">Welcome to Doughrock</h1>
 
     <div class="imgbox" id="image-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <iframe src="https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview" width="640" height="480"></iframe>
-        <iframe src="https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview" width="640" height="480"></iframe>
-        <iframe src="https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview" width="640" height="480"></iframe>
-        <iframe src="https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview" width="640" height="480"></iframe>
+        <iframe class="camera-iframe" src="https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview" width="640" height="480"></iframe>
+        <iframe class="camera-iframe" src="https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview" width="640" height="480"></iframe>
+        <iframe class="camera-iframe" src="https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview" width="640" height="480"></iframe>
+        <iframe class="camera-iframe" src="https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview" width="640" height="480"></iframe>
     </div>
 
     <h2 style="text-align:center;">Temperature Plots:</h2>
     <div class="imgbox" id="temperature-plots-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <iframe src="https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview" width="640" height="480"></iframe>
-        <iframe src="https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview" width="640" height="480"></iframe>
+        <iframe class="temperature-iframe" src="https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview" width="640" height="360"></iframe>
+        <iframe class="temperature-iframe" src="https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview" width="640" height="360"></iframe>
     </div>
 
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
@@ -35,7 +35,24 @@ image: /assets/images/Venus.PNG
         object-fit: fill; /* Squeeze the image to fit exactly in a 4:3 ratio */
     }
 
-    /* Style for a 2x2 grid layout when in widescreen */
+    /* Common iframe styling */
+    iframe {
+        border: none;
+    }
+
+    /* Camera iframes with 4:3 ratio */
+    .camera-iframe {
+        width: 640px;
+        height: 480px;
+    }
+
+    /* Temperature plot iframes with 16:9 ratio to avoid black bars */
+    .temperature-iframe {
+        width: 640px;
+        height: 360px; /* Set to 16:9 ratio to avoid letterboxing */
+    }
+
+    /* 2x2 grid layout in widescreen */
     .widescreen-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr); /* 2 columns */
@@ -43,7 +60,7 @@ image: /assets/images/Venus.PNG
         gap: 10px;
     }
 
-    /* Adjust the flex layout for larger screens */
+    /* Flex row layout for larger screens */
     .row-layout {
         display: flex;
         flex-direction: row;
@@ -57,17 +74,10 @@ image: /assets/images/Venus.PNG
         flex-direction: column;
     }
 
-    /* Portrait Mode: Enable vertical scrolling */
+    /* Portrait mode adjustments for smaller screens */
     @media screen and (max-width: 768px) {
-        body {
-            overflow-y: auto; /* Add vertical scrolling */
-        }
-    }
-
-    /* Ensure the video fits the screen width in portrait mode */
-    @media screen and (max-width: 768px) {
-        #detectedVideo {
-            width: 100%;
+        iframe {
+            width: 90%; /* Make the iframes take 90% of the screen width in portrait mode */
             height: auto;
         }
     }
