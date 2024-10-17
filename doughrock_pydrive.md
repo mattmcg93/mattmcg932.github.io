@@ -9,10 +9,10 @@ image: /assets/images/Venus.PNG
     <h1 style="text-align:center;">Welcome to Doughrock</h1>
 
     <div class="imgbox" id="image-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <img id="camara1" src="https://drive.google.com/uc?id=10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI" alt="Image 1" class="squeeze-aspect-ratio" />
-        <img id="camara2" src="https://drive.google.com/uc?id=19KHRWco6o_U3SB1Zsof58MvGyPbO6j__" alt="Image 2" class="squeeze-aspect-ratio" />
-        <img id="camara4" src="https://drive.google.com/uc?id=11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ" alt="Image 4" class="squeeze-aspect-ratio" />
-        <img id="camara5" src="https://drive.google.com/uc?id=1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq" alt="Image 5" class="squeeze-aspect-ratio" />
+        <img id="camara1" src="https://drive.google.com/uc?export=view&id=10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI" alt="Image 1" class="squeeze-aspect-ratio" />
+        <img id="camara2" src="https://drive.google.com/uc?export=view&id=19KHRWco6o_U3SB1Zsof58MvGyPbO6j__" alt="Image 2" class="squeeze-aspect-ratio" />
+        <img id="camara4" src="https://drive.google.com/uc?export=view&id=11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ" alt="Image 4" class="squeeze-aspect-ratio" />
+        <img id="camara5" src="https://drive.google.com/uc?export=view&id=1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq" alt="Image 5" class="squeeze-aspect-ratio" />
     </div>
 
     <h2 style="text-align:center;">Most recently detected object (last 24hrs):</h2>
@@ -25,8 +25,8 @@ image: /assets/images/Venus.PNG
 
     <h2 style="text-align:center;">Temperature Plots:</h2>
     <div class="imgbox" id="temperature-plots-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <img id="temperaturePlot1" src="https://drive.google.com/uc?id=1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r" alt="Temperature Plot 1" style="max-width: 100%; height: auto; margin: 5px;" />
-        <img id="temperaturePlot2" src="https://drive.google.com/uc?id=1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH" alt="Temperature Plot 2" style="max-width: 100%; height: auto; margin: 5px;" />
+        <img id="temperaturePlot1" src="https://drive.google.com/uc?export=view&id=1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r" alt="Temperature Plot 1" style="max-width: 100%; height: auto; margin: 5px;" />
+        <img id="temperaturePlot2" src="https://drive.google.com/uc?export=view&id=1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH" alt="Temperature Plot 2" style="max-width: 100%; height: auto; margin: 5px;" />
     </div>
 
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
@@ -140,12 +140,12 @@ function loadVideoOnce(videoId, videoUrl) {
 
 // Update each camera image and temperature plot every 15 seconds
 setInterval(function() {
-    updateImage('camara1', 'https://drive.google.com/uc?id=10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI');
-    updateImage('camara2', 'https://drive.google.com/uc?id=19KHRWco6o_U3SB1Zsof58MvGyPbO6j__');
-    updateImage('camara4', 'https://drive.google.com/uc?id=11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ');
-    updateImage('camara5', 'https://drive.google.com/uc?id=1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq');
-    updateTemperaturePlot('temperaturePlot1', 'https://drive.google.com/uc?id=1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r');
-    updateTemperaturePlot('temperaturePlot2', 'https://drive.google.com/uc?id=1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH');
+    updateImage('camara1', 'https://drive.google.com/uc?export=view&id=10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI');
+    updateImage('camara2', 'https://drive.google.com/uc?export=view&id=19KHRWco6o_U3SB1Zsof58MvGyPbO6j__');
+    updateImage('camara4', 'https://drive.google.com/uc?export=view&id=11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ');
+    updateImage('camara5', 'https://drive.google.com/uc?export=view&id=1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq');
+    updateTemperaturePlot('temperaturePlot1', 'https://drive.google.com/uc?export=view&id=1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r');
+    updateTemperaturePlot('temperaturePlot2', 'https://drive.google.com/uc?export=view&id=1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH');
 }, 15000); // 15 seconds interval
 
 // Load the video once when the page loads
