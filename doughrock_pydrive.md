@@ -1,7 +1,7 @@
 ---
 layout: doughrock
-title: "DOUGHROCK PYDRIVE2"
-excerpt: "DOUGHROCK PYDRIVE2"
+title: "DOUGHROCK PYDRIVE"
+excerpt: "DOUGHROCK PYDRIVE"
 image: /assets/images/Venus.PNG
 ---
 
@@ -55,6 +55,13 @@ image: /assets/images/Venus.PNG
     .column-layout {
         display: flex;
         flex-direction: column;
+    }
+
+    /* Portrait Mode: Enable vertical scrolling */
+    @media screen and (max-width: 768px) {
+        body {
+            overflow-y: auto; /* Add vertical scrolling */
+        }
     }
 
     /* Ensure the video fits the screen width in portrait mode */
