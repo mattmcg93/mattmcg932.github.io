@@ -6,7 +6,7 @@ image: /assets/images/Venus.PNG
 ---
 
 <div class="center">
-    <h1 style="text-align:center;">Welcome to Doughrock</h1>
+    <h1 style="text-align:center;">Welcome to Doughrock2</h1>
 
     <div class="imgbox" id="image-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
         <img id="camara1" src="https://drive.google.com/uc?export=view&id=10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI" alt="Image 1" class="squeeze-aspect-ratio" />
