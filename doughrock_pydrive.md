@@ -1,6 +1,6 @@
 ---
 layout: doughrock
-title: "DOUGHROCK PYDRIVE"
+title: "DOUGHROCK_PYDRIVE"
 excerpt: "DOUGHROCK PYDRIVE"
 image: /assets/images/Venus.PNG
 ---
@@ -97,25 +97,25 @@ function toggleLED() {
     }
 }
 
-function appendTimestampToUrl(url) {
-    const timestamp = new Date().getTime(); // Get current timestamp
-    return `${url}?t=${timestamp}`; // Append timestamp to URL to prevent caching
+function appendUniqueParamToUrl(url) {
+    const uniqueParam = new Date().getTime(); // Get the current timestamp as a unique parameter
+    return `${url}?v=${uniqueParam}`; // Append the unique parameter to prevent caching
 }
 
 function updateIframeSources() {
     // Camera image iframes
-    document.getElementById('camera1').src = appendTimestampToUrl('https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview');
-    document.getElementById('camera2').src = appendTimestampToUrl('https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview');
-    document.getElementById('camera3').src = appendTimestampToUrl('https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview');
-    document.getElementById('camera4').src = appendTimestampToUrl('https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview');
+    document.getElementById('camera1').src = appendUniqueParamToUrl('https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview');
+    document.getElementById('camera2').src = appendUniqueParamToUrl('https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview');
+    document.getElementById('camera3').src = appendUniqueParamToUrl('https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview');
+    document.getElementById('camera4').src = appendUniqueParamToUrl('https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview');
 
     // Temperature plot iframes
-    document.getElementById('temperature1').src = appendTimestampToUrl('https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview');
-    document.getElementById('temperature2').src = appendTimestampToUrl('https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview');
+    document.getElementById('temperature1').src = appendUniqueParamToUrl('https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview');
+    document.getElementById('temperature2').src = appendUniqueParamToUrl('https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview');
 
     // New images added from drive
-    document.getElementById('newImage1').src = appendTimestampToUrl('https://drive.google.com/file/d/1vco7jhaA1L2W-uKgMNonyE0o9P7EDLOS/preview');
-    document.getElementById('newImage2').src = appendTimestampToUrl('https://drive.google.com/file/d/1qD91XKt-wZAsEPd8OFikLe21v6bVIpcM/preview');
+    document.getElementById('newImage1').src = appendUniqueParamToUrl('https://drive.google.com/file/d/1vco7jhaA1L2W-uKgMNonyE0o9P7EDLOS/preview');
+    document.getElementById('newImage2').src = appendUniqueParamToUrl('https://drive.google.com/file/d/1qD91XKt-wZAsEPd8OFikLe21v6bVIpcM/preview');
 }
 
 // This function updates the image sources when the page loads
