@@ -1,6 +1,6 @@
 ---
 layout: doughrock
-title: "DOUGHROCK FLIP2"
+title: "DOUGHROCK FLIP1"
 excerpt: "DOUGHROCK FLIP2"
 image: /assets/images/Venus.PNG
 ---
