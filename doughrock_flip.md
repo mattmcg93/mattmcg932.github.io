@@ -1,7 +1,7 @@
 ---
 layout: doughrock
-title:  "DOUGHROCK FLIP2"
-excerpt: "DOUGHROCK FLIP2"
+title:  "DOUGHROCK FLIP"
+excerpt: "DOUGHROCK FLIP"
 image: /assets/images/Venus.PNG
 ---
 
@@ -12,26 +12,26 @@ image: /assets/images/Venus.PNG
 </div>
 
 <script>
-// Image URLs array
+// List of image URLs
 let images = [
     'https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg',
     'https://dl.dropbox.com/scl/fi/uy7wnnd292doq8ipq4ref/captureEthernet.jpg',
     'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg'
 ];
 
-let currentIndex = 0;
+let currentIndex = 0; // Start with the first image
 
-function showNextImage() {
+function updateSlideshowImage() {
     let imageElement = document.getElementById('slideshow');
-    let newImg = new Image(); // Create a new Image object
-    let timestamp = new Date().getTime(); // Prevent caching
+    let newImg = new Image(); // Create a new image object
+    let timestamp = new Date().getTime(); // Prevent caching by appending a timestamp
 
-    // Set new image source and timestamp to prevent cache issues
+    // Set new image URL with timestamp to avoid caching issues
     newImg.src = images[currentIndex] + '?t=' + timestamp;
-    newImg.alt = "Slideshow Image";
+    newImg.alt = "Slideshow Image"; 
 
     newImg.onload = function() {
-        // Change the image only when the new one has successfully loaded
+        // Only replace the image source once the new image has fully loaded
         imageElement.src = newImg.src;
     }
 
@@ -39,9 +39,13 @@ function showNextImage() {
         console.error("Failed to load image: " + newImg.src);
     }
 
-    currentIndex = (currentIndex + 1) % images.length; // Cycle through images
+    // Increment the index to show the next image, cycling back to the first image after the last one
+    currentIndex = (currentIndex + 1) % images.length;
 }
 
-// Set the interval to change the image every 10 seconds
-setInterval(showNextImage, 10000);
+// Set the interval to change the image every 10 seconds (10000 ms)
+setInterval(updateSlideshowImage, 10000);
+
+// Initial image setup
+updateSlideshowImage();
 </script>
