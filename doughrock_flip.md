@@ -1,21 +1,21 @@
 ---
 layout: doughrock
-title:  "DOUGHROCK FLIP2"
+title:  "DOUGHROCK FLIP"
 excerpt: "DOUGHROCK FLIP2"
 image: /assets/images/Venus.PNG
 ---
 
 <div class="center" style="background-color: black; padding: 0; margin: 0; height: 100vh; width: 100vw;">
     <div class="imgbox" id="image-container" style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%;">
-        <img id="camara" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg" alt="Camera Image" style="width: 100vw; height: 100vh; object-fit: fill; margin: 0;" />
+        <img id="camara" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?dl=1" alt="Camera Image" style="width: 100vw; height: 100vh; object-fit: fill; margin: 0;" />
     </div>
 </div>
 
 <script>
 var images = [
-    'https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg',
-    'https://dl.dropbox.com/scl/fi/uy7wnnd292doq8ipq4ref/captureEthernet.jpg',
-    'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg'
+    'https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?dl=1',
+    'https://dl.dropbox.com/scl/fi/uy7wnnd292doq8ipq4ref/captureEthernet.jpg?dl=1',
+    'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?dl=1'
 ];
 
 var currentImageIndex = 0;
@@ -29,7 +29,7 @@ function updateImage(imageId) {
     currentImageIndex = (currentImageIndex + 1) % images.length;
     var imageUrl = images[currentImageIndex];
 
-    newImg.src = imageUrl + '?t=' + timestamp;
+    newImg.src = imageUrl + '&t=' + timestamp;
     newImg.alt = oldImg.alt;
     newImg.id = imageId;
 
@@ -43,7 +43,7 @@ function updateImage(imageId) {
     }
 }
 
-// Update the single image every 15 seconds
+// Update the single image every 4.5 seconds
 setInterval(function() {
     updateImage('camara');
 }, 4500);
