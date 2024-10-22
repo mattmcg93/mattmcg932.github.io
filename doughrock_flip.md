@@ -1,21 +1,21 @@
 ---
 layout: doughrock
-title:  "DOUGHROCK FLIP"
+title:  "DOUGHROCK FLIP2"
 excerpt: "DOUGHROCK FLIP2"
 image: /assets/images/Venus.PNG
 ---
 
 <div class="center" style="background-color: black; padding: 0; margin: 0; height: 100vh; width: 100vw;">
     <div class="imgbox" id="image-container" style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%;">
-        <img id="slideshow" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg" alt="Slideshow Image" style="width: 100vw; height: 100vh; object-fit: fill; margin: 0;" />
+        <img id="slideshow" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?rlkey=kc2kwu9ntn4h4atdta0h4bz3q&st=gpqpb66w&dl=1" alt="Slideshow Image" style="width: 100vw; height: 100vh; object-fit: fill; margin: 0;" />
     </div>
 </div>
 
 <script>
 let imageUrls = [
-    'https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg',
-    'https://dl.dropbox.com/scl/fi/uy7wnnd292doq8ipq4ref/captureEthernet.jpg',
-    'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg'
+    'https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?rlkey=kc2kwu9ntn4h4atdta0h4bz3q&st=gpqpb66w&dl=1',
+    'https://dl.dropbox.com/scl/fi/uy7wnnd292doq8ipq4ref/captureEthernet.jpg?rlkey=lqvtll9d5hmgyk9drbcm45o3i&st=nxgwun9b&dl=1',
+    'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1'
 ];
 
 let currentIndex = 0;
@@ -25,7 +25,7 @@ function updateImage(imageId, imageUrl) {
     var newImg = new Image();
     var timestamp = new Date().getTime(); // Add timestamp to prevent caching
 
-    newImg.src = imageUrl + '?t=' + timestamp;
+    newImg.src = imageUrl + '&t=' + timestamp;
     newImg.alt = oldImg.alt;
     newImg.id = imageId;
 
