@@ -12,6 +12,7 @@ image: /assets/images/Venus.PNG
 </div>
 
 <script>
+// Image URLs array
 let images = [
     'https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg',
     'https://dl.dropbox.com/scl/fi/uy7wnnd292doq8ipq4ref/captureEthernet.jpg',
@@ -21,12 +22,26 @@ let images = [
 let currentIndex = 0;
 
 function showNextImage() {
-    const imageElement = document.getElementById('slideshow');
-    currentIndex = (currentIndex + 1) % images.length; // Cycle through the array
-    imageElement.src = images[currentIndex];
+    let imageElement = document.getElementById('slideshow');
+    let newImg = new Image(); // Create a new Image object
+    let timestamp = new Date().getTime(); // Prevent caching
+
+    // Set new image source and timestamp to prevent cache issues
+    newImg.src = images[currentIndex] + '?t=' + timestamp;
+    newImg.alt = "Slideshow Image";
+
+    newImg.onload = function() {
+        // Change the image only when the new one has successfully loaded
+        imageElement.src = newImg.src;
+    }
+
+    newImg.onerror = function() {
+        console.error("Failed to load image: " + newImg.src);
+    }
+
+    currentIndex = (currentIndex + 1) % images.length; // Cycle through images
 }
 
-setInterval(showNextImage, 10000); // Change every 10 seconds
+// Set the interval to change the image every 10 seconds
+setInterval(showNextImage, 10000);
 </script>
-
- 
