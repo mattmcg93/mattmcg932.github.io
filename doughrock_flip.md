@@ -28,3 +28,5 @@ function showNextImage() {
 
 setInterval(showNextImage, 10000); // Change every 10 seconds
 </script>
+
+ 
