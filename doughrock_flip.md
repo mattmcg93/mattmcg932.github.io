@@ -1,51 +1,63 @@
----
-layout: doughrock
-title:  "DOUGHROCK FLIP"
-excerpt: "DOUGHROCK FLIP"
-image: /assets/images/Venus.PNG
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }}</title>
 
-<div class="center" style="background-color: black; padding: 0; margin: 0; height: 100vh; width: 100vw;">
-    <div class="imgbox" id="image-container" style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%;">
-        <img id="slideshow" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg" alt="Slideshow Image" style="width: 100vw; height: 100vh; object-fit: fill; margin: 0;" />
+    <style>
+        /* Ensure the image takes up the full screen */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+
+        #image-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #image-container img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="image-container">
+        <img src="https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture1.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1" alt="Image 1">
+        <img src="https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture2.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1" alt="Image 2" style="display: none;">
+        <img src="https://dl.dropbox.com/scl/fi/5f09j1aix76rbw5ci2nqh/capture3.jpg?rlkey=grfyzmz93k1m1yl7owtx9kcgc&st=ec613gi4&dl=1" alt="Image 3" style="display: none;">
     </div>
-</div>
 
-<script>
-// List of image URLs
-let images = [
-    'https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg',
-    'https://dl.dropbox.com/scl/fi/uy7wnnd292doq8ipq4ref/captureEthernet.jpg',
-    'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg'
-];
+    <script>
+        const images = document.querySelectorAll('#image-container img');
+        let currentImageIndex = 0;
 
-let currentIndex = 0; // Start with the first image
+        function showNextImage() {
+            // Hide the current image
+            images[currentImageIndex].style.display = 'none';
+            
+            // Move to the next image index
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            
+            // Show the next image
+            images[currentImageIndex].style.display = 'block';
+        }
 
-function updateSlideshowImage() {
-    let imageElement = document.getElementById('slideshow');
-    let newImg = new Image(); // Create a new image object
-    let timestamp = new Date().getTime(); // Prevent caching by appending a timestamp
+        // Show the next image every 10 seconds (10000 milliseconds)
+        setInterval(showNextImage, 10000);
 
-    // Set new image URL with timestamp to avoid caching issues
-    newImg.src = images[currentIndex] + '?t=' + timestamp;
-    newImg.alt = "Slideshow Image"; 
-
-    newImg.onload = function() {
-        // Only replace the image source once the new image has fully loaded
-        imageElement.src = newImg.src;
-    }
-
-    newImg.onerror = function() {
-        console.error("Failed to load image: " + newImg.src);
-    }
-
-    // Increment the index to show the next image, cycling back to the first image after the last one
-    currentIndex = (currentIndex + 1) % images.length;
-}
-
-// Set the interval to change the image every 10 seconds (10000 ms)
-setInterval(updateSlideshowImage, 10000);
-
-// Initial image setup
-updateSlideshowImage();
-</script>
+        // Ensure the first image is visible when the page loads
+        window.addEventListener('load', () => {
+            images[0].style.display = 'block';
+        });
+    </script>
+</body>
+</html>
