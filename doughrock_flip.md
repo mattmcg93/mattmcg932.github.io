@@ -1,31 +1,51 @@
+---
+layout: doughrock
+title:  "DOUGHROCK FLIP2"
+excerpt: "DOUGHROCK FLIP2"
+image: /assets/images/Venus.PNG
+---
+
+<div class="center" style="background-color: black; padding: 0; margin: 0; height: 100vh; width: 100vw;">
+    <div class="imgbox" id="image-container" style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%;">
+        <img id="camara" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg" alt="Camera Image" style="width: 100vw; height: 100vh; object-fit: fill; margin: 0;" />
+    </div>
+</div>
+
 <script>
-let images = [
-    'https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?rlkey=kc2kwu9ntn4h4atdta0h4bz3q&st=gpqpb66w&dl=1',
-    'https://dl.dropbox.com/scl/fi/uy7wnnd292doq8ipq4ref/captureEthernet.jpg?rlkey=lqvtll9d5hmgyk9drbcm45o3i&st=nxgwun9b&dl=1',
-    'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1'
+var images = [
+    'https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg',
+    'https://dl.dropbox.com/scl/fi/uy7wnnd292doq8ipq4ref/captureEthernet.jpg',
+    'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg'
 ];
 
-let currentIndex = 0;
+var currentImageIndex = 0;
 
-function showImage() {
-    const imageContainer = document.getElementById('image-container');
-    imageContainer.innerHTML = ''; // Clear the container
-    const img = document.createElement('img');
-    img.src = images[currentIndex];
-    img.style.width = '100vw'; // Full screen width
-    img.style.height = '100vh'; // Full screen height
-    img.style.objectFit = 'cover'; // Maintain aspect ratio and cover the screen
-    imageContainer.appendChild(img);
+function updateImage(imageId) {
+    var oldImg = document.getElementById(imageId);
+    var newImg = new Image();
+    var timestamp = new Date().getTime(); // Add timestamp to prevent caching
 
-    // Move to the next image after 10 seconds
-    currentIndex = (currentIndex + 1) % images.length;
+    // Get the next image URL from the array and update the index
+    currentImageIndex = (currentImageIndex + 1) % images.length;
+    var imageUrl = images[currentImageIndex];
+
+    newImg.src = imageUrl + '?t=' + timestamp;
+    newImg.alt = oldImg.alt;
+    newImg.id = imageId;
+
+    newImg.onload = function() {
+        // Replace the old image source only after the new image has successfully loaded
+        oldImg.src = newImg.src;
+    }
+
+    newImg.onerror = function() {
+        console.error("Failed to load image: " + newImg.src);
+    }
 }
 
-function startSlideshow() {
-    showImage(); // Show the first image
-    setInterval(showImage, 10000); // Change image every 10 seconds
-}
+// Update the single image every 15 seconds
+setInterval(function() {
+    updateImage('camara');
+}, 4500);
 
-// Start the slideshow when the page loads
-window.onload = startSlideshow;
 </script>
