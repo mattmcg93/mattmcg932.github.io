@@ -1,13 +1,13 @@
 ---
 layout: doughrock
-title:  "DOUGHROCK FLIP2"
+title:  "DOUGHROCK FLIP"
 excerpt: "DOUGHROCK FLIP2"
 image: /assets/images/Venus.PNG
 ---
 
 <div class="center" style="background-color: black; padding: 0; margin: 0; height: 100vh; width: 100vw;">
     <div class="imgbox" id="image-container" style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%;">
-        <img id="slideshow" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?rlkey=kc2kwu9ntn4h4atdta0h4bz3q&st=gpqpb66w&dl=1" alt="Slideshow Image" style="width: 100vw; height: 100vh; object-fit: fill; margin: 0;" />
+        <img id="slideshow" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?rlkey=kc2kwu9ntn4h4atdta0h4bz3q&st=gpqpb66w&dl=1" alt="Slideshow Image" style="height: 100vh; width: auto; object-fit: cover; margin: 0;" />
     </div>
 </div>
 
