@@ -12,20 +12,9 @@
             width: 100%;
             overflow: hidden;
         }
-
-        .fullscreen-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;  /* Stretch to fill width */
-            height: 100%; /* Stretch to fill height */
-            object-fit: fill; /* Disregard aspect ratio */
-        }
     </style>
 </head>
 <body>
-    <iframe id="slideshow" class="fullscreen-image"></iframe>
-
     <script>
         // Array of Google Drive preview URLs
         const imageUrls = [
@@ -36,21 +25,9 @@
 
         let currentImageIndex = 0;
 
-        function appendRandomParamToUrl(url) {
-            const randomParam = Date.now() + Math.random().toString(36).substring(7); // Combine timestamp and random string
-            return `${url}?v=${randomParam}`; // Append cache-busting query parameter
-        }
-
-        function reloadIframe(id, url) {
-            const iframe = document.getElementById(id);
-            const newIframe = iframe.cloneNode();
-            newIframe.src = appendRandomParamToUrl(url);
-            iframe.parentNode.replaceChild(newIframe, iframe); // Dynamically replace iframe
-        }
-
         function showNextImage() {
-            const url = imageUrls[currentImageIndex];
-            reloadIframe('slideshow', url); // Replace iframe with the next image
+            // Navigate directly to the next URL
+            window.location.href = imageUrls[currentImageIndex];
 
             // Move to the next image, loop back to the first if at the end
             currentImageIndex = (currentImageIndex + 1) % imageUrls.length;
@@ -58,8 +35,8 @@
 
         // Start the slideshow
         window.onload = function() {
-            showNextImage(); // Show the first image
             setInterval(showNextImage, 15000); // Change image every 15 seconds
+            showNextImage(); // Show the first image immediately
         };
     </script>
 </body>
