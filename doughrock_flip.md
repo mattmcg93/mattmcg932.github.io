@@ -17,14 +17,9 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;  /* Fill the page width */
-            height: auto; /* Maintain aspect ratio */
-        }
-
-        /* Allow vertical scrolling if needed */
-        iframe {
-            display: block;
-            min-height: 100%; /* Ensure image uses at least full viewport height */
+            width: 100%;  /* Stretch to fill width */
+            height: 100%; /* Stretch to fill height */
+            object-fit: fill; /* Disregard aspect ratio */
         }
     </style>
 </head>
