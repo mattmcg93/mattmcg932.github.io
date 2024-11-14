@@ -1,7 +1,7 @@
 ---
 layout: doughrock
-title: "DOUGHROCK PYDRIVE"
-excerpt: "DOUGHROCK PYDRIVE"
+title: "DOUGHROCK PYDRIVE2"
+excerpt: "DOUGHROCK PYDRIVE2"
 image: /assets/images/Venus.PNG
 ---
 
@@ -86,12 +86,10 @@ function toggleLED() {
     }
 }
 
-// Perform a forced page refresh every 15 seconds
+// Perform a true hard refresh every 15 seconds
 window.onload = function() {
     setInterval(function() {
-        const currentUrl = window.location.href.split('?')[0]; // Get the base URL without query parameters
-        const newUrl = currentUrl + '?v=' + Date.now(); // Add a unique cache-busting query parameter
-        window.location.replace(newUrl); // Replace URL with cache-busting version and reload
+        window.location.href = window.location.href.split('?')[0] + '?hardrefresh=' + Date.now();
     }, 15000);
 };
 </script>
