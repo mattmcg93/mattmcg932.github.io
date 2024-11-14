@@ -17,8 +17,14 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;  /* Fit to page width */
+            width: 100%;  /* Fill the page width */
             height: auto; /* Maintain aspect ratio */
+        }
+
+        /* Allow vertical scrolling if needed */
+        iframe {
+            display: block;
+            min-height: 100%; /* Ensure image uses at least full viewport height */
         }
     </style>
 </head>
