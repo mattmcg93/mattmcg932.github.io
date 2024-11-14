@@ -3,8 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Slideshow Controller</title>
+    <title>Image Slideshow</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background: black;
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="slideshow"></iframe>
+
     <script>
+        // Array of Google Drive preview URLs
         const imageUrls = [
             'https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview',
             'https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview',
@@ -13,18 +38,21 @@
 
         let currentIndex = 0;
 
-        function navigateToNextImage() {
+        function showNextImage() {
+            const iframe = document.getElementById('slideshow');
+
+            // Set iframe source to the next image URL
+            iframe.src = imageUrls[currentIndex];
+
+            // Increment index and loop back to the start
             currentIndex = (currentIndex + 1) % imageUrls.length;
-            window.location.href = imageUrls[currentIndex] + "?next=" + encodeURIComponent(window.location.href);
         }
 
-        // Automatically switch images every 15 seconds
+        // Start the slideshow
         window.onload = function() {
-            setTimeout(navigateToNextImage, 15000);
+            showNextImage(); // Show the first image immediately
+            setInterval(showNextImage, 15000); // Change image every 15 seconds
         };
     </script>
-</head>
-<body>
-    <h1>Loading Slideshow...</h1>
 </body>
 </html>
