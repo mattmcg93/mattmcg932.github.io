@@ -87,9 +87,9 @@ function toggleLED() {
 }
 
 // Perform a true hard refresh every 15 seconds
-window.onload = function() {
-    setInterval(function() {
-        window.location.href = window.location.href.split('?')[0] + '?hardrefresh=' + Date.now();
-    }, 15000);
-};
+//window.onload = function() {
+//    setInterval(function() {
+//        window.location.href = window.location.href.split('?')[0] + '?hardrefresh=' + Date.now();
+//    }, 15000);
+//};
 </script>
