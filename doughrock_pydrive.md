@@ -1,7 +1,7 @@
 ---
 layout: doughrock
-title: "DOUGHROCK PYDRIVE2"
-excerpt: "DOUGHROCK PYDRIVE2"
+title: "DOUGHROCK PYDRIVE"
+excerpt: "DOUGHROCK PYDRIVE"
 image: /assets/images/Venus.PNG
 ---
 
@@ -86,30 +86,10 @@ function toggleLED() {
     }
 }
 
-function appendRandomParamToUrl(url) {
-    const randomParam = Date.now() + Math.random().toString(36).substring(7);
-    return `${url}?v=${randomParam}`;
-}
-
-function reloadIframe(id, url) {
-    const iframe = document.getElementById(id);
-    const newIframe = iframe.cloneNode();
-    newIframe.src = appendRandomParamToUrl(url); // Use cache-busting URL
-    iframe.parentNode.replaceChild(newIframe, iframe); // Replace iframe to force reload
-}
-
-function updateIframeSources() {
-    reloadIframe('camera1', 'https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview');
-    reloadIframe('camera2', 'https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview');
-    reloadIframe('camera3', 'https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview');
-    reloadIframe('camera4', 'https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview');
-    reloadIframe('temperature1', 'https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview');
-    reloadIframe('temperature2', 'https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview');
-}
-
-// Refresh every 10 seconds to enforce image updates
+// Perform a hard page refresh every 15 seconds
 window.onload = function() {
-    updateIframeSources();
-    setInterval(updateIframeSources, 10000);
+    setInterval(function() {
+        location.reload(true); // Force reload with cache bypass
+    }, 15000);
 };
 </script>
