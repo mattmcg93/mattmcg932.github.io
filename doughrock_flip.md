@@ -26,29 +26,30 @@
     <iframe id="slideshow" class="fullscreen-image"></iframe>
 
     <script>
-        // Array of Google Drive preview URLs
-        const imageUrls = [
-            'https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview',
-            'https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview',
-            'https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview'
+        // Array of Google Drive file IDs for direct media access
+        const imageFileIds = [
+            '10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI',
+            '19KHRWco6o_U3SB1Zsof58MvGyPbO6j__',
+            '11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ'
         ];
 
         let currentImageIndex = 0;
 
         function appendRandomParamToUrl(url) {
             const randomParam = Math.random().toString(36).substring(7); // Generate a random string
-            return `${url}?v=${randomParam}`; // Append the random string to prevent caching
+            return `${url}&v=${randomParam}`; // Append the random string to prevent caching
         }
 
         function showNextImage() {
-            // Get the iframe element
+            // Direct Google Drive file URL for raw content
+            const baseUrl = `https://drive.google.com/uc?id=${imageFileIds[currentImageIndex]}&export=view`;
+            
+            // Get the iframe element and update source with cache-busting parameter
             const iframe = document.getElementById('slideshow');
-            
-            // Set the next image source with a cache-busting parameter
-            iframe.src = appendRandomParamToUrl(imageUrls[currentImageIndex]);
-            
+            iframe.src = appendRandomParamToUrl(baseUrl);
+
             // Move to the next image, loop back to the first if at the end
-            currentImageIndex = (currentImageIndex + 1) % imageUrls.length;
+            currentImageIndex = (currentImageIndex + 1) % imageFileIds.length;
         }
 
         // Start the slideshow
