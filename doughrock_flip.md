@@ -38,11 +38,16 @@
 
         let currentIndex = 0;
 
+        function appendCacheBuster(url) {
+            // Add a unique timestamp parameter to prevent caching
+            return `${url}?cb=${Date.now()}`;
+        }
+
         function showNextImage() {
             const iframe = document.getElementById('slideshow');
 
-            // Set iframe source to the next image URL
-            iframe.src = imageUrls[currentIndex];
+            // Set iframe source to the next image URL with cache-busting parameter
+            iframe.src = appendCacheBuster(imageUrls[currentIndex]);
 
             // Increment index and loop back to the start
             currentIndex = (currentIndex + 1) % imageUrls.length;
