@@ -37,24 +37,28 @@
         let currentImageIndex = 0;
 
         function appendRandomParamToUrl(url) {
-            const randomParam = Math.random().toString(36).substring(7); // Generate a random string
-            return `${url}?v=${randomParam}`; // Append the random string to prevent caching
+            const randomParam = Date.now() + Math.random().toString(36).substring(7); // Combine timestamp and random string
+            return `${url}?v=${randomParam}`; // Append cache-busting query parameter
+        }
+
+        function reloadIframe(id, url) {
+            const iframe = document.getElementById(id);
+            const newIframe = iframe.cloneNode();
+            newIframe.src = appendRandomParamToUrl(url);
+            iframe.parentNode.replaceChild(newIframe, iframe); // Dynamically replace iframe
         }
 
         function showNextImage() {
-            // Get the iframe element
-            const iframe = document.getElementById('slideshow');
-            
-            // Set the next image source with a cache-busting parameter
-            iframe.src = appendRandomParamToUrl(imageUrls[currentImageIndex]);
-            
+            const url = imageUrls[currentImageIndex];
+            reloadIframe('slideshow', url); // Replace iframe with the next image
+
             // Move to the next image, loop back to the first if at the end
             currentImageIndex = (currentImageIndex + 1) % imageUrls.length;
         }
 
         // Start the slideshow
         window.onload = function() {
-            showNextImage();
+            showNextImage(); // Show the first image
             setInterval(showNextImage, 15000); // Change image every 15 seconds
         };
     </script>
