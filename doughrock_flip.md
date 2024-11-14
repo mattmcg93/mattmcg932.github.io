@@ -39,24 +39,29 @@
         let currentIndex = 0;
 
         function appendCacheBuster(url) {
-            // Add a unique timestamp parameter to prevent caching
-            return `${url}?cb=${Date.now()}`;
+            return `${url}?cb=${Date.now()}`; // Cache-busting with timestamp
         }
 
-        function showNextImage() {
+        function reloadIframe() {
             const iframe = document.getElementById('slideshow');
+            
+            // Remove old iframe
+            iframe.parentNode.removeChild(iframe);
+            
+            // Create new iframe with next image
+            const newIframe = document.createElement('iframe');
+            newIframe.id = 'slideshow';
+            newIframe.src = appendCacheBuster(imageUrls[currentIndex]);
+            document.body.appendChild(newIframe);
 
-            // Set iframe source to the next image URL with cache-busting parameter
-            iframe.src = appendCacheBuster(imageUrls[currentIndex]);
-
-            // Increment index and loop back to the start
+            // Update index and loop
             currentIndex = (currentIndex + 1) % imageUrls.length;
         }
 
         // Start the slideshow
         window.onload = function() {
-            showNextImage(); // Show the first image immediately
-            setInterval(showNextImage, 15000); // Change image every 15 seconds
+            reloadIframe(); // Show the first image immediately
+            setInterval(reloadIframe, 15000); // Change image every 15 seconds
         };
     </script>
 </body>
