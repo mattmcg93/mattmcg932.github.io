@@ -14,9 +14,7 @@ image: /assets/images/Venus.PNG
         <iframe class="camera-iframe" id="camera3" width="640" height="480"></iframe>
         <iframe class="camera-iframe" id="camera4" width="640" height="480"></iframe>
 
-        <!-- New image iframes added -->
-        <iframe class="camera-iframe" id="newImage1" width="640" height="480"></iframe>
-        <iframe class="camera-iframe" id="newImage2" width="640" height="480"></iframe>
+
     </div>
 
     <h2 style="text-align:center;">Temperature Plots:</h2>
@@ -113,9 +111,7 @@ function updateIframeSources() {
     document.getElementById('temperature1').src = appendRandomParamToUrl('https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview');
     document.getElementById('temperature2').src = appendRandomParamToUrl('https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview');
 
-    // New images added from drive
-    document.getElementById('newImage1').src = appendRandomParamToUrl('https://drive.google.com/file/d/1vco7jhaA1L2W-uKgMNonyE0o9P7EDLOS/preview');
-    document.getElementById('newImage2').src = appendRandomParamToUrl('https://drive.google.com/file/d/1qD91XKt-wZAsEPd8OFikLe21v6bVIpcM/preview');
+
 }
 
 // This function updates the image sources when the page loads
