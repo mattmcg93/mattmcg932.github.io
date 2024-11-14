@@ -1,7 +1,7 @@
 ---
 layout: doughrock
-title: "DOUGHROCK PYDRIVE"
-excerpt: "DOUGHROCK PYDRIVE"
+title: "DOUGHROCK PYDRIVE2"
+excerpt: "DOUGHROCK PYDRIVE2"
 image: /assets/images/Venus.PNG
 ---
 
@@ -91,13 +91,20 @@ function appendRandomParamToUrl(url) {
     return `${url}?v=${randomParam}`;
 }
 
+function reloadIframe(id, url) {
+    const iframe = document.getElementById(id);
+    const newIframe = iframe.cloneNode();
+    newIframe.src = appendRandomParamToUrl(url); // Use cache-busting URL
+    iframe.parentNode.replaceChild(newIframe, iframe); // Replace iframe to force reload
+}
+
 function updateIframeSources() {
-    document.getElementById('camera1').src = appendRandomParamToUrl('https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview');
-    document.getElementById('camera2').src = appendRandomParamToUrl('https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview');
-    document.getElementById('camera3').src = appendRandomParamToUrl('https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview');
-    document.getElementById('camera4').src = appendRandomParamToUrl('https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview');
-    document.getElementById('temperature1').src = appendRandomParamToUrl('https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview');
-    document.getElementById('temperature2').src = appendRandomParamToUrl('https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview');
+    reloadIframe('camera1', 'https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview');
+    reloadIframe('camera2', 'https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview');
+    reloadIframe('camera3', 'https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview');
+    reloadIframe('camera4', 'https://drive.google.com/file/d/1prHvQ2rbwoUfv5nf-ig4mAGznxFbePXq/preview');
+    reloadIframe('temperature1', 'https://drive.google.com/file/d/1CUPkHJvfNaihCiTkOycwY8zlptEwW5-r/preview');
+    reloadIframe('temperature2', 'https://drive.google.com/file/d/1KNUjtFYwoI3hzEsjXtSgB0L2DDajNKfH/preview');
 }
 
 // Refresh every 10 seconds to enforce image updates
