@@ -1,68 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Slideshow</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            background: black;
-        }
+---
+layout: doughrock
+title:  "DOUGHROCK FLIP"
+excerpt: "DOUGHROCK FLIP2"
+image: /assets/images/Venus.PNG
+---
 
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            object-fit: cover;
-        }
-    </style>
-</head>
-<body>
-    <iframe id="slideshow"></iframe>
+<div class="center" style="background-color: black; padding: 0; margin: 0; height: 100vh; width: 100vw;">
+    <div class="imgbox" id="image-container" style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%;">
+        <img id="slideshow" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?rlkey=kc2kwu9ntn4h4atdta0h4bz3q&st=gpqpb66w&dl=1" alt="Slideshow Image" style="height: 100vh; width: auto; object-fit: cover; margin: 0;" />
+    </div>
+</div>
 
-    <script>
-        // Array of Google Drive preview URLs
-        const imageUrls = [
-            'https://drive.google.com/file/d/10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI/preview',
-            'https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview',
-            'https://drive.google.com/file/d/11yc6_LOWjh5L9pXkMV1-pV8QbidulJSQ/preview'
-        ];
+<script>
+let imageUrls = [
+    'https://dl.dropbox.com/scl/fi/zhkwrx1kt7kc5s0ypduhx/capture1.jpg?rlkey=uigscdp62h8o0zkh5jr6m9hdv&st=s60u33u0&dl=1',
+    'https://dl.dropbox.com/scl/fi/9wz46ajek7xtyxa5rtpag/captureEthernet.jpg?rlkey=vlsx4cdu5zd5ywdpqo2gyoq1j&st=giw1qvyp&dl=1',
+    'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1'
+];
 
-        let currentIndex = 0;
+let currentIndex = 0;
 
-        function appendCacheBuster(url) {
-            return `${url}?cb=${Date.now()}`; // Cache-busting with timestamp
-        }
+function updateImage(imageId, imageUrl) {
+    var oldImg = document.getElementById(imageId);
+    var newImg = new Image();
+    var timestamp = new Date().getTime(); // Add timestamp to prevent caching
 
-        function reloadIframe() {
-            const iframe = document.getElementById('slideshow');
-            
-            // Remove old iframe
-            iframe.parentNode.removeChild(iframe);
-            
-            // Create new iframe with next image
-            const newIframe = document.createElement('iframe');
-            newIframe.id = 'slideshow';
-            newIframe.src = appendCacheBuster(imageUrls[currentIndex]);
-            document.body.appendChild(newIframe);
+    newImg.src = imageUrl + '&t=' + timestamp;
+    newImg.alt = oldImg.alt;
+    newImg.id = imageId;
 
-            // Update index and loop
-            currentIndex = (currentIndex + 1) % imageUrls.length;
-        }
+    newImg.onload = function() {
+        // Replace the old image source only after the new image has successfully loaded
+        oldImg.src = newImg.src;
+    }
 
-        // Start the slideshow
-        window.onload = function() {
-            reloadIframe(); // Show the first image immediately
-            setInterval(reloadIframe, 15000); // Change image every 15 seconds
-        };
-    </script>
-</body>
-</html>
+    newImg.onerror = function() {
+        console.error("Failed to load image: " + newImg.src);
+    }
+}
+
+// Rotate between the three URLs every 10 seconds
+setInterval(function() {
+    currentIndex = (currentIndex + 1) % imageUrls.length; // Cycle through the URLs
+    updateImage('slideshow', imageUrls[currentIndex]);
+}, 10000);
+
+</script>
