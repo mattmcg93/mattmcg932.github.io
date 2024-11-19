@@ -25,8 +25,11 @@ image: /assets/images/Venus.PNG
 
     <h2 style="text-align:center;">Temperature Plots:</h2>
     <div class="imgbox" id="temperature-plots-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
-        <img id="temperaturePlot1" src="https://dl.dropbox.com/scl/fi/2jwf4t0ci2odajrpnvjop/raspi1temp_temperature_plot.png?rlkey=20p7prqvvdabblqrx447ucdzi&st=01iqgo0r&dl=1" alt="Temperature Plot 1" style="max-width: 100%; height: auto; margin: 5px;" />
-        <img id="temperaturePlot2" src="https://dl.dropbox.com/scl/fi/14o1yqgxpvabidjc9sgw3/raspi1humid_temperature_plot.png?rlkey=uov2z8zjqt3rd8x6kdi6gpsf6&st=6yyjwchh&dl=1" alt="Temperature Plot 2" style="max-width: 100%; height: auto; margin: 5px;" />
+        <img id="temperaturePlot1" src="https://dl.dropbox.com/scl/fi/mvh3qpj4ika2b5qr6mr3i/raspi1temp_temperature_month_plot.png?rlkey=639b5zabw1tlgd0n6llqpwmkg&st=4w0tnrdo&dl=1" alt="Temperature Plot 1" style="max-width: 100%; height: auto; margin: 5px;" />
+        <img id="temperaturePlot2" src="https://dl.dropbox.com/scl/fi/tx5y6m9r4kq2c4qkdzw1f/raspi1temp_temperature_week_plot.png?rlkey=4sbnzj8qm4nkclzg5pf4oxltu&st=1u6h0to4&dl=1" alt="Temperature Plot 2" style="max-width: 100%; height: auto; margin: 5px;" />
+        <img id="humidityPlot1" src="https://dl.dropbox.com/scl/fi/va98fqt6xa1wigf9hqkin/raspi1humid_temperature_month_plot.png?rlkey=lgghdrj348fr4t0o4av20wlsp&st=hd9vslso&dl=1" alt="Temperature Plot 1" style="max-width: 100%; height: auto; margin: 5px;" />
+        <img id="humidityPlot2" src="https://dl.dropbox.com/scl/fi/yt28xmb1r4gib0ef92qys/raspi1humid_temperature_week_plot.png?rlkey=14c2qpdqmeiuqg1015i50imci&st=d2vlmu50&dl=1" alt="Temperature Plot 2" style="max-width: 100%; height: auto; margin: 5px;" />
+        
     </div>
 
     <button id="toggleButton" onclick="toggleLED()">Toggle LED</button>
@@ -144,8 +147,10 @@ setInterval(function() {
     updateImage('camara2', 'https://dl.dropbox.com/scl/fi/9wz46ajek7xtyxa5rtpag/captureEthernet.jpg?rlkey=vlsx4cdu5zd5ywdpqo2gyoq1j&st=giw1qvyp&dl=1');
     updateImage('camara4', 'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1');
     updateImage('camara5', 'https://dl.dropbox.com/scl/fi/9ana9eoxf3yob6kopqix6/capture4.jpg?rlkey=joehtgx3n67v48vd525zz9vrn&st=0h5hfxhp&dl=1');
-    updateTemperaturePlot('temperaturePlot1', 'https://dl.dropbox.com/scl/fi/2jwf4t0ci2odajrpnvjop/raspi1temp_temperature_plot.png?rlkey=20p7prqvvdabblqrx447ucdzi&st=01iqgo0r&dl=1');
-    updateTemperaturePlot('temperaturePlot2', 'https://dl.dropbox.com/scl/fi/14o1yqgxpvabidjc9sgw3/raspi1humid_temperature_plot.png?rlkey=uov2z8zjqt3rd8x6kdi6gpsf6&st=6yyjwchh&dl=1');
+    updateTemperaturePlot('temperaturePlot1', 'https://dl.dropbox.com/scl/fi/mvh3qpj4ika2b5qr6mr3i/raspi1temp_temperature_month_plot.png?rlkey=639b5zabw1tlgd0n6llqpwmkg&st=4w0tnrdo&dl=1');
+    updateTemperaturePlot('temperaturePlot2', 'https://dl.dropbox.com/scl/fi/tx5y6m9r4kq2c4qkdzw1f/raspi1temp_temperature_week_plot.png?rlkey=4sbnzj8qm4nkclzg5pf4oxltu&st=1u6h0to4&dl=1');
+    updateTemperaturePlot('humidityPlot1', 'https://dl.dropbox.com/scl/fi/va98fqt6xa1wigf9hqkin/raspi1humid_temperature_month_plot.png?rlkey=lgghdrj348fr4t0o4av20wlsp&st=hd9vslso&dl=1');
+    updateTemperaturePlot('humidityPlot2', 'https://dl.dropbox.com/scl/fi/yt28xmb1r4gib0ef92qys/raspi1humid_temperature_week_plot.png?rlkey=14c2qpdqmeiuqg1015i50imci&st=d2vlmu50&dl=1');
 }, 15000); // 15 seconds interval
 
 // Load the video once when the page loads
