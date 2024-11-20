@@ -7,7 +7,7 @@ image: /assets/images/Venus.PNG
 
 <div class="center" style="background-color: black; padding: 0; margin: 0; height: 100vh; width: 100vw;">
     <div class="imgbox" id="image-container" style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%;">
-        <img id="slideshow" src="https://dl.dropbox.com/scl/fi/zhkwrx1kt7kc5s0ypduhx/capture1.jpg?rlkey=uigscdp62h8o0zkh5jr6m9hdv&st=s60u33u0&dl=1" alt="Slideshow Image" style="height: 100vh; width: auto; object-fit: cover; margin: 0;" />
+        <img id="slideshow" src="https://dl.dropbox.com/scl/fi/0gtuqbpf7lm96xzdxeokx/capture1.jpg?rlkey=kc2kwu9ntn4h4atdta0h4bz3q&st=gpqpb66w&dl=1" alt="Slideshow Image" style="height: 100vh; width: auto; object-fit: cover; margin: 0;" />
     </div>
 </div>
 
@@ -15,7 +15,7 @@ image: /assets/images/Venus.PNG
 let imageUrls = [
     'https://dl.dropbox.com/scl/fi/zhkwrx1kt7kc5s0ypduhx/capture1.jpg?rlkey=uigscdp62h8o0zkh5jr6m9hdv&st=s60u33u0&dl=1',
     'https://dl.dropbox.com/scl/fi/9wz46ajek7xtyxa5rtpag/captureEthernet.jpg?rlkey=vlsx4cdu5zd5ywdpqo2gyoq1j&st=giw1qvyp&dl=1',
-    'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1'
+    'https://dl.dropbox.com/scl/fi/xh5ml5to3afne3zyhsnbb/capture3.jpg?rlkey=0d4f26lwyyvx4amyngsvy37d9&st=kla64jwv&dl=1',
     'https://dl.dropbox.com/scl/fi/qozc8h33g0kycqavqcolt/LatestDetection.png?rlkey=di99unlbe0pnyg6rvynl5l93y&st=450rqohe&dl=1'
 ];
 
@@ -40,7 +40,7 @@ function updateImage(imageId, imageUrl) {
     }
 }
 
-// Rotate between the three URLs every 10 seconds
+// Rotate between the four URLs every 10 seconds
 setInterval(function() {
     currentIndex = (currentIndex + 1) % imageUrls.length; // Cycle through the URLs
     updateImage('slideshow', imageUrls[currentIndex]);
