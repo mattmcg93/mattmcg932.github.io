@@ -7,10 +7,10 @@ image: /assets/images/Venus.PNG
 
 <div class="center" style="background-color: black; padding: 0; margin: 0; height: 100vh; width: 100vw; display: flex;">
     <div id="img1-container" 
-         style="width: 50vw; height: 100vh; background-size: 100% 100%; background-repeat: no-repeat;">
+         style="width: 50vw; height: 100vh; background-size: 100% 100%; background-repeat: no-repeat; background-position: center center;">
     </div>
     <div id="img2-container" 
-         style="width: 50vw; height: 100vh; background-size: 100% 100%; background-repeat: no-repeat;">
+         style="width: 50vw; height: 100vh; background-size: 100% 100%; background-repeat: no-repeat; background-position: center center;">
     </div>
 </div>
 
@@ -20,19 +20,29 @@ let imageUrls = [
     'https://dl.dropbox.com/scl/fi/9wz46ajek7xtyxa5rtpag/captureEthernet.jpg?rlkey=vlsx4cdu5zd5ywdpqo2gyoq1j&st=giw1qvyp&dl=1'
 ];
 
-function updateBackgroundImage(containerId, imageUrl) {
-    var timestamp = new Date().getTime();
-    // Append timestamp to prevent caching
-    document.getElementById(containerId).style.backgroundImage = `url('${imageUrl}&t=${timestamp}')`;
+// Preload and update function
+function preloadAndSetBackground(containerId, imageUrl) {
+    let timestamp = new Date().getTime();
+    let newImage = new Image();
+    newImage.src = imageUrl + '&t=' + timestamp;
+
+    newImage.onload = function() {
+        // Only update background after image has fully loaded
+        document.getElementById(containerId).style.backgroundImage = `url('${newImage.src}')`;
+    }
+
+    newImage.onerror = function() {
+        console.error("Failed to load image: " + newImage.src);
+    }
 }
 
 // Initial load
-updateBackgroundImage('img1-container', imageUrls[0]);
-updateBackgroundImage('img2-container', imageUrls[1]);
+preloadAndSetBackground('img1-container', imageUrls[0]);
+preloadAndSetBackground('img2-container', imageUrls[1]);
 
 // Update both images every 10 seconds
 setInterval(function() {
-    updateBackgroundImage('img1-container', imageUrls[0]);
-    updateBackgroundImage('img2-container', imageUrls[1]);
+    preloadAndSetBackground('img1-container', imageUrls[0]);
+    preloadAndSetBackground('img2-container', imageUrls[1]);
 }, 10000);
 </script>
