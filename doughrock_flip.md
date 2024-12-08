@@ -9,16 +9,16 @@ image: /assets/images/Venus.PNG
     <div class="imgbox" id="image-container" 
          style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%;">
          
-        <!-- Two images side by side -->
+        <!-- Two images side by side, each forcibly stretched -->
         <img id="img1" 
              src="https://dl.dropbox.com/scl/fi/zhkwrx1kt7kc5s0ypduhx/capture1.jpg?rlkey=uigscdp62h8o0zkh5jr6m9hdv&st=s60u33u0&dl=1" 
              alt="Image 1" 
-             style="height: 100%; width: 50%; object-fit: cover; margin: 0; padding: 0;" />
+             style="margin: 0; padding: 0; width: 50vw; height: 100vh;" />
 
         <img id="img2" 
              src="https://dl.dropbox.com/scl/fi/9wz46ajek7xtyxa5rtpag/captureEthernet.jpg?rlkey=vlsx4cdu5zd5ywdpqo2gyoq1j&st=giw1qvyp&dl=1" 
              alt="Image 2" 
-             style="height: 100%; width: 50%; object-fit: cover; margin: 0; padding: 0;" />
+             style="margin: 0; padding: 0; width: 50vw; height: 100vh;" />
     </div>
 </div>
 
@@ -36,9 +36,9 @@ function updateImage(imageId, imageUrl) {
     newImg.src = imageUrl + '&t=' + timestamp;
     newImg.alt = oldImg.alt;
     newImg.id = imageId;
-    newImg.style.height = "100%";
-    newImg.style.width = "50%";
-    newImg.style.objectFit = "cover";
+    // Apply the same forced dimensions
+    newImg.style.width = "50vw";
+    newImg.style.height = "100vh";
     newImg.style.margin = "0";
     newImg.style.padding = "0";
 
@@ -57,4 +57,3 @@ setInterval(function() {
     updateImage('img2', imageUrls[1]);
 }, 10000);
 </script>
-
