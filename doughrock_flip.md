@@ -57,3 +57,4 @@ setInterval(function() {
     updateImage('img2', imageUrls[1]);
 }, 10000);
 </script>
+
