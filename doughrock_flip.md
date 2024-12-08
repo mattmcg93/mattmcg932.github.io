@@ -45,5 +45,5 @@ preloadAndSetBackground('img2-container', imageUrls[1]);
 setInterval(function() {
     preloadAndSetBackground('img1-container', imageUrls[0]);
     preloadAndSetBackground('img2-container', imageUrls[1]);
-}, 10000);
+}, 5000);
 </script>
