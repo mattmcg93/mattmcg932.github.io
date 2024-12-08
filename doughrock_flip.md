@@ -34,5 +34,5 @@ updateBackgroundImage('img2-container', imageUrls[1]);
 setInterval(function() {
     updateBackgroundImage('img1-container', imageUrls[0]);
     updateBackgroundImage('img2-container', imageUrls[1]);
-}, 7000);
+}, 10000);
 </script>
