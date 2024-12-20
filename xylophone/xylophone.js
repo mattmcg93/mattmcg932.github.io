@@ -2,8 +2,9 @@ var wordNumber = 0;
 var soundsPath = "sounds/";
 var extension = ".mp3";
 
-// Corresponding text to display
+// Corresponding text and image paths
 var words = ["Leo", "You", "Cant", "Catch", "Me"];
+var images = ["images/leo.jpg", "images/you.jpg", "images/cant.jpg", "images/catch.jpg", "images/me.jpg"]; // Replace with actual image file names
 
 var manifest = [
     [ // Leo
@@ -48,6 +49,9 @@ function playSound(target) {
 
     // Update the text above the xylophone
     document.getElementById("displayText").textContent = words[wordNumber];
+
+    // Update the image above the xylophone
+    document.getElementById("xylophoneImage").src = images[wordNumber];
 
     // Cycle to the next word
     if (wordNumber < 4) {
