@@ -49,3 +49,15 @@ image: /assets/images/Venus.PNG
         }
     }
 </style>
+
+<script>
+function refreshImages() {
+    let timestamp = new Date().getTime(); // Unique timestamp to bypass cache
+    document.getElementById("camera1").src = "https://drive.google.com/file/d/19KHRWco6o_U3SB1Zsof58MvGyPbO6j__/preview?nocache=" + timestamp;
+    document.getElementById("camera2").src = "https://drive.google.com/file/d/1vrr26I23p4XUdAlN_2tnevs4VYE7PIoI/preview?nocache=" + timestamp;
+    document.getElementById("camera3").src = "https://drive.google.com/file/d/15NHAZMdz2H9QrQ5h3VJiqcF_4K_rvC1C/preview?nocache=" + timestamp;
+}
+
+// Refresh images every 5 seconds
+setInterval(refreshImages, 5000);
+</script>
