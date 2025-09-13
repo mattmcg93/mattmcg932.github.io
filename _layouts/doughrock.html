@@ -24,6 +24,43 @@
         }
         .status { color: #4CAF50; }
         .main-container { max-width: 1400px; margin: 0 auto; }
+        
+        /* Sensor data section */
+        .sensor-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .sensor-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .sensor-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .sensor-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .sensor-updated {
+            font-size: 0.8em;
+            opacity: 0.7;
+            margin-top: 10px;
+        }
+        
         .main-image-section {
             background: rgba(255,255,255,0.95);
             border-radius: 20px;
@@ -97,6 +134,22 @@
             <div class="status">Welcome to Doughrock.</div>
         </div>
 
+        <!-- Sensor Data Section -->
+        <div class="sensor-section">
+            <div class="sensor-grid">
+                <div class="sensor-card">
+                    <div class="sensor-label">Humidity</div>
+                    <div class="sensor-value" id="humidity-value">--%</div>
+                    <div class="sensor-updated" id="humidity-updated">Loading...</div>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-label">Temperature</div>
+                    <div class="sensor-value" id="temperature-value">--°C</div>
+                    <div class="sensor-updated" id="temperature-updated">Loading...</div>
+                </div>
+            </div>
+        </div>
+
         <div class="main-image-section">
             <img id="main-image" class="main-image" alt="Main View">
             <div id="main-title">Loading main image...</div>
@@ -127,6 +180,12 @@
             "Humidity - Last Week", "Temperature - Last Week"
         ];
 
+        // Sensor data file IDs
+        const sensorIds = {
+            humidity: "1Ajb8r6TB5aKkWDAr99iDAlo3TlqReT2O",
+            temperature: "1GPWSQIFjLR25lmuP-ljgIFriLNBS-FyQ"
+        };
+
         let selectedIndex = 0;
         const debugLog = document.getElementById('debug-log');
 
@@ -134,6 +193,98 @@
             console.log(message);
             debugLog.innerHTML += message + '<br>';
             debugLog.scrollTop = debugLog.scrollHeight;
+        }
+
+        // Function to fetch sensor data from Google Drive text files
+        async function fetchSensorData(fileId, sensorType) {
+            const urls = [
+                `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
+                `https://docs.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
+            ];
+            
+            const corsProxies = getCORSProxies();
+            
+            // Try direct fetch first
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url, {
+                        cache: 'no-store',
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const text = await response.text();
+                        if (text && text.trim()) {
+                            log(`${sensorType} data fetched directly: ${text.trim()}`);
+                            return text.trim();
+                        }
+                    }
+                } catch (e) {
+                    log(`Direct ${sensorType} fetch failed: ${e.message}`);
+                }
+            }
+            
+            // Try with CORS proxies
+            for (const proxy of corsProxies) {
+                try {
+                    const url = `https://drive.google.com/uc?id=${fileId}&export=download`;
+                    const proxyUrl = proxy + encodeURIComponent(url);
+                    
+                    const response = await fetch(proxyUrl, {
+                        cache: 'no-store'
+                    });
+                    
+                    if (response.ok) {
+                        const text = await response.text();
+                        if (text && text.trim()) {
+                            log(`${sensorType} data fetched via proxy: ${text.trim()}`);
+                            return text.trim();
+                        }
+                    }
+                } catch (e) {
+                    log(`Proxy ${sensorType} fetch failed: ${e.message}`);
+                }
+            }
+            
+            log(`Failed to fetch ${sensorType} data`);
+            return null;
+        }
+
+        // Update sensor displays
+        async function updateSensorData() {
+            log('Updating sensor data...');
+            
+            // Update humidity
+            const humidityData = await fetchSensorData(sensorIds.humidity, 'humidity');
+            if (humidityData) {
+                const humidityValue = parseFloat(humidityData);
+                if (!isNaN(humidityValue)) {
+                    document.getElementById('humidity-value').textContent = `${humidityValue.toFixed(1)}%`;
+                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                } else {
+                    document.getElementById('humidity-value').textContent = `${humidityData}%`;
+                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                }
+            } else {
+                document.getElementById('humidity-updated').textContent = 'Failed to update';
+            }
+            
+            // Update temperature
+            const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
+            if (temperatureData) {
+                const temperatureValue = parseFloat(temperatureData);
+                if (!isNaN(temperatureValue)) {
+                    document.getElementById('temperature-value').textContent = `${temperatureValue.toFixed(1)}°C`;
+                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                } else {
+                    document.getElementById('temperature-value').textContent = `${temperatureData}°C`;
+                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                }
+            } else {
+                document.getElementById('temperature-updated').textContent = 'Failed to update';
+            }
         }
 
         // Generate URLs with aggressive cache busting
@@ -380,7 +531,10 @@
             log('Starting auto-refresh every 10 seconds with aggressive cache clearing...');
             
             setInterval(async () => {
-                log('Auto-refreshing all images with cache clearing...');
+                log('Auto-refreshing all images and sensor data...');
+                
+                // Update sensor data
+                await updateSensorData();
                 
                 document.querySelectorAll('img').forEach(img => {
                     if (img.src && img.src.startsWith('blob:')) {
@@ -495,6 +649,9 @@
         async function init() {
             log('Starting Doughrock live stream...');
             const container = document.getElementById('image-container');
+            
+            // Load initial sensor data
+            await updateSensorData();
             
             for (let i = 0; i < driveIds.length; i++) {
                 const thumbnail = await createThumbnail(driveIds[i], i);
