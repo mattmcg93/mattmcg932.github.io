@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Camera Feed</title>
     <!-- Open Graph meta tags for social media previews -->
-    <meta property="og:title" content="Live Camera Feed" />
+    <meta property="og:title" content="Live Camera Feed2" />
     <meta property="og:description" content="Real-time camera monitoring system" />
     <meta property="og:image" content="https://drive.google.com/uc?id=1vrr26I23p4XUdAlN_2tnevs4VYE7PIoI" />
     <meta property="og:url" content="" />
@@ -400,12 +400,21 @@
             const mainImage = document.getElementById('main-image');
             const newMainSrc = generateImageUrl(driveIds[selectedIndex]);
             
-            // Preload the main image
+            // Preload the main image with fallback
             const mainImg = new Image();
             mainImg.onload = () => {
                 mainImage.style.opacity = '0.7';
                 setTimeout(() => {
                     mainImage.src = newMainSrc;
+                    mainImage.style.opacity = '1';
+                }, 100);
+            };
+            mainImg.onerror = () => {
+                // Try alternative URL format
+                const altUrl = getAlternativeImageUrl(driveIds[selectedIndex]);
+                mainImage.style.opacity = '0.7';
+                setTimeout(() => {
+                    mainImage.src = altUrl;
                     mainImage.style.opacity = '1';
                 }, 100);
             };
