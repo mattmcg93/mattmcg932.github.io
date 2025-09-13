@@ -74,14 +74,19 @@
             border-radius: 15px;
             min-height: 300px;
             background: #f0f0f0;
-            object-fit: contain; /* Changed from cover to contain */
-            max-height: 70vh; /* Limit height on mobile */
+            object-fit: contain;
+            max-height: 70vh;
+            cursor: pointer;
         }
         .thumbnails-section {
             background: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .thumbnails-section h2 {
+            font-size: 1.3em;
+            font-weight: 400;
         }
         #image-container {
             display: grid;
@@ -96,17 +101,16 @@
             transition: all 0.3s;
             position: relative;
             background: #f8f9fa;
-            /* Remove fixed min-height for mobile flexibility */
         }
         .thumbnail-wrapper:hover { transform: scale(1.05); }
         .thumbnail-wrapper.selected { border-color: #667eea; }
         .thumbnail {
             width: 100%;
-            height: auto; /* Changed from fixed 150px to auto */
-            object-fit: contain; /* Changed from cover to contain */
+            height: auto;
+            object-fit: contain;
             background: #ddd;
-            min-height: 120px; /* Minimum height but flexible */
-            max-height: 200px; /* Maximum height to prevent oversized images */
+            min-height: 120px;
+            max-height: 200px;
         }
         .loading { 
             display: flex; 
@@ -129,6 +133,62 @@
         .info { position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 3px; font-size: 12px; }
         .debug { margin-top: 20px; background: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
 
+        /* Fullscreen modal styles */
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fullscreen-modal.active {
+            display: flex;
+        }
+
+        .fullscreen-image {
+            max-width: 95vw;
+            max-height: 95vh;
+            object-fit: contain;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 1);
+        }
+
+        /* Mobile portrait rotation */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .fullscreen-image.rotated {
+                transform: rotate(90deg);
+                max-width: 95vh;
+                max-height: 95vw;
+            }
+        }
+
         /* Mobile-specific responsive adjustments */
         @media (max-width: 768px) {
             body {
@@ -146,7 +206,7 @@
             }
             
             .main-image {
-                max-height: 50vh; /* Smaller on mobile */
+                max-height: 50vh;
             }
             
             #image-container {
@@ -174,7 +234,7 @@
             }
             
             #image-container {
-                grid-template-columns: repeat(2, 1fr); /* 2 columns on small phones */
+                grid-template-columns: repeat(2, 1fr);
                 gap: 8px;
             }
             
@@ -229,6 +289,12 @@
             <div id="image-container"></div>
             <div id="debug-log" class="debug"></div>
         </div>
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <div class="fullscreen-modal" id="fullscreen-modal">
+        <button class="close-button" id="close-modal">&times;</button>
+        <img class="fullscreen-image" id="fullscreen-image" alt="Fullscreen View">
     </div>
 
     <script>
@@ -715,6 +781,74 @@
             });
         }
 
+        // Fullscreen modal functionality
+        function setupFullscreenModal() {
+            const modal = document.getElementById('fullscreen-modal');
+            const fullscreenImg = document.getElementById('fullscreen-image');
+            const closeButton = document.getElementById('close-modal');
+            const mainImage = document.getElementById('main-image');
+            
+            // Function to check if device is mobile and in portrait
+            function isMobilePortrait() {
+                return window.innerWidth <= 768 && window.innerHeight > window.innerWidth;
+            }
+            
+            // Open fullscreen modal
+            function openFullscreen() {
+                if (mainImage.src) {
+                    fullscreenImg.src = mainImage.src;
+                    
+                    // Auto-rotate on mobile portrait
+                    if (isMobilePortrait()) {
+                        fullscreenImg.classList.add('rotated');
+                    } else {
+                        fullscreenImg.classList.remove('rotated');
+                    }
+                    
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
+                }
+            }
+            
+            // Close fullscreen modal
+            function closeFullscreen() {
+                modal.classList.remove('active');
+                fullscreenImg.classList.remove('rotated');
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+            
+            // Event listeners
+            mainImage.addEventListener('click', openFullscreen);
+            closeButton.addEventListener('click', closeFullscreen);
+            
+            // Close on background click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeFullscreen();
+                }
+            });
+            
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeFullscreen();
+                }
+            });
+            
+            // Handle orientation change
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    if (modal.classList.contains('active')) {
+                        if (isMobilePortrait()) {
+                            fullscreenImg.classList.add('rotated');
+                        } else {
+                            fullscreenImg.classList.remove('rotated');
+                        }
+                    }
+                }, 100);
+            });
+        }
+
         async function init() {
             log('Starting Doughrock live stream...');
             const container = document.getElementById('image-container');
@@ -730,10 +864,13 @@
             selectThumbnail(0);
             startAutoRefresh();
             
+            // Setup fullscreen modal
+            setupFullscreenModal();
+            
             log('Initialization complete. Auto-refresh enabled.');
         }
 
         window.addEventListener('load', init);
     </script>
 </body>
-</html>
+</html>            
