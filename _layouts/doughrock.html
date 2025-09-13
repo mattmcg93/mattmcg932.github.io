@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock Live Stream</title>
+    <title>Live Camera Feed - Extreme Loading</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -94,7 +94,7 @@
     <div class="main-container">
         <div class="header">
             <h1>Doughrock Live Stream</h1>
-            <div class="status">Welcome To Doughrock</div>
+            <div class="status">Welcome To Douchrock...</div>
         </div>
 
         <div class="main-image-section">
@@ -440,7 +440,10 @@
             // Load first image as main
             selectThumbnail(0);
             
-            log('Initialization complete. Check results above.');
+            // Start auto-refresh system
+            startAutoRefresh();
+            
+            log('Initialization complete. Auto-refresh enabled.');
         }
 
         // Start when page loads
