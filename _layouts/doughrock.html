@@ -280,7 +280,7 @@
 <body>
     <div class="main-container">
         <div class="header">
-            <h1>Live Camera System3</h1>
+            <h1>Live Camera System</h1>
             <div class="status-indicator">
                 <div class="status-dot"></div>
                 <span>Live Feed Active</span>
@@ -503,18 +503,38 @@
             }, 1000);
         }
 
-        function initializeImages() {
+        async function initializeImages() {
             const container = document.getElementById('image-container');
-            container.innerHTML = '';
+            container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">Loading images... This may take a moment.</div>';
 
-            // Create thumbnail elements
-            driveIds.forEach((driveId, index) => {
-                const thumbnailElement = createThumbnailElement(driveId, index);
-                container.appendChild(thumbnailElement);
+            // Create thumbnail elements with forced loading
+            const thumbnailPromises = driveIds.map(async (driveId, index) => {
+                return await createThumbnailElement(driveId, index);
+            });
+            
+            // Wait for all thumbnails to be created
+            const thumbnails = await Promise.allSettled(thumbnailPromises);
+            
+            // Clear container and add thumbnails
+            container.innerHTML = '';
+            thumbnails.forEach((result, index) => {
+                if (result.status === 'fulfilled') {
+                    container.appendChild(result.value);
+                } else {
+                    // Create error placeholder
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'thumbnail-wrapper';
+                    errorDiv.innerHTML = `
+                        <div style="height: 200px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
+                            Failed to load<br>${cameraNames[index]}
+                        </div>
+                    `;
+                    container.appendChild(errorDiv);
+                }
             });
 
             // Set initial main image
-            selectThumbnail(0);
+            await selectThumbnail(0);
         }
 
         function startPeriodicUpdates() {
