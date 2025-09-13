@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Camera Feed</title>
     <!-- Open Graph meta tags for social media previews -->
-    <meta property="og:title" content="Live Camera Feed2" />
+    <meta property="og:title" content="Live Camera Feed" />
     <meta property="og:description" content="Real-time camera monitoring system" />
     <meta property="og:image" content="https://drive.google.com/uc?id=1vrr26I23p4XUdAlN_2tnevs4VYE7PIoI" />
     <meta property="og:url" content="" />
@@ -280,7 +280,7 @@
 <body>
     <div class="main-container">
         <div class="header">
-            <h1>Live Camera System2</h1>
+            <h1>Live Camera System3</h1>
             <div class="status-indicator">
                 <div class="status-dot"></div>
                 <span>Live Feed Active</span>
@@ -396,52 +396,90 @@
             const loadingIndicator = document.getElementById('loading-indicator');
             loadingIndicator.style.display = 'inline-block';
 
-            // Update main image
+            // Update main image with URL attempts
             const mainImage = document.getElementById('main-image');
-            const newMainSrc = generateImageUrl(driveIds[selectedIndex]);
+            const urlAttempts = generateImageUrl(driveIds[selectedIndex]);
+            let mainAttempt = 0;
             
-            // Preload the main image with fallback
-            const mainImg = new Image();
-            mainImg.onload = () => {
-                mainImage.style.opacity = '0.7';
-                setTimeout(() => {
-                    mainImage.src = newMainSrc;
-                    mainImage.style.opacity = '1';
-                }, 100);
-            };
-            mainImg.onerror = () => {
-                // Try alternative URL format
-                const altUrl = getAlternativeImageUrl(driveIds[selectedIndex]);
-                mainImage.style.opacity = '0.7';
-                setTimeout(() => {
-                    mainImage.src = altUrl;
-                    mainImage.style.opacity = '1';
-                }, 100);
-            };
-            mainImg.src = newMainSrc;
+            function tryMainUpdate() {
+                if (mainAttempt < urlAttempts.length) {
+                    const tempImg = new Image();
+                    tempImg.onload = () => {
+                        mainImage.style.opacity = '0.7';
+                        setTimeout(() => {
+                            mainImage.src = tempImg.src;
+                            mainImage.style.opacity = '1';
+                        }, 100);
+                    };
+                    tempImg.onerror = () => {
+                        mainAttempt++;
+                        tryMainUpdate();
+                    };
+                    tempImg.src = urlAttempts[mainAttempt];
+                } else {
+                    // Try CORS proxy
+                    const corsUrls = getCORSProxyUrl(urlAttempts[0]);
+                    if (mainAttempt - urlAttempts.length < corsUrls.length) {
+                        const tempImg = new Image();
+                        tempImg.onload = () => {
+                            mainImage.style.opacity = '0.7';
+                            setTimeout(() => {
+                                mainImage.src = tempImg.src;
+                                mainImage.style.opacity = '1';
+                            }, 100);
+                        };
+                        tempImg.src = corsUrls[mainAttempt - urlAttempts.length];
+                    }
+                }
+            }
+            
+            tryMainUpdate();
 
-            // Update thumbnails
+            // Update thumbnails with URL attempts
             document.querySelectorAll('.thumbnail').forEach((img, index) => {
-                const newSrc = generateImageUrl(driveIds[index]);
+                const thumbUrls = generateImageUrl(driveIds[index]);
+                let thumbAttempt = 0;
                 
-                // Preload each thumbnail
-                const thumbImg = new Image();
-                thumbImg.onload = () => {
-                    img.style.opacity = '0.7';
-                    setTimeout(() => {
-                        img.src = newSrc;
-                        img.style.opacity = '1';
-                    }, 50 + (index * 20)); // Stagger the updates
-                };
-                thumbImg.src = newSrc;
+                function tryThumbUpdate() {
+                    if (thumbAttempt < thumbUrls.length) {
+                        const tempImg = new Image();
+                        tempImg.onload = () => {
+                            img.style.opacity = '0.7';
+                            setTimeout(() => {
+                                img.src = tempImg.src;
+                                img.style.opacity = '1';
+                            }, 50 + (index * 20));
+                        };
+                        tempImg.onerror = () => {
+                            thumbAttempt++;
+                            tryThumbUpdate();
+                        };
+                        tempImg.src = thumbUrls[thumbAttempt];
+                    } else {
+                        // Try CORS proxy for thumbnails too
+                        const corsUrls = getCORSProxyUrl(thumbUrls[0]);
+                        if (thumbAttempt - thumbUrls.length < corsUrls.length) {
+                            const tempImg = new Image();
+                            tempImg.onload = () => {
+                                img.style.opacity = '0.7';
+                                setTimeout(() => {
+                                    img.src = tempImg.src;
+                                    img.style.opacity = '1';
+                                }, 50 + (index * 20));
+                            };
+                            tempImg.src = corsUrls[thumbAttempt - thumbUrls.length];
+                        }
+                    }
+                }
+                
+                tryThumbUpdate();
             });
 
             updateLastUpdateTime();
             
-            // Hide loading indicator after a short delay
             setTimeout(() => {
                 loadingIndicator.style.display = 'none';
-            }, 500);
+            }, 1000);
         }
 
         function updateLastUpdateTime() {
