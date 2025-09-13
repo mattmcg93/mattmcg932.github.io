@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Camera Feed - Extreme Loading</title>
+    <title>Doughrock</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -94,7 +94,7 @@
     <div class="main-container">
         <div class="header">
             <h1>Doughrock Live Stream</h1>
-            <div class="status">Welcome To Douchrock...</div>
+            <div class="status">Welcome to Doughrock.</div>
         </div>
 
         <div class="main-image-section">
@@ -111,20 +111,16 @@
 
     <script>
         const driveIds = [
-            "1vrr26I23p4XUdAlN_2tnevs4VYE7PIoI",
-            "1c5CxW2NnicVSxcldDZ6cd3ZTIysa2zcL", 
             "19KHRWco6o_U3SB1Zsof58MvGyPbO6j__",
+            "1vrr26I23p4XUdAlN_2tnevs4VYE7PIoI",
             "10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI",
             "1jVn1wKSIoHepUjxdZRS6xlh4JC90q55c",
-            "15NHAZMdz2H9QrQ5h3VJiqcF_4K_rvC1C",
-            "1WFZzwLUK9iqx9JUQD9MvoRl8K8ZOl2mr",
-            "1toZRE71Yk7pG9_CMsgVo1Zc4K8OJdCes"
+            "15NHAZMdz2H9QrQ5h3VJiqcF_4K_rvC1C"
         ];
 
         const cameraNames = [
-            "raspberrypiKitchen", "raspberrypiEthernet", "raspberrypiEthernet",
-            "raspberrypi1", "raspberrypi3", "raspberrypiKitchen",
-            "Humidity - Last Week", "Temperature - Last Week"
+            "raspberrypiEthernet", "raspberrypiKitchen",
+            "raspberrypi1", "raspberrypi3", "raspberrypiKitchen"
         ];
 
         let selectedIndex = 0;
@@ -136,45 +132,28 @@
             debugLog.scrollTop = debugLog.scrollHeight;
         }
 
-        // Method 1: Brute force with every possible Google Drive URL format
+        // Generate URLs with aggressive cache busting
         function generateAllPossibleUrls(driveId) {
             const timestamp = Date.now();
+            const randomParam = Math.random().toString(36).substring(7);
             return [
-                // Standard formats
-                `https://drive.google.com/uc?id=${driveId}&export=download`,
-                `https://drive.google.com/uc?export=download&id=${driveId}`,
-                `https://drive.google.com/file/d/${driveId}/view?usp=sharing`,
-                `https://drive.google.com/file/d/${driveId}/preview`,
-                `https://drive.google.com/open?id=${driveId}`,
-                
-                // Direct image URLs
-                `https://lh3.googleusercontent.com/d/${driveId}`,
-                `https://lh3.googleusercontent.com/d/${driveId}=w2000`,
-                `https://lh3.googleusercontent.com/d/${driveId}=s2000`,
-                `https://lh4.googleusercontent.com/d/${driveId}`,
-                `https://lh5.googleusercontent.com/d/${driveId}`,
-                `https://lh6.googleusercontent.com/d/${driveId}`,
-                
-                // Thumbnail formats
-                `https://drive.google.com/thumbnail?id=${driveId}`,
-                `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000`,
-                `https://drive.google.com/thumbnail?id=${driveId}&sz=s1000`,
-                
-                // Alternative endpoints
-                `https://docs.google.com/uc?id=${driveId}&export=download`,
-                `https://googledrive.com/host/${driveId}`,
-                
-                // With timestamps to break cache
-                `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}`,
-                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}`,
-                
-                // Force download formats
-                `https://drive.google.com/uc?id=${driveId}&export=download&confirm=t`,
-                `https://drive.google.com/uc?id=${driveId}&export=download&confirm=no_antivirus`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
+                `https://drive.google.com/uc?export=download&id=${driveId}&t=${timestamp}&nocache=${randomParam}`,
+                `https://drive.google.com/file/d/${driveId}/view?usp=sharing&t=${timestamp}`,
+                `https://drive.google.com/file/d/${driveId}/preview?t=${timestamp}&r=${randomParam}`,
+                `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`,
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&nocache=${randomParam}`,
+                `https://lh3.googleusercontent.com/d/${driveId}=s2000&t=${timestamp}`,
+                `https://lh4.googleusercontent.com/d/${driveId}?t=${timestamp}`,
+                `https://lh5.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}`,
+                `https://drive.google.com/thumbnail?id=${driveId}&t=${timestamp}&r=${randomParam}`,
+                `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000&t=${timestamp}`,
+                `https://docs.google.com/uc?id=${driveId}&export=download&t=${timestamp}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&confirm=t&t=${timestamp}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&confirm=no_antivirus&t=${timestamp}`,
             ];
         }
 
-        // Method 2: CORS proxy services (many different ones)
         function getCORSProxies() {
             return [
                 'https://api.allorigins.win/raw?url=',
@@ -188,7 +167,6 @@
             ];
         }
 
-        // Method 3: Advanced fetch with multiple techniques
         async function extremeFetchImage(driveId) {
             const urls = generateAllPossibleUrls(driveId);
             const proxies = getCORSProxies();
@@ -201,7 +179,6 @@
                 log(`Trying direct URL ${i + 1}/${urls.length}: ${url.substring(0, 80)}...`);
                 
                 try {
-                    // Method 3a: Regular fetch
                     let response = await fetch(url, { 
                         mode: 'cors',
                         credentials: 'omit',
@@ -211,28 +188,26 @@
                     if (response.ok) {
                         const blob = await response.blob();
                         if (blob.size > 0 && blob.type.startsWith('image/')) {
-                            log(`✅ Success with direct URL!`);
+                            log(`Success with direct URL!`);
                             return URL.createObjectURL(blob);
                         }
                     }
                 } catch (e) {
-                    // Try no-cors mode
                     try {
                         let response = await fetch(url, { mode: 'no-cors' });
-                        // Can't read the response with no-cors, but can try to use the URL directly
                         if (await testImageLoad(url)) {
-                            log(`✅ Success with no-cors direct load!`);
+                            log(`Success with no-cors direct load!`);
                             return url;
                         }
                     } catch (e2) {
-                        log(`❌ Direct fetch failed: ${e2.message.substring(0, 50)}...`);
+                        log(`Direct fetch failed: ${e2.message.substring(0, 50)}...`);
                     }
                 }
             }
             
             // Try with CORS proxies
             for (const proxy of proxies) {
-                for (const url of urls.slice(0, 5)) { // Try top 5 URLs with each proxy
+                for (const url of urls.slice(0, 5)) {
                     try {
                         const proxyUrl = proxy + encodeURIComponent(url);
                         log(`Trying proxy: ${proxy.substring(0, 30)}... with URL`);
@@ -245,55 +220,41 @@
                         
                         if (response.ok) {
                             const blob = await response.blob();
-                            if (blob.size > 1000) { // Must be at least 1KB
-                                log(`✅ Success with proxy!`);
+                            if (blob.size > 1000) {
+                                log(`Success with proxy!`);
                                 return URL.createObjectURL(blob);
                             }
                         }
                     } catch (e) {
-                        log(`❌ Proxy failed: ${e.message.substring(0, 30)}...`);
+                        log(`Proxy failed: ${e.message.substring(0, 30)}...`);
                     }
                 }
             }
             
-            // Method 4: Iframe extraction attempt
             try {
                 const iframeResult = await iframeExtraction(driveId);
                 if (iframeResult) {
-                    log(`✅ Success with iframe extraction!`);
+                    log(`Success with iframe extraction!`);
                     return iframeResult;
                 }
             } catch (e) {
-                log(`❌ Iframe extraction failed: ${e.message}`);
+                log(`Iframe extraction failed: ${e.message}`);
             }
             
-            // Method 5: Base64 embedded preview attempt  
-            try {
-                const embedResult = await embedPreviewAttempt(driveId);
-                if (embedResult) {
-                    log(`✅ Success with embed preview!`);
-                    return embedResult;
-                }
-            } catch (e) {
-                log(`❌ Embed preview failed: ${e.message}`);
-            }
-            
-            log(`❌ All methods failed for ${driveId}`);
+            log(`All methods failed for ${driveId}`);
             return null;
         }
 
-        // Method 4: Test if an image URL actually loads
         function testImageLoad(url) {
             return new Promise((resolve) => {
                 const img = new Image();
                 img.onload = () => resolve(true);
                 img.onerror = () => resolve(false);
                 img.src = url;
-                setTimeout(() => resolve(false), 5000); // 5 second timeout
+                setTimeout(() => resolve(false), 5000);
             });
         }
 
-        // Method 5: Iframe extraction technique
         function iframeExtraction(driveId) {
             return new Promise((resolve) => {
                 const iframe = document.createElement('iframe');
@@ -324,7 +285,6 @@
                         if (!resolved) {
                             resolved = true;
                             document.body.removeChild(iframe);
-                            // Return the preview URL itself as last resort
                             resolve(`https://drive.google.com/file/d/${driveId}/preview`);
                         }
                     }, 3000);
@@ -340,22 +300,127 @@
             });
         }
 
-        // Method 6: Embed preview attempt with object/embed tags
-        function embedPreviewAttempt(driveId) {
-            return new Promise((resolve) => {
-                const embed = document.createElement('object');
-                embed.data = `https://drive.google.com/file/d/${driveId}/preview`;
-                embed.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;';
-                document.body.appendChild(embed);
-                
-                setTimeout(() => {
-                    if (embed.parentNode) document.body.removeChild(embed);
-                    resolve(`https://drive.google.com/file/d/${driveId}/preview`);
-                }, 2000);
-            });
+        // Force cache clearing and image refresh
+        async function forceClearCacheAndRefresh(driveId) {
+            if ('caches' in window) {
+                try {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(
+                        cacheNames.map(cacheName => caches.delete(cacheName))
+                    );
+                } catch (e) {
+                    log('Cache clearing failed, continuing...');
+                }
+            }
+            
+            const timestamp = Date.now();
+            const randomId = Math.random().toString(36).substring(2, 15);
+            const sessionId = Math.random().toString(36).substring(2, 10);
+            
+            const urls = [
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000&v=${timestamp}&_cb=${randomId}&sid=${sessionId}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&v=${timestamp}&_nocache=${randomId}`,
+                `https://lh3.googleusercontent.com/d/${driveId}?v=${timestamp}&r=${randomId}&s=${sessionId}`,
+                `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000&v=${timestamp}&_=${randomId}`,
+            ];
+            
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url, {
+                        cache: 'no-store',
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        if (blob.size > 1000) {
+                            return URL.createObjectURL(blob);
+                        }
+                    }
+                } catch (e) {
+                    continue;
+                }
+            }
+            
+            const corsProxies = getCORSProxies();
+            for (const proxy of corsProxies) {
+                try {
+                    const url = `https://lh3.googleusercontent.com/d/${driveId}=w2000&v=${timestamp}`;
+                    const response = await fetch(proxy + encodeURIComponent(url), {
+                        cache: 'no-store',
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        if (blob.size > 1000) {
+                            return URL.createObjectURL(blob);
+                        }
+                    }
+                } catch (e) {
+                    continue;
+                }
+            }
+            
+            return null;
         }
 
-        // Create thumbnail with extreme loading
+        // Add automatic refresh system with aggressive cache clearing
+        function startAutoRefresh() {
+            log('Starting auto-refresh every 10 seconds with aggressive cache clearing...');
+            
+            setInterval(async () => {
+                log('Auto-refreshing all images with cache clearing...');
+                
+                document.querySelectorAll('img').forEach(img => {
+                    if (img.src && img.src.startsWith('blob:')) {
+                        URL.revokeObjectURL(img.src);
+                    }
+                });
+                
+                const mainImage = document.getElementById('main-image');
+                const newMainUrl = await forceClearCacheAndRefresh(driveIds[selectedIndex]);
+                if (newMainUrl) {
+                    mainImage.style.opacity = '0.5';
+                    mainImage.src = '';
+                    setTimeout(() => {
+                        mainImage.src = newMainUrl;
+                        mainImage.onload = () => {
+                            mainImage.style.opacity = '1';
+                            log(`Main image refreshed: ${cameraNames[selectedIndex]}`);
+                        };
+                    }, 100);
+                }
+                
+                const thumbnails = document.querySelectorAll('.thumbnail');
+                for (let index = 0; index < thumbnails.length && index < driveIds.length; index++) {
+                    const img = thumbnails[index];
+                    const newUrl = await forceClearCacheAndRefresh(driveIds[index]);
+                    if (newUrl) {
+                        img.style.opacity = '0.7';
+                        img.src = '';
+                        setTimeout(() => {
+                            img.src = newUrl;
+                            img.onload = () => {
+                                img.style.opacity = '1';
+                                log(`Thumbnail ${index + 1} refreshed`);
+                            };
+                        }, 200 + (index * 100));
+                    }
+                    
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+                
+                log('Aggressive cache-cleared refresh completed');
+            }, 10000);
+        }
+
         async function createThumbnail(driveId, index) {
             const wrapper = document.createElement('div');
             wrapper.className = 'thumbnail-wrapper';
@@ -369,25 +434,24 @@
             
             wrapper.addEventListener('click', () => selectThumbnail(index));
             
-            // Start loading in background
             extremeFetchImage(driveId).then(imageUrl => {
                 if (imageUrl) {
                     const img = document.createElement('img');
                     img.className = 'thumbnail';
                     img.src = imageUrl;
                     img.onload = () => {
-                        wrapper.innerHTML = `<div class="info">${cameraNames[index]} ✅</div>`;
+                        wrapper.innerHTML = `<div class="info">${cameraNames[index]}</div>`;
                         wrapper.insertBefore(img, wrapper.firstChild);
                     };
                     img.onerror = () => {
                         wrapper.innerHTML = `
-                            <div class="loading">❌ Load failed</div>
+                            <div class="loading">Load failed</div>
                             <div class="info">${cameraNames[index]} - Error</div>
                         `;
                     };
                 } else {
                     wrapper.innerHTML = `
-                        <div class="loading">❌ All methods failed</div>
+                        <div class="loading">All methods failed</div>
                         <div class="info">${cameraNames[index]} - Failed</div>
                     `;
                 }
@@ -396,7 +460,6 @@
             return wrapper;
         }
 
-        // Select thumbnail and update main image
         async function selectThumbnail(index) {
             selectedIndex = index;
             const mainImage = document.getElementById('main-image');
@@ -420,33 +483,26 @@
                 mainTitle.textContent = `${cameraNames[index]} - Could not load`;
             }
             
-            // Update selection styling
             document.querySelectorAll('.thumbnail-wrapper').forEach((w, i) => {
                 w.classList.toggle('selected', i === index);
             });
         }
 
-        // Initialize everything
         async function init() {
-            log('Starting extreme image loading test...');
+            log('Starting Doughrock live stream...');
             const container = document.getElementById('image-container');
             
-            // Create all thumbnails
             for (let i = 0; i < driveIds.length; i++) {
                 const thumbnail = await createThumbnail(driveIds[i], i);
                 container.appendChild(thumbnail);
             }
             
-            // Load first image as main
             selectThumbnail(0);
-            
-            // Start auto-refresh system
             startAutoRefresh();
             
             log('Initialization complete. Auto-refresh enabled.');
         }
 
-        // Start when page loads
         window.addEventListener('load', init);
     </script>
 </body>
