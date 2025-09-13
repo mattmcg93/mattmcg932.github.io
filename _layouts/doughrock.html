@@ -61,6 +61,14 @@
             margin-top: 10px;
         }
         
+        .tap-instruction {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        
         .main-image-section {
             background: rgba(255,255,255,0.95);
             border-radius: 20px;
@@ -222,6 +230,10 @@
             .sensor-value {
                 font-size: 2em;
             }
+            
+            .tap-instruction {
+                font-size: 0.85em;
+            }
         }
 
         @media (max-width: 480px) {
@@ -278,6 +290,8 @@
                 </div>
             </div>
         </div>
+
+        <div class="tap-instruction">Tap to make full screen</div>
 
         <div class="main-image-section">
             <img id="main-image" class="main-image" alt="Main View">
@@ -873,4 +887,6 @@
         window.addEventListener('load', init);
     </script>
 </body>
-</html>            
+</html>
+
+        
