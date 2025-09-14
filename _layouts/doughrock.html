@@ -288,7 +288,7 @@
 <body>
     <div class="main-container">
         <div class="header">
-            <h1>Doughrock Live Stream2</h1>
+            <h1>Doughrock Live Stream</h1>
             <div class="status">Welcome to Doughrock.</div>
         </div>
 
@@ -387,29 +387,89 @@
                 showCommandStatus("Another command is in progress. Please wait.", "info");
                 return;
             }
-
+        
             isCommandInProgress = true;
             showCommandStatus(`Sending ${taskName} command...`, "info");
             
             log(`Triggering ${taskName} by accessing file: ${fileId}`);
-
-            const triggerUrl = `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`;
-            
-            const img = new Image();
-            img.onload = () => {
-                showCommandStatus(`${taskName} trigger sent successfully!`, "success");
-                log(`${taskName} file accessed successfully`);
-                isCommandInProgress = false;
-                clearStatusAfterDelay();
-            };
-            img.onerror = () => {
-                showCommandStatus(`${taskName} trigger failed`, "error");
-                log(`Failed to access ${taskName} trigger file`);
-                isCommandInProgress = false;
-                clearStatusAfterDelay();
-            };
-            
-            img.src = triggerUrl;
+        
+            // Try multiple methods to trigger the file access
+            const methods = [
+                // Method 1: Image load
+                () => {
+                    const img = new Image();
+                    const triggerUrl = `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}&r=${Math.random()}`;
+                    
+                    return new Promise((resolve) => {
+                        img.onload = () => resolve(true);
+                        img.onerror = () => resolve(false);
+                        img.src = triggerUrl;
+                        setTimeout(() => resolve(false), 5000);
+                    });
+                },
+                
+                // Method 2: Fetch request
+                () => {
+                    const triggerUrl = `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`;
+                    
+                    return fetch(triggerUrl, { 
+                        mode: 'no-cors',
+                        cache: 'no-store'
+                    }).then(() => true).catch(() => false);
+                },
+                
+                // Method 3: Different Google Drive URL
+                () => {
+                    const img = new Image();
+                    const triggerUrl = `https://lh3.googleusercontent.com/d/${fileId}?t=${Date.now()}`;
+                    
+                    return new Promise((resolve) => {
+                        img.onload = () => resolve(true);
+                        img.onerror = () => resolve(false);
+                        img.src = triggerUrl;
+                        setTimeout(() => resolve(false), 3000);
+                    });
+                }
+            ];
+        
+            // Try methods sequentially
+            async function tryMethods() {
+                for (let i = 0; i < methods.length; i++) {
+                    log(`Trying trigger method ${i + 1}...`);
+                    try {
+                        const success = await methods[i]();
+                        if (success) {
+                            showCommandStatus(`${taskName} trigger sent successfully!`, "success");
+                            log(`${taskName} file accessed successfully with method ${i + 1}`);
+                            isCommandInProgress = false;
+                            clearStatusAfterDelay();
+                            return;
+                        }
+                    } catch (e) {
+                        log(`Method ${i + 1} failed: ${e.message}`);
+                    }
+                }
+                
+                // All methods failed
+                showCommandStatus(`${taskName} trigger failed - trying alternative approach`, "info");
+                log(`All trigger methods failed for ${taskName}`);
+                
+                // Alternative: Try to access via iframe (sometimes works)
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
+                document.body.appendChild(iframe);
+                
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    showCommandStatus(`${taskName} alternative trigger attempted`, "success");
+                    log(`${taskName} iframe trigger attempted`);
+                    isCommandInProgress = false;
+                    clearStatusAfterDelay();
+                }, 2000);
+            }
+        
+            tryMethods();
         }
 
         function clearStatusAfterDelay() {
