@@ -60,91 +60,6 @@
             opacity: 0.7;
             margin-top: 10px;
         }
-
-        /* Control Buttons Styles */
-        .control-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .control-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 30px;
-            border: none;
-            border-radius: 15px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 120px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .lamp-on-btn {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-        }
-
-        .lamp-on-btn:hover {
-            background: linear-gradient(135deg, #45a049, #3d8b40);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
-        }
-
-        .lamp-off-btn {
-            background: linear-gradient(135deg, #f44336, #da190b);
-            color: white;
-        }
-
-        .lamp-off-btn:hover {
-            background: linear-gradient(135deg, #da190b, #c62828);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.3);
-        }
-
-        .btn-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .btn-text {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .command-status {
-            text-align: center;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-            font-weight: 500;
-            min-height: 20px;
-        }
-
-        .command-status.success {
-            background: rgba(76, 175, 80, 0.1);
-            color: #2e7d32;
-            border: 1px solid rgba(76, 175, 80, 0.3);
-        }
-
-        .command-status.info {
-            background: rgba(33, 150, 243, 0.1);
-            color: #1565c0;
-            border: 1px solid rgba(33, 150, 243, 0.3);
-        }
-
-        .command-status.error {
-            background: rgba(244, 67, 54, 0.1);
-            color: #c62828;
-            border: 1px solid rgba(244, 67, 54, 0.3);
-        }
         
         .tap-instruction {
             text-align: center;
@@ -273,15 +188,83 @@
             background: rgba(255, 255, 255, 1);
         }
 
-        /* Mobile responsive */
+        /* Mobile portrait rotation */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .fullscreen-image.rotated {
+                transform: rotate(90deg);
+                max-width: 95vh;
+                max-height: 95vw;
+            }
+        }
+
+        /* Mobile-specific responsive adjustments */
         @media (max-width: 768px) {
-            body { padding: 15px; }
-            .header h1 { font-size: 2em; }
-            .sensor-section, .main-image-section, .thumbnails-section { padding: 20px; }
-            .main-image { max-height: 50vh; }
-            #image-container { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-            .thumbnail { min-height: 100px; max-height: 150px; }
-            .sensor-value { font-size: 2em; }
+            body {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .sensor-section,
+            .main-image-section,
+            .thumbnails-section {
+                padding: 20px;
+            }
+            
+            .main-image {
+                max-height: 50vh;
+            }
+            
+            #image-container {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 10px;
+            }
+            
+            .thumbnail {
+                min-height: 100px;
+                max-height: 150px;
+            }
+            
+            .sensor-value {
+                font-size: 2em;
+            }
+            
+            .tap-instruction {
+                font-size: 0.85em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            #image-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .thumbnail {
+                min-height: 80px;
+                max-height: 120px;
+            }
+            
+            .sensor-section,
+            .main-image-section,
+            .thumbnails-section {
+                padding: 15px;
+            }
+            
+            .main-image {
+                max-height: 40vh;
+                min-height: 200px;
+            }
         }
     </style>
 </head>
@@ -308,22 +291,6 @@
             </div>
         </div>
 
-        <!-- Control Buttons Section -->
-        <div class="sensor-section">
-            <h2 style="text-align: center; margin-bottom: 20px; color: #333;">Lamp Controls</h2>
-            <div class="control-buttons">
-                <button class="control-btn lamp-on-btn" id="lamp-on-btn">
-                    <span class="btn-icon">💡</span>
-                    <span class="btn-text">Lamp ON</span>
-                </button>
-                <button class="control-btn lamp-off-btn" id="lamp-off-btn">
-                    <span class="btn-icon">🌙</span>
-                    <span class="btn-text">Lamp OFF</span>
-                </button>
-            </div>
-            <div id="command-status" class="command-status"></div>
-        </div>
-
         <div class="tap-instruction">Tap to make full screen</div>
 
         <div class="main-image-section">
@@ -345,10 +312,6 @@
     </div>
 
     <script>
-        // Google Drive trigger file IDs
-        const LAMP_ON_FILE_ID = "1YORRWPrXjBm_1nwFwLqikrlpJGap12os";
-        const LAMP_OFF_FILE_ID = "1nagVRwjpCgj3OC75lSlrjHUnVZpYIWZE";
-
         const driveIds = [
             "1vrr26I23p4XUdAlN_2tnevs4VYE7PIoI",
             "1jVn1wKSIoHepUjxdZRS6xlh4JC90q55c",
@@ -366,13 +329,13 @@
             "Humidity - Daily, Weekly, Monthly", "Temperature - Daily, Weekly, Monthly"
         ];
 
+        // Sensor data file IDs
         const sensorIds = {
             humidity: "1Ajb8r6TB5aKkWDAr99iDAlo3TlqReT2O",
             temperature: "1GPWSQIFjLR25lmuP-ljgIFriLNBS-FyQ"
         };
 
         let selectedIndex = 0;
-        let isCommandInProgress = false;
         const debugLog = document.getElementById('debug-log');
 
         function log(message) {
@@ -381,150 +344,99 @@
             debugLog.scrollTop = debugLog.scrollHeight;
         }
 
-        // Enhanced lamp control function for better file access detection
-        async function sendCommand(taskName, fileId) {
-            if (isCommandInProgress) {
-                showCommandStatus("Another command is in progress. Please wait.", "info");
-                return;
-            }
-        
-            isCommandInProgress = true;
-            showCommandStatus(`Sending ${taskName} command...`, "info");
+        // Function to fetch sensor data from Google Drive text files
+        async function fetchSensorData(fileId, sensorType) {
+            const urls = [
+                `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
+                `https://docs.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
+            ];
             
-            log(`Triggering ${taskName} by accessing file: ${fileId}`);
-        
-            // Multiple aggressive access methods to ensure Google Drive registers the access
-            const accessMethods = [
-                // Method 1: Direct download URL with multiple attempts
-                async () => {
-                    const urls = [
-                        `https://drive.google.com/uc?id=${fileId}&export=download`,
-                        `https://drive.google.com/file/d/${fileId}/view`,
-                        `https://docs.google.com/uc?id=${fileId}&export=download`
-                    ];
+            const corsProxies = getCORSProxies();
+            
+            // Try direct fetch first
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url, {
+                        cache: 'no-store',
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate'
+                        }
+                    });
                     
-                    for (const url of urls) {
-                        try {
-                            const response = await fetch(url, { 
-                                mode: 'no-cors',
-                                cache: 'no-store',
-                                headers: {
-                                    'Cache-Control': 'no-cache'
-                                }
-                            });
-                            log(`Fetch attempt to: ${url}`);
-                            await new Promise(resolve => setTimeout(resolve, 1000));
-                        } catch (e) {
-                            log(`Fetch failed: ${e.message}`);
+                    if (response.ok) {
+                        const text = await response.text();
+                        if (text && text.trim()) {
+                            log(`${sensorType} data fetched directly: ${text.trim()}`);
+                            return text.trim();
                         }
                     }
-                },
-                
-                // Method 2: Image load attempts
-                async () => {
-                    const urls = [
-                        `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
-                        `https://lh3.googleusercontent.com/d/${fileId}?t=${Date.now()}`
-                    ];
-                    
-                    for (const url of urls) {
-                        const img = new Image();
-                        img.src = url;
-                        log(`Image load attempt: ${url}`);
-                        await new Promise(resolve => setTimeout(resolve, 1000));
-                    }
-                },
-                
-                // Method 3: Multiple iframe attempts
-                async () => {
-                    const urls = [
-                        `https://drive.google.com/file/d/${fileId}/preview`,
-                        `https://drive.google.com/file/d/${fileId}/view`,
-                        `https://docs.google.com/document/d/${fileId}/preview`
-                    ];
-                    
-                    for (const url of urls) {
-                        const iframe = document.createElement('iframe');
-                        iframe.style.display = 'none';
-                        iframe.style.width = '1px';
-                        iframe.style.height = '1px';
-                        iframe.src = url;
-                        document.body.appendChild(iframe);
-                        
-                        log(`Iframe access attempt: ${url}`);
-                        
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        document.body.removeChild(iframe);
-                    }
-                },
-                
-                // Method 4: Link click simulation
-                async () => {
-                    const urls = [
-                        `https://drive.google.com/uc?id=${fileId}&export=download`,
-                        `https://drive.google.com/file/d/${fileId}/view?usp=sharing`
-                    ];
-                    
-                    for (const url of urls) {
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.style.display = 'none';
-                        link.target = '_blank';
-                        document.body.appendChild(link);
-                        
-                        // Simulate click
-                        link.click();
-                        log(`Link click simulation: ${url}`);
-                        
-                        await new Promise(resolve => setTimeout(resolve, 1000));
-                        document.body.removeChild(link);
-                    }
+                } catch (e) {
+                    log(`Direct ${sensorType} fetch failed: ${e.message}`);
                 }
-            ];
-        
-            try {
-                // Execute all methods in parallel for maximum access detection
-                log("Executing multiple access methods simultaneously...");
-                await Promise.all(accessMethods.map(method => method().catch(e => log(`Method failed: ${e}`))));
-                
-                showCommandStatus(`${taskName} trigger sent successfully! Monitor should detect access.`, "success");
-                log(`${taskName} file accessed with multiple methods`);
-                
-            } catch (error) {
-                showCommandStatus(`${taskName} trigger failed: ${error.message}`, "error");
-                log(`All access methods failed: ${error.message}`);
             }
             
-            isCommandInProgress = false;
-            clearStatusAfterDelay();
+            // Try with CORS proxies
+            for (const proxy of corsProxies) {
+                try {
+                    const url = `https://drive.google.com/uc?id=${fileId}&export=download`;
+                    const proxyUrl = proxy + encodeURIComponent(url);
+                    
+                    const response = await fetch(proxyUrl, {
+                        cache: 'no-store'
+                    });
+                    
+                    if (response.ok) {
+                        const text = await response.text();
+                        if (text && text.trim()) {
+                            log(`${sensorType} data fetched via proxy: ${text.trim()}`);
+                            return text.trim();
+                        }
+                    }
+                } catch (e) {
+                    log(`Proxy ${sensorType} fetch failed: ${e.message}`);
+                }
+            }
+            
+            log(`Failed to fetch ${sensorType} data`);
+            return null;
         }
 
-        function clearStatusAfterDelay() {
-            setTimeout(() => {
-                document.getElementById('command-status').textContent = '';
-                document.getElementById('command-status').className = 'command-status';
-            }, 8000);
+        // Update sensor displays
+        async function updateSensorData() {
+            log('Updating sensor data...');
+            
+            // Update humidity
+            const humidityData = await fetchSensorData(sensorIds.humidity, 'humidity');
+            if (humidityData) {
+                const humidityValue = parseFloat(humidityData);
+                if (!isNaN(humidityValue)) {
+                    document.getElementById('humidity-value').textContent = `${humidityValue.toFixed(1)}%`;
+                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                } else {
+                    document.getElementById('humidity-value').textContent = `${humidityData}%`;
+                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                }
+            } else {
+                document.getElementById('humidity-updated').textContent = 'Failed to update';
+            }
+            
+            // Update temperature
+            const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
+            if (temperatureData) {
+                const temperatureValue = parseFloat(temperatureData);
+                if (!isNaN(temperatureValue)) {
+                    document.getElementById('temperature-value').textContent = `${temperatureValue.toFixed(1)}°C`;
+                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                } else {
+                    document.getElementById('temperature-value').textContent = `${temperatureData}°C`;
+                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                }
+            } else {
+                document.getElementById('temperature-updated').textContent = 'Failed to update';
+            }
         }
 
-        function showCommandStatus(message, type) {
-            const statusElement = document.getElementById('command-status');
-            statusElement.textContent = message;
-            statusElement.className = `command-status ${type}`;
-        }
-
-        function setupLampControls() {
-            const lampOnBtn = document.getElementById('lamp-on-btn');
-            const lampOffBtn = document.getElementById('lamp-off-btn');
-
-            lampOnBtn.addEventListener('click', () => {
-                sendCommand("Lamp ON", LAMP_ON_FILE_ID);
-            });
-
-            lampOffBtn.addEventListener('click', () => {
-                sendCommand("Lamp OFF", LAMP_OFF_FILE_ID);
-            });
-        }
-
+        // Generate URLs with aggressive cache busting
         function generateAllPossibleUrls(driveId) {
             const timestamp = Date.now();
             const randomParam = Math.random().toString(36).substring(7);
@@ -623,6 +535,16 @@
                 }
             }
             
+            try {
+                const iframeResult = await iframeExtraction(driveId);
+                if (iframeResult) {
+                    log(`Success with iframe extraction!`);
+                    return iframeResult;
+                }
+            } catch (e) {
+                log(`Iframe extraction failed: ${e.message}`);
+            }
+            
             log(`All methods failed for ${driveId}`);
             return null;
         }
@@ -637,19 +559,102 @@
             });
         }
 
-        // Function to fetch sensor data from Google Drive text files
-        async function fetchSensorData(fileId, sensorType) {
+        function iframeExtraction(driveId) {
+            return new Promise((resolve) => {
+                const iframe = document.createElement('iframe');
+                iframe.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;';
+                iframe.src = `https://drive.google.com/file/d/${driveId}/preview`;
+                document.body.appendChild(iframe);
+                
+                let resolved = false;
+                
+                iframe.onload = () => {
+                    setTimeout(() => {
+                        if (resolved) return;
+                        try {
+                            const doc = iframe.contentDocument || iframe.contentWindow.document;
+                            const images = doc.querySelectorAll('img');
+                            for (const img of images) {
+                                if (img.src && img.src.includes('googleusercontent')) {
+                                    resolved = true;
+                                    document.body.removeChild(iframe);
+                                    resolve(img.src);
+                                    return;
+                                }
+                            }
+                        } catch (e) {
+                            log(`Iframe access blocked by CORS: ${e.message}`);
+                        }
+                        
+                        if (!resolved) {
+                            resolved = true;
+                            document.body.removeChild(iframe);
+                            resolve(`https://drive.google.com/file/d/${driveId}/preview`);
+                        }
+                    }, 3000);
+                };
+                
+                setTimeout(() => {
+                    if (!resolved) {
+                        resolved = true;
+                        if (iframe.parentNode) document.body.removeChild(iframe);
+                        resolve(null);
+                    }
+                }, 8000);
+            });
+        }
+
+        // Force cache clearing and image refresh
+        async function forceClearCacheAndRefresh(driveId) {
+            if ('caches' in window) {
+                try {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(
+                        cacheNames.map(cacheName => caches.delete(cacheName))
+                    );
+                } catch (e) {
+                    log('Cache clearing failed, continuing...');
+                }
+            }
+            
+            const timestamp = Date.now();
+            const randomId = Math.random().toString(36).substring(2, 15);
+            const sessionId = Math.random().toString(36).substring(2, 10);
+            
             const urls = [
-                `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
-                `https://docs.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000&v=${timestamp}&_cb=${randomId}&sid=${sessionId}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&v=${timestamp}&_nocache=${randomId}`,
+                `https://lh3.googleusercontent.com/d/${driveId}?v=${timestamp}&r=${randomId}&s=${sessionId}`,
+                `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000&v=${timestamp}&_=${randomId}`,
             ];
             
-            const corsProxies = getCORSProxies();
-            
-            // Try direct fetch first
             for (const url of urls) {
                 try {
                     const response = await fetch(url, {
+                        cache: 'no-store',
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        if (blob.size > 1000) {
+                            return URL.createObjectURL(blob);
+                        }
+                    }
+                } catch (e) {
+                    continue;
+                }
+            }
+            
+            const corsProxies = getCORSProxies();
+            for (const proxy of corsProxies) {
+                try {
+                    const url = `https://lh3.googleusercontent.com/d/${driveId}=w2000&v=${timestamp}`;
+                    const response = await fetch(proxy + encodeURIComponent(url), {
                         cache: 'no-store',
                         headers: {
                             'Cache-Control': 'no-cache, no-store, must-revalidate'
@@ -657,73 +662,112 @@
                     });
                     
                     if (response.ok) {
-                        const text = await response.text();
-                        if (text && text.trim()) {
-                            log(`${sensorType} data fetched directly: ${text.trim()}`);
-                            return text.trim();
+                        const blob = await response.blob();
+                        if (blob.size > 1000) {
+                            return URL.createObjectURL(blob);
                         }
                     }
                 } catch (e) {
-                    log(`Direct ${sensorType} fetch failed: ${e.message}`);
+                    continue;
                 }
             }
             
-            // Try with CORS proxies
-            for (const proxy of corsProxies) {
-                try {
-                    const url = `https://drive.google.com/uc?id=${fileId}&export=download`;
-                    const proxyUrl = proxy + encodeURIComponent(url);
-                    
-                    const response = await fetch(proxyUrl, {
-                        cache: 'no-store'
-                    });
-                    
-                    if (response.ok) {
-                        const text = await response.text();
-                        if (text && text.trim()) {
-                            log(`${sensorType} data fetched via proxy: ${text.trim()}`);
-                            return text.trim();
-                        }
-                    }
-                } catch (e) {
-                    log(`Proxy ${sensorType} fetch failed: ${e.message}`);
-                }
-            }
-            
-            log(`Failed to fetch ${sensorType} data`);
             return null;
         }
 
-        async function updateSensorData() {
-            log('Updating sensor data...');
+        // Updated function to force refresh the main image
+        async function refreshMainImage() {
+            const mainImage = document.getElementById('main-image');
+            const mainTitle = document.getElementById('main-title');
             
-            const humidityData = await fetchSensorData(sensorIds.humidity, 'humidity');
-            if (humidityData) {
-                const humidityValue = parseFloat(humidityData);
-                if (!isNaN(humidityValue)) {
-                    document.getElementById('humidity-value').textContent = `${humidityValue.toFixed(1)}%`;
-                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-                } else {
-                    document.getElementById('humidity-value').textContent = `${humidityData}%`;
-                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-                }
-            } else {
-                document.getElementById('humidity-updated').textContent = 'Failed to update';
+            log(`Refreshing main image for ${cameraNames[selectedIndex]}...`);
+            
+            // Show loading state
+            mainImage.style.opacity = '0.5';
+            mainTitle.textContent = `Refreshing ${cameraNames[selectedIndex]}...`;
+            
+            // Try to get a fresh image URL
+            let newMainUrl = await forceClearCacheAndRefresh(driveIds[selectedIndex]);
+            
+            // If that fails, fall back to the full extremeFetchImage method
+            if (!newMainUrl) {
+                log(`Force refresh failed, trying extremeFetchImage...`);
+                newMainUrl = await extremeFetchImage(driveIds[selectedIndex]);
             }
             
-            const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
-            if (temperatureData) {
-                const temperatureValue = parseFloat(temperatureData);
-                if (!isNaN(temperatureValue)) {
-                    document.getElementById('temperature-value').textContent = `${temperatureValue.toFixed(1)}°C`;
-                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-                } else {
-                    document.getElementById('temperature-value').textContent = `${temperatureData}°C`;
-                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-                }
+            if (newMainUrl) {
+                // Clear current image first
+                mainImage.src = '';
+                
+                // Set new image
+                mainImage.src = newMainUrl;
+                mainImage.onload = () => {
+                    mainImage.style.opacity = '1';
+                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Updated at ${new Date().toLocaleTimeString()}`;
+                    log(`Main image refreshed successfully: ${cameraNames[selectedIndex]}`);
+                };
+                mainImage.onerror = () => {
+                    mainImage.style.opacity = '1';
+                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Failed to refresh`;
+                    log(`Main image refresh failed: ${cameraNames[selectedIndex]}`);
+                };
             } else {
-                document.getElementById('temperature-updated').textContent = 'Failed to update';
+                // If all methods fail, try to force a reload by changing the src to empty and back
+                mainImage.style.opacity = '1';
+                mainTitle.textContent = `${cameraNames[selectedIndex]} - Refresh failed, retrying...`;
+                log(`All refresh methods failed for main image`);
+                
+                // As a last resort, try to force refresh by clearing and reloading
+                setTimeout(async () => {
+                    const fallbackUrl = `https://lh3.googleusercontent.com/d/${driveIds[selectedIndex]}=w2000&t=${Date.now()}&force=${Math.random()}`;
+                    mainImage.src = fallbackUrl;
+                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Fallback refresh attempt`;
+                }, 1000);
             }
+        }
+
+        // Add automatic refresh system with improved main image updating
+        function startAutoRefresh() {
+            log('Starting auto-refresh every 10 seconds with forced main image updates...');
+            
+            setInterval(async () => {
+                log('Auto-refreshing all images and sensor data...');
+                
+                // Update sensor data
+                await updateSensorData();
+                
+                // Clean up blob URLs
+                document.querySelectorAll('img').forEach(img => {
+                    if (img.src && img.src.startsWith('blob:')) {
+                        URL.revokeObjectURL(img.src);
+                    }
+                });
+                
+                // Force refresh the main image - this is the key fix
+                await refreshMainImage();
+                
+                // Update thumbnails
+                const thumbnails = document.querySelectorAll('.thumbnail');
+                for (let index = 0; index < thumbnails.length && index < driveIds.length; index++) {
+                    const img = thumbnails[index];
+                    const newUrl = await forceClearCacheAndRefresh(driveIds[index]);
+                    if (newUrl) {
+                        img.style.opacity = '0.7';
+                        img.src = '';
+                        setTimeout(() => {
+                            img.src = newUrl;
+                            img.onload = () => {
+                                img.style.opacity = '1';
+                                log(`Thumbnail ${index + 1} refreshed`);
+                            };
+                        }, 200 + (index * 100));
+                    }
+                    
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+                
+                log('Auto-refresh cycle completed');
+            }, 10000);
         }
 
         async function createThumbnail(driveId, index) {
@@ -765,7 +809,6 @@
             return wrapper;
         }
 
-
         async function selectThumbnail(index) {
             selectedIndex = index;
             const mainImage = document.getElementById('main-image');
@@ -794,63 +837,80 @@
             });
         }
 
+        // Fullscreen modal functionality
         function setupFullscreenModal() {
             const modal = document.getElementById('fullscreen-modal');
             const fullscreenImg = document.getElementById('fullscreen-image');
             const closeButton = document.getElementById('close-modal');
             const mainImage = document.getElementById('main-image');
             
+            // Function to check if device is mobile and in portrait
+            function isMobilePortrait() {
+                return window.innerWidth <= 768 && window.innerHeight > window.innerWidth;
+            }
+            
+            // Open fullscreen modal
             function openFullscreen() {
                 if (mainImage.src) {
                     fullscreenImg.src = mainImage.src;
+                    
+                    // Auto-rotate on mobile portrait
+                    if (isMobilePortrait()) {
+                        fullscreenImg.classList.add('rotated');
+                    } else {
+                        fullscreenImg.classList.remove('rotated');
+                    }
+                    
                     modal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
                 }
             }
             
+            // Close fullscreen modal
             function closeFullscreen() {
                 modal.classList.remove('active');
-                document.body.style.overflow = '';
+                fullscreenImg.classList.remove('rotated');
+                document.body.style.overflow = ''; // Restore scrolling
             }
             
+            // Event listeners
             mainImage.addEventListener('click', openFullscreen);
             closeButton.addEventListener('click', closeFullscreen);
             
+            // Close on background click
             modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeFullscreen();
+                if (e.target === modal) {
+                    closeFullscreen();
+                }
             });
             
+            // Close on escape key
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && modal.classList.contains('active')) {
                     closeFullscreen();
                 }
             });
-        }
-
-        function startAutoRefresh() {
-            log('Starting auto-refresh every 10 seconds...');
             
-            setInterval(async () => {
-                log('Auto-refreshing...');
-                await updateSensorData();
-                
-                // Refresh main image using original method
-                const mainImage = document.getElementById('main-image');
-                const imageUrl = await extremeFetchImage(driveIds[selectedIndex]);
-                if (imageUrl) {
-                    mainImage.src = imageUrl;
-                }
-                
-                log('Auto-refresh completed');
-            }, 10000);
+            // Handle orientation change
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    if (modal.classList.contains('active')) {
+                        if (isMobilePortrait()) {
+                            fullscreenImg.classList.add('rotated');
+                        } else {
+                            fullscreenImg.classList.remove('rotated');
+                        }
+                    }
+                }, 100);
+            });
         }
 
         async function init() {
             log('Starting Doughrock live stream...');
             const container = document.getElementById('image-container');
             
+            // Load initial sensor data
             await updateSensorData();
-            setupLampControls();
             
             for (let i = 0; i < driveIds.length; i++) {
                 const thumbnail = await createThumbnail(driveIds[i], i);
@@ -859,13 +919,14 @@
             
             selectThumbnail(0);
             startAutoRefresh();
+            
+            // Setup fullscreen modal
             setupFullscreenModal();
             
-            log('Initialization complete.');
+            log('Initialization complete. Auto-refresh enabled.');
         }
 
         window.addEventListener('load', init);
     </script>
 </body>
 </html>
-        
