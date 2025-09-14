@@ -141,6 +141,91 @@
         .info { position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 3px; font-size: 12px; }
         .debug { margin-top: 20px; background: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
 
+        /* Control Buttons Styles */
+        .control-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .lamp-on-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .lamp-on-btn:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .lamp-off-btn {
+            background: linear-gradient(135deg, #f44336, #da190b);
+            color: white;
+        }
+
+        .lamp-off-btn:hover {
+            background: linear-gradient(135deg, #da190b, #c62828);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.3);
+        }
+
+        .btn-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .btn-text {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .command-status {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: 500;
+            min-height: 20px;
+        }
+
+        .command-status.success {
+            background: rgba(76, 175, 80, 0.1);
+            color: #2e7d32;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .command-status.info {
+            background: rgba(33, 150, 243, 0.1);
+            color: #1565c0;
+            border: 1px solid rgba(33, 150, 243, 0.3);
+        }
+
+        .command-status.error {
+            background: rgba(244, 67, 54, 0.1);
+            color: #c62828;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
         /* Fullscreen modal styles */
         .fullscreen-modal {
             display: none;
@@ -291,6 +376,22 @@
             </div>
         </div>
 
+        <!-- Control Buttons Section -->
+        <div class="sensor-section">
+            <h2 style="text-align: center; margin-bottom: 20px; color: #333;">Lamp Controls</h2>
+            <div class="control-buttons">
+                <button class="control-btn lamp-on-btn" id="lamp-on-btn">
+                    <span class="btn-icon">💡</span>
+                    <span class="btn-text">Lamp ON</span>
+                </button>
+                <button class="control-btn lamp-off-btn" id="lamp-off-btn">
+                    <span class="btn-icon">🌙</span>
+                    <span class="btn-text">Lamp OFF</span>
+                </button>
+            </div>
+            <div id="command-status" class="command-status"></div>
+        </div>
+
         <div class="tap-instruction">Tap to make full screen</div>
 
         <div class="main-image-section">
@@ -312,6 +413,74 @@
     </div>
 
     <script>
+        // Google Drive trigger file IDs (replace with your actual file IDs)
+        const LAMP_ON_FILE_ID = "1YORRWPrXjBm_1nwFwLqikrlpJGap12os";
+        const LAMP_OFF_FILE_ID = "1nagVRwjpCgj3OC75lSlrjHUnVZpYIWZE";
+
+        // Command tracking
+        let isCommandInProgress = false;
+
+        // Function to trigger command by accessing Google Drive file
+        function sendCommand(taskName, fileId) {
+            if (isCommandInProgress) {
+                showCommandStatus("Another command is in progress. Please wait.", "info");
+                return;
+            }
+
+            isCommandInProgress = true;
+            showCommandStatus(`Sending ${taskName} command...`, "info");
+            
+            log(`Triggering ${taskName} by accessing file: ${fileId}`);
+
+            // Access the Google Drive file to trigger the command
+            const triggerUrl = `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`;
+            
+            // Create invisible image to trigger file access
+            const img = new Image();
+            img.onload = () => {
+                showCommandStatus(`${taskName} trigger sent successfully! ✅`, "success");
+                log(`✅ ${taskName} file accessed successfully`);
+                isCommandInProgress = false;
+                clearStatusAfterDelay();
+            };
+            img.onerror = () => {
+                showCommandStatus(`${taskName} trigger failed`, "error");
+                log(`❌ Failed to access ${taskName} trigger file`);
+                isCommandInProgress = false;
+                clearStatusAfterDelay();
+            };
+            
+            // Trigger the file access
+            img.src = triggerUrl;
+        }
+
+        function clearStatusAfterDelay() {
+            setTimeout(() => {
+                document.getElementById('command-status').textContent = '';
+                document.getElementById('command-status').className = 'command-status';
+            }, 5000);
+        }
+
+        function showCommandStatus(message, type) {
+            const statusElement = document.getElementById('command-status');
+            statusElement.textContent = message;
+            statusElement.className = `command-status ${type}`;
+        }
+
+        // Setup lamp control buttons
+        function setupLampControls() {
+            const lampOnBtn = document.getElementById('lamp-on-btn');
+            const lampOffBtn = document.getElementById('lamp-off-btn');
+
+            lampOnBtn.addEventListener('click', () => {
+                sendCommand("Lamp ON", LAMP_ON_FILE_ID);
+            });
+
+            lampOffBtn.addEventListener('click', () => {
+                sendCommand("Lamp OFF", LAMP_OFF_FILE_ID);
+            });
+        }
+
         const driveIds = [
             "1vrr26I23p4XUdAlN_2tnevs4VYE7PIoI",
             "1jVn1wKSIoHepUjxdZRS6xlh4JC90q55c",
@@ -347,284 +516,6 @@
         // Function to fetch sensor data from Google Drive text files
         async function fetchSensorData(fileId, sensorType) {
             const urls = [
-                `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
-                `https://docs.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
-            ];
-            
-            const corsProxies = getCORSProxies();
-            
-            // Try direct fetch first
-            for (const url of urls) {
-                try {
-                    const response = await fetch(url, {
-                        cache: 'no-store',
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        const text = await response.text();
-                        if (text && text.trim()) {
-                            log(`${sensorType} data fetched directly: ${text.trim()}`);
-                            return text.trim();
-                        }
-                    }
-                } catch (e) {
-                    log(`Direct ${sensorType} fetch failed: ${e.message}`);
-                }
-            }
-            
-            // Try with CORS proxies
-            for (const proxy of corsProxies) {
-                try {
-                    const url = `https://drive.google.com/uc?id=${fileId}&export=download`;
-                    const proxyUrl = proxy + encodeURIComponent(url);
-                    
-                    const response = await fetch(proxyUrl, {
-                        cache: 'no-store'
-                    });
-                    
-                    if (response.ok) {
-                        const text = await response.text();
-                        if (text && text.trim()) {
-                            log(`${sensorType} data fetched via proxy: ${text.trim()}`);
-                            return text.trim();
-                        }
-                    }
-                } catch (e) {
-                    log(`Proxy ${sensorType} fetch failed: ${e.message}`);
-                }
-            }
-            
-            log(`Failed to fetch ${sensorType} data`);
-            return null;
-        }
-
-        // Update sensor displays
-        async function updateSensorData() {
-            log('Updating sensor data...');
-            
-            // Update humidity
-            const humidityData = await fetchSensorData(sensorIds.humidity, 'humidity');
-            if (humidityData) {
-                const humidityValue = parseFloat(humidityData);
-                if (!isNaN(humidityValue)) {
-                    document.getElementById('humidity-value').textContent = `${humidityValue.toFixed(1)}%`;
-                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-                } else {
-                    document.getElementById('humidity-value').textContent = `${humidityData}%`;
-                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-                }
-            } else {
-                document.getElementById('humidity-updated').textContent = 'Failed to update';
-            }
-            
-            // Update temperature
-            const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
-            if (temperatureData) {
-                const temperatureValue = parseFloat(temperatureData);
-                if (!isNaN(temperatureValue)) {
-                    document.getElementById('temperature-value').textContent = `${temperatureValue.toFixed(1)}°C`;
-                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-                } else {
-                    document.getElementById('temperature-value').textContent = `${temperatureData}°C`;
-                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-                }
-            } else {
-                document.getElementById('temperature-updated').textContent = 'Failed to update';
-            }
-        }
-
-        // Generate URLs with aggressive cache busting
-        function generateAllPossibleUrls(driveId) {
-            const timestamp = Date.now();
-            const randomParam = Math.random().toString(36).substring(7);
-            return [
-                `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
-                `https://drive.google.com/uc?export=download&id=${driveId}&t=${timestamp}&nocache=${randomParam}`,
-                `https://drive.google.com/file/d/${driveId}/view?usp=sharing&t=${timestamp}`,
-                `https://drive.google.com/file/d/${driveId}/preview?t=${timestamp}&r=${randomParam}`,
-                `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`,
-                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&nocache=${randomParam}`,
-                `https://lh3.googleusercontent.com/d/${driveId}=s2000&t=${timestamp}`,
-                `https://lh4.googleusercontent.com/d/${driveId}?t=${timestamp}`,
-                `https://lh5.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}`,
-                `https://drive.google.com/thumbnail?id=${driveId}&t=${timestamp}&r=${randomParam}`,
-                `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000&t=${timestamp}`,
-                `https://docs.google.com/uc?id=${driveId}&export=download&t=${timestamp}`,
-                `https://drive.google.com/uc?id=${driveId}&export=download&confirm=t&t=${timestamp}`,
-                `https://drive.google.com/uc?id=${driveId}&export=download&confirm=no_antivirus&t=${timestamp}`,
-            ];
-        }
-
-        function getCORSProxies() {
-            return [
-                'https://api.allorigins.win/raw?url=',
-                'https://api.codetabs.com/v1/proxy?quest=',
-                'https://cors-anywhere.herokuapp.com/',
-                'https://thingproxy.freeboard.io/fetch/',
-                'https://cors.io/?',
-                'https://jsonp.afeld.me/?url=',
-                'https://whatever-origin.herokuapp.com/get?url=',
-                'https://cors-proxy.htmldriven.com/?url=',
-            ];
-        }
-
-        async function extremeFetchImage(driveId) {
-            const urls = generateAllPossibleUrls(driveId);
-            const proxies = getCORSProxies();
-            
-            log(`Attempting to load image ${driveId}...`);
-            
-            // Try direct URLs first
-            for (let i = 0; i < urls.length; i++) {
-                const url = urls[i];
-                log(`Trying direct URL ${i + 1}/${urls.length}: ${url.substring(0, 80)}...`);
-                
-                try {
-                    let response = await fetch(url, { 
-                        mode: 'cors',
-                        credentials: 'omit',
-                        referrerPolicy: 'no-referrer'
-                    });
-                    
-                    if (response.ok) {
-                        const blob = await response.blob();
-                        if (blob.size > 0 && blob.type.startsWith('image/')) {
-                            log(`Success with direct URL!`);
-                            return URL.createObjectURL(blob);
-                        }
-                    }
-                } catch (e) {
-                    try {
-                        let response = await fetch(url, { mode: 'no-cors' });
-                        if (await testImageLoad(url)) {
-                            log(`Success with no-cors direct load!`);
-                            return url;
-                        }
-                    } catch (e2) {
-                        log(`Direct fetch failed: ${e2.message.substring(0, 50)}...`);
-                    }
-                }
-            }
-            
-            // Try with CORS proxies
-            for (const proxy of proxies) {
-                for (const url of urls.slice(0, 5)) {
-                    try {
-                        const proxyUrl = proxy + encodeURIComponent(url);
-                        log(`Trying proxy: ${proxy.substring(0, 30)}... with URL`);
-                        
-                        const response = await fetch(proxyUrl, {
-                            headers: {
-                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                            }
-                        });
-                        
-                        if (response.ok) {
-                            const blob = await response.blob();
-                            if (blob.size > 1000) {
-                                log(`Success with proxy!`);
-                                return URL.createObjectURL(blob);
-                            }
-                        }
-                    } catch (e) {
-                        log(`Proxy failed: ${e.message.substring(0, 30)}...`);
-                    }
-                }
-            }
-            
-            try {
-                const iframeResult = await iframeExtraction(driveId);
-                if (iframeResult) {
-                    log(`Success with iframe extraction!`);
-                    return iframeResult;
-                }
-            } catch (e) {
-                log(`Iframe extraction failed: ${e.message}`);
-            }
-            
-            log(`All methods failed for ${driveId}`);
-            return null;
-        }
-
-        function testImageLoad(url) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve(true);
-                img.onerror = () => resolve(false);
-                img.src = url;
-                setTimeout(() => resolve(false), 5000);
-            });
-        }
-
-        function iframeExtraction(driveId) {
-            return new Promise((resolve) => {
-                const iframe = document.createElement('iframe');
-                iframe.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;';
-                iframe.src = `https://drive.google.com/file/d/${driveId}/preview`;
-                document.body.appendChild(iframe);
-                
-                let resolved = false;
-                
-                iframe.onload = () => {
-                    setTimeout(() => {
-                        if (resolved) return;
-                        try {
-                            const doc = iframe.contentDocument || iframe.contentWindow.document;
-                            const images = doc.querySelectorAll('img');
-                            for (const img of images) {
-                                if (img.src && img.src.includes('googleusercontent')) {
-                                    resolved = true;
-                                    document.body.removeChild(iframe);
-                                    resolve(img.src);
-                                    return;
-                                }
-                            }
-                        } catch (e) {
-                            log(`Iframe access blocked by CORS: ${e.message}`);
-                        }
-                        
-                        if (!resolved) {
-                            resolved = true;
-                            document.body.removeChild(iframe);
-                            resolve(`https://drive.google.com/file/d/${driveId}/preview`);
-                        }
-                    }, 3000);
-                };
-                
-                setTimeout(() => {
-                    if (!resolved) {
-                        resolved = true;
-                        if (iframe.parentNode) document.body.removeChild(iframe);
-                        resolve(null);
-                    }
-                }, 8000);
-            });
-        }
-
-        // Force cache clearing and image refresh
-        async function forceClearCacheAndRefresh(driveId) {
-            if ('caches' in window) {
-                try {
-                    const cacheNames = await caches.keys();
-                    await Promise.all(
-                        cacheNames.map(cacheName => caches.delete(cacheName))
-                    );
-                } catch (e) {
-                    log('Cache clearing failed, continuing...');
-                }
-            }
-            
-            const timestamp = Date.now();
-            const randomId = Math.random().toString(36).substring(2, 15);
-            const sessionId = Math.random().toString(36).substring(2, 10);
-            
-            const urls = [
-                `https://lh3.googleusercontent.com/d/${driveId}=w2000&v=${timestamp}&_cb=${randomId}&sid=${sessionId}`,
-                `https://drive.google.com/uc?id=${driveId}&export=download&v=${timestamp}&_nocache=${randomId}`,
-                `https://lh3.googleusercontent.com/d/${driveId}?v=${timestamp}&r=${randomId}&s=${sessionId}`,
                 `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000&v=${timestamp}&_=${randomId}`,
             ];
             
@@ -912,6 +803,9 @@
             // Load initial sensor data
             await updateSensorData();
             
+            // Setup lamp controls
+            setupLampControls();
+            
             for (let i = 0; i < driveIds.length; i++) {
                 const thumbnail = await createThumbnail(driveIds[i], i);
                 container.appendChild(thumbnail);
@@ -929,4 +823,282 @@
         window.addEventListener('load', init);
     </script>
 </body>
-</html>
+</html>uc?id=${fileId}&export=download&t=${Date.now()}`,
+                `https://docs.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
+            ];
+            
+            const corsProxies = getCORSProxies();
+            
+            // Try direct fetch first
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url, {
+                        cache: 'no-store',
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const text = await response.text();
+                        if (text && text.trim()) {
+                            log(`${sensorType} data fetched directly: ${text.trim()}`);
+                            return text.trim();
+                        }
+                    }
+                } catch (e) {
+                    log(`Direct ${sensorType} fetch failed: ${e.message}`);
+                }
+            }
+            
+            // Try with CORS proxies
+            for (const proxy of corsProxies) {
+                try {
+                    const url = `https://drive.google.com/uc?id=${fileId}&export=download`;
+                    const proxyUrl = proxy + encodeURIComponent(url);
+                    
+                    const response = await fetch(proxyUrl, {
+                        cache: 'no-store'
+                    });
+                    
+                    if (response.ok) {
+                        const text = await response.text();
+                        if (text && text.trim()) {
+                            log(`${sensorType} data fetched via proxy: ${text.trim()}`);
+                            return text.trim();
+                        }
+                    }
+                } catch (e) {
+                    log(`Proxy ${sensorType} fetch failed: ${e.message}`);
+                }
+            }
+            
+            log(`Failed to fetch ${sensorType} data`);
+            return null;
+        }
+
+        // Update sensor displays
+        async function updateSensorData() {
+            log('Updating sensor data...');
+            
+            // Update humidity
+            const humidityData = await fetchSensorData(sensorIds.humidity, 'humidity');
+            if (humidityData) {
+                const humidityValue = parseFloat(humidityData);
+                if (!isNaN(humidityValue)) {
+                    document.getElementById('humidity-value').textContent = `${humidityValue.toFixed(1)}%`;
+                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                } else {
+                    document.getElementById('humidity-value').textContent = `${humidityData}%`;
+                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                }
+            } else {
+                document.getElementById('humidity-updated').textContent = 'Failed to update';
+            }
+            
+            // Update temperature
+            const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
+            if (temperatureData) {
+                const temperatureValue = parseFloat(temperatureData);
+                if (!isNaN(temperatureValue)) {
+                    document.getElementById('temperature-value').textContent = `${temperatureValue.toFixed(1)}°C`;
+                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                } else {
+                    document.getElementById('temperature-value').textContent = `${temperatureData}°C`;
+                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                }
+            } else {
+                document.getElementById('temperature-updated').textContent = 'Failed to update';
+            }
+        }
+
+        // Generate URLs with aggressive cache busting
+        function generateAllPossibleUrls(driveId) {
+            const timestamp = Date.now();
+            const randomParam = Math.random().toString(36).substring(7);
+            return [
+                `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
+                `https://drive.google.com/uc?export=download&id=${driveId}&t=${timestamp}&nocache=${randomParam}`,
+                `https://drive.google.com/file/d/${driveId}/view?usp=sharing&t=${timestamp}`,
+                `https://drive.google.com/file/d/${driveId}/preview?t=${timestamp}&r=${randomParam}`,
+                `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`,
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&nocache=${randomParam}`,
+                `https://lh3.googleusercontent.com/d/${driveId}=s2000&t=${timestamp}`,
+                `https://lh4.googleusercontent.com/d/${driveId}?t=${timestamp}`,
+                `https://lh5.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}`,
+                `https://drive.google.com/thumbnail?id=${driveId}&t=${timestamp}&r=${randomParam}`,
+                `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000&t=${timestamp}`,
+                `https://docs.google.com/uc?id=${driveId}&export=download&t=${timestamp}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&confirm=t&t=${timestamp}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&confirm=no_antivirus&t=${timestamp}`,
+            ];
+        }
+
+        function getCORSProxies() {
+            return [
+                'https://api.allorigins.win/raw?url=',
+                'https://api.codetabs.com/v1/proxy?quest=',
+                'https://cors-anywhere.herokuapp.com/',
+                'https://thingproxy.freeboard.io/fetch/',
+                'https://cors.io/?',
+                'https://jsonp.afeld.me/?url=',
+                'https://whatever-origin.herokuapp.com/get?url=',
+                'https://cors-proxy.htmldriven.com/?url=',
+            ];
+        }
+
+        async function extremeFetchImage(driveId) {
+            const urls = generateAllPossibleUrls(driveId);
+            const proxies = getCORSProxies();
+            
+            log(`Attempting to load image ${driveId}...`);
+            
+            // Try direct URLs first
+            for (let i = 0; i < urls.length; i++) {
+                const url = urls[i];
+                log(`Trying direct URL ${i + 1}/${urls.length}: ${url.substring(0, 80)}...`);
+                
+                try {
+                    let response = await fetch(url, { 
+                        mode: 'cors',
+                        credentials: 'omit',
+                        referrerPolicy: 'no-referrer'
+                    });
+                    
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        if (blob.size > 0 && blob.type.startsWith('image/')) {
+                            log(`Success with direct URL!`);
+                            return URL.createObjectURL(blob);
+                        }
+                    }
+                } catch (e) {
+                    try {
+                        let response = await fetch(url, { mode: 'no-cors' });
+                        if (await testImageLoad(url)) {
+                            log(`Success with no-cors direct load!`);
+                            return url;
+                        }
+                    } catch (e2) {
+                        log(`Direct fetch failed: ${e2.message.substring(0, 50)}...`);
+                    }
+                }
+            }
+            
+            // Try with CORS proxies
+            for (const proxy of proxies) {
+                for (const url of urls.slice(0, 5)) {
+                    try {
+                        const proxyUrl = proxy + encodeURIComponent(url);
+                        log(`Trying proxy: ${proxy.substring(0, 30)}... with URL`);
+                        
+                        const response = await fetch(proxyUrl, {
+                            headers: {
+                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            if (blob.size > 1000) {
+                                log(`Success with proxy!`);
+                                return URL.createObjectURL(blob);
+                            }
+                        }
+                    } catch (e) {
+                        log(`Proxy failed: ${e.message.substring(0, 30)}...`);
+                    }
+                }
+            }
+            
+            try {
+                const iframeResult = await iframeExtraction(driveId);
+                if (iframeResult) {
+                    log(`Success with iframe extraction!`);
+                    return iframeResult;
+                }
+            } catch (e) {
+                log(`Iframe extraction failed: ${e.message}`);
+            }
+            
+            log(`All methods failed for ${driveId}`);
+            return null;
+        }
+
+        function testImageLoad(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+                setTimeout(() => resolve(false), 5000);
+            });
+        }
+
+        function iframeExtraction(driveId) {
+            return new Promise((resolve) => {
+                const iframe = document.createElement('iframe');
+                iframe.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;';
+                iframe.src = `https://drive.google.com/file/d/${driveId}/preview`;
+                document.body.appendChild(iframe);
+                
+                let resolved = false;
+                
+                iframe.onload = () => {
+                    setTimeout(() => {
+                        if (resolved) return;
+                        try {
+                            const doc = iframe.contentDocument || iframe.contentWindow.document;
+                            const images = doc.querySelectorAll('img');
+                            for (const img of images) {
+                                if (img.src && img.src.includes('googleusercontent')) {
+                                    resolved = true;
+                                    document.body.removeChild(iframe);
+                                    resolve(img.src);
+                                    return;
+                                }
+                            }
+                        } catch (e) {
+                            log(`Iframe access blocked by CORS: ${e.message}`);
+                        }
+                        
+                        if (!resolved) {
+                            resolved = true;
+                            document.body.removeChild(iframe);
+                            resolve(`https://drive.google.com/file/d/${driveId}/preview`);
+                        }
+                    }, 3000);
+                };
+                
+                setTimeout(() => {
+                    if (!resolved) {
+                        resolved = true;
+                        if (iframe.parentNode) document.body.removeChild(iframe);
+                        resolve(null);
+                    }
+                }, 8000);
+            });
+        }
+
+        // Force cache clearing and image refresh
+        async function forceClearCacheAndRefresh(driveId) {
+            if ('caches' in window) {
+                try {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(
+                        cacheNames.map(cacheName => caches.delete(cacheName))
+                    );
+                } catch (e) {
+                    log('Cache clearing failed, continuing...');
+                }
+            }
+            
+            const timestamp = Date.now();
+            const randomId = Math.random().toString(36).substring(2, 15);
+            const sessionId = Math.random().toString(36).substring(2, 10);
+            
+            const urls = [
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000&v=${timestamp}&_cb=${randomId}&sid=${sessionId}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&v=${timestamp}&_nocache=${randomId}`,
+                `https://lh3.googleusercontent.com/d/${driveId}?v=${timestamp}&r=${randomId}&s=${sessionId}`,
+                `https://drive.google.com/
