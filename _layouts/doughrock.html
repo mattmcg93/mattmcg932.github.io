@@ -675,9 +675,60 @@
             return null;
         }
 
-        // Add automatic refresh system with aggressive cache clearing
+        // Updated function to force refresh the main image
+        async function refreshMainImage() {
+            const mainImage = document.getElementById('main-image');
+            const mainTitle = document.getElementById('main-title');
+            
+            log(`Refreshing main image for ${cameraNames[selectedIndex]}...`);
+            
+            // Show loading state
+            mainImage.style.opacity = '0.5';
+            mainTitle.textContent = `Refreshing ${cameraNames[selectedIndex]}...`;
+            
+            // Try to get a fresh image URL
+            let newMainUrl = await forceClearCacheAndRefresh(driveIds[selectedIndex]);
+            
+            // If that fails, fall back to the full extremeFetchImage method
+            if (!newMainUrl) {
+                log(`Force refresh failed, trying extremeFetchImage...`);
+                newMainUrl = await extremeFetchImage(driveIds[selectedIndex]);
+            }
+            
+            if (newMainUrl) {
+                // Clear current image first
+                mainImage.src = '';
+                
+                // Set new image
+                mainImage.src = newMainUrl;
+                mainImage.onload = () => {
+                    mainImage.style.opacity = '1';
+                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Updated at ${new Date().toLocaleTimeString()}`;
+                    log(`Main image refreshed successfully: ${cameraNames[selectedIndex]}`);
+                };
+                mainImage.onerror = () => {
+                    mainImage.style.opacity = '1';
+                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Failed to refresh`;
+                    log(`Main image refresh failed: ${cameraNames[selectedIndex]}`);
+                };
+            } else {
+                // If all methods fail, try to force a reload by changing the src to empty and back
+                mainImage.style.opacity = '1';
+                mainTitle.textContent = `${cameraNames[selectedIndex]} - Refresh failed, retrying...`;
+                log(`All refresh methods failed for main image`);
+                
+                // As a last resort, try to force refresh by clearing and reloading
+                setTimeout(async () => {
+                    const fallbackUrl = `https://lh3.googleusercontent.com/d/${driveIds[selectedIndex]}=w2000&t=${Date.now()}&force=${Math.random()}`;
+                    mainImage.src = fallbackUrl;
+                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Fallback refresh attempt`;
+                }, 1000);
+            }
+        }
+
+        // Add automatic refresh system with improved main image updating
         function startAutoRefresh() {
-            log('Starting auto-refresh every 10 seconds with aggressive cache clearing...');
+            log('Starting auto-refresh every 10 seconds with forced main image updates...');
             
             setInterval(async () => {
                 log('Auto-refreshing all images and sensor data...');
@@ -685,26 +736,17 @@
                 // Update sensor data
                 await updateSensorData();
                 
+                // Clean up blob URLs
                 document.querySelectorAll('img').forEach(img => {
                     if (img.src && img.src.startsWith('blob:')) {
                         URL.revokeObjectURL(img.src);
                     }
                 });
                 
-                const mainImage = document.getElementById('main-image');
-                const newMainUrl = await forceClearCacheAndRefresh(driveIds[selectedIndex]);
-                if (newMainUrl) {
-                    mainImage.style.opacity = '0.5';
-                    mainImage.src = '';
-                    setTimeout(() => {
-                        mainImage.src = newMainUrl;
-                        mainImage.onload = () => {
-                            mainImage.style.opacity = '1';
-                            log(`Main image refreshed: ${cameraNames[selectedIndex]}`);
-                        };
-                    }, 100);
-                }
+                // Force refresh the main image - this is the key fix
+                await refreshMainImage();
                 
+                // Update thumbnails
                 const thumbnails = document.querySelectorAll('.thumbnail');
                 for (let index = 0; index < thumbnails.length && index < driveIds.length; index++) {
                     const img = thumbnails[index];
@@ -724,7 +766,7 @@
                     await new Promise(resolve => setTimeout(resolve, 300));
                 }
                 
-                log('Aggressive cache-cleared refresh completed');
+                log('Auto-refresh cycle completed');
             }, 10000);
         }
 
@@ -888,5 +930,3 @@
     </script>
 </body>
 </html>
-
-        
