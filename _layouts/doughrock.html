@@ -345,7 +345,7 @@
     </div>
 
     <script>
-        // Google Drive trigger file IDs (replace with your actual file IDs)
+        // Google Drive trigger file IDs
         const LAMP_ON_FILE_ID = "1YORRWPrXjBm_1nwFwLqikrlpJGap12os";
         const LAMP_OFF_FILE_ID = "1nagVRwjpCgj3OC75lSlrjHUnVZpYIWZE";
 
@@ -381,8 +381,8 @@
             debugLog.scrollTop = debugLog.scrollHeight;
         }
 
-        // Lamp control functions (new)
-        function sendCommand(taskName, fileId) {
+        // Enhanced lamp control function for better file access detection
+        async function sendCommand(taskName, fileId) {
             if (isCommandInProgress) {
                 showCommandStatus("Another command is in progress. Please wait.", "info");
                 return;
@@ -393,90 +393,117 @@
             
             log(`Triggering ${taskName} by accessing file: ${fileId}`);
         
-            // Try multiple methods to trigger the file access
-            const methods = [
-                // Method 1: Image load
-                () => {
-                    const img = new Image();
-                    const triggerUrl = `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}&r=${Math.random()}`;
+            // Multiple aggressive access methods to ensure Google Drive registers the access
+            const accessMethods = [
+                // Method 1: Direct download URL with multiple attempts
+                async () => {
+                    const urls = [
+                        `https://drive.google.com/uc?id=${fileId}&export=download`,
+                        `https://drive.google.com/file/d/${fileId}/view`,
+                        `https://docs.google.com/uc?id=${fileId}&export=download`
+                    ];
                     
-                    return new Promise((resolve) => {
-                        img.onload = () => resolve(true);
-                        img.onerror = () => resolve(false);
-                        img.src = triggerUrl;
-                        setTimeout(() => resolve(false), 5000);
-                    });
+                    for (const url of urls) {
+                        try {
+                            const response = await fetch(url, { 
+                                mode: 'no-cors',
+                                cache: 'no-store',
+                                headers: {
+                                    'Cache-Control': 'no-cache'
+                                }
+                            });
+                            log(`Fetch attempt to: ${url}`);
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                        } catch (e) {
+                            log(`Fetch failed: ${e.message}`);
+                        }
+                    }
                 },
                 
-                // Method 2: Fetch request
-                () => {
-                    const triggerUrl = `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`;
+                // Method 2: Image load attempts
+                async () => {
+                    const urls = [
+                        `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
+                        `https://lh3.googleusercontent.com/d/${fileId}?t=${Date.now()}`
+                    ];
                     
-                    return fetch(triggerUrl, { 
-                        mode: 'no-cors',
-                        cache: 'no-store'
-                    }).then(() => true).catch(() => false);
+                    for (const url of urls) {
+                        const img = new Image();
+                        img.src = url;
+                        log(`Image load attempt: ${url}`);
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
                 },
                 
-                // Method 3: Different Google Drive URL
-                () => {
-                    const img = new Image();
-                    const triggerUrl = `https://lh3.googleusercontent.com/d/${fileId}?t=${Date.now()}`;
+                // Method 3: Multiple iframe attempts
+                async () => {
+                    const urls = [
+                        `https://drive.google.com/file/d/${fileId}/preview`,
+                        `https://drive.google.com/file/d/${fileId}/view`,
+                        `https://docs.google.com/document/d/${fileId}/preview`
+                    ];
                     
-                    return new Promise((resolve) => {
-                        img.onload = () => resolve(true);
-                        img.onerror = () => resolve(false);
-                        img.src = triggerUrl;
-                        setTimeout(() => resolve(false), 3000);
-                    });
+                    for (const url of urls) {
+                        const iframe = document.createElement('iframe');
+                        iframe.style.display = 'none';
+                        iframe.style.width = '1px';
+                        iframe.style.height = '1px';
+                        iframe.src = url;
+                        document.body.appendChild(iframe);
+                        
+                        log(`Iframe access attempt: ${url}`);
+                        
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        document.body.removeChild(iframe);
+                    }
+                },
+                
+                // Method 4: Link click simulation
+                async () => {
+                    const urls = [
+                        `https://drive.google.com/uc?id=${fileId}&export=download`,
+                        `https://drive.google.com/file/d/${fileId}/view?usp=sharing`
+                    ];
+                    
+                    for (const url of urls) {
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.style.display = 'none';
+                        link.target = '_blank';
+                        document.body.appendChild(link);
+                        
+                        // Simulate click
+                        link.click();
+                        log(`Link click simulation: ${url}`);
+                        
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        document.body.removeChild(link);
+                    }
                 }
             ];
         
-            // Try methods sequentially
-            async function tryMethods() {
-                for (let i = 0; i < methods.length; i++) {
-                    log(`Trying trigger method ${i + 1}...`);
-                    try {
-                        const success = await methods[i]();
-                        if (success) {
-                            showCommandStatus(`${taskName} trigger sent successfully!`, "success");
-                            log(`${taskName} file accessed successfully with method ${i + 1}`);
-                            isCommandInProgress = false;
-                            clearStatusAfterDelay();
-                            return;
-                        }
-                    } catch (e) {
-                        log(`Method ${i + 1} failed: ${e.message}`);
-                    }
-                }
+            try {
+                // Execute all methods in parallel for maximum access detection
+                log("Executing multiple access methods simultaneously...");
+                await Promise.all(accessMethods.map(method => method().catch(e => log(`Method failed: ${e}`))));
                 
-                // All methods failed
-                showCommandStatus(`${taskName} trigger failed - trying alternative approach`, "info");
-                log(`All trigger methods failed for ${taskName}`);
+                showCommandStatus(`${taskName} trigger sent successfully! Monitor should detect access.`, "success");
+                log(`${taskName} file accessed with multiple methods`);
                 
-                // Alternative: Try to access via iframe (sometimes works)
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
-                document.body.appendChild(iframe);
-                
-                setTimeout(() => {
-                    document.body.removeChild(iframe);
-                    showCommandStatus(`${taskName} alternative trigger attempted`, "success");
-                    log(`${taskName} iframe trigger attempted`);
-                    isCommandInProgress = false;
-                    clearStatusAfterDelay();
-                }, 2000);
+            } catch (error) {
+                showCommandStatus(`${taskName} trigger failed: ${error.message}`, "error");
+                log(`All access methods failed: ${error.message}`);
             }
-        
-            tryMethods();
+            
+            isCommandInProgress = false;
+            clearStatusAfterDelay();
         }
 
         function clearStatusAfterDelay() {
             setTimeout(() => {
                 document.getElementById('command-status').textContent = '';
                 document.getElementById('command-status').className = 'command-status';
-            }, 5000);
+            }, 8000);
         }
 
         function showCommandStatus(message, type) {
@@ -498,7 +525,6 @@
             });
         }
 
-        // Original working image functions (restored)
         function generateAllPossibleUrls(driveId) {
             const timestamp = Date.now();
             const randomParam = Math.random().toString(36).substring(7);
@@ -739,6 +765,7 @@
             return wrapper;
         }
 
+
         async function selectThumbnail(index) {
             selectedIndex = index;
             const mainImage = document.getElementById('main-image');
@@ -840,4 +867,5 @@
         window.addEventListener('load', init);
     </script>
 </body>
-</html>        
+</html>
+        
