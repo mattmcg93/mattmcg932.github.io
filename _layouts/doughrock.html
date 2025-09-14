@@ -109,25 +109,30 @@
             transition: all 0.3s;
             position: relative;
             background: #f8f9fa;
+            /* Force 4:3 aspect ratio */
+            aspect-ratio: 4 / 3;
         }
         .thumbnail-wrapper:hover { transform: scale(1.05); }
         .thumbnail-wrapper.selected { border-color: #667eea; }
         .thumbnail {
             width: 100%;
-            height: auto;
-            object-fit: contain;
+            height: 100%;
+            object-fit: cover; /* Changed from contain to cover to fill the 4:3 container */
             background: #ddd;
-            min-height: 120px;
-            max-height: 200px;
         }
         .loading { 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            height: 150px; 
+            height: 100%; /* Changed to 100% to fill the 4:3 container */
             color: #666;
             flex-direction: column;
             gap: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
         .spinner {
             width: 30px;
@@ -222,11 +227,6 @@
                 gap: 10px;
             }
             
-            .thumbnail {
-                min-height: 100px;
-                max-height: 150px;
-            }
-            
             .sensor-value {
                 font-size: 2em;
             }
@@ -248,11 +248,6 @@
             #image-container {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 8px;
-            }
-            
-            .thumbnail {
-                min-height: 80px;
-                max-height: 120px;
             }
             
             .sensor-section,
