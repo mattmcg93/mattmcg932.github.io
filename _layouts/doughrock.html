@@ -114,20 +114,11 @@
         .thumbnail-wrapper.selected { border-color: #667eea; }
         .thumbnail {
             width: 100%;
-            height: 0;
-            padding-bottom: 75%; /* 4:3 aspect ratio (3/4 = 0.75) */
-            object-fit: cover;
+            height: auto;
+            object-fit: contain;
             background: #ddd;
-            position: relative;
-        }
-        
-        .thumbnail-wrapper img.thumbnail {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            min-height: 120px;
+            max-height: 200px;
         }
         .loading { 
             display: flex; 
@@ -231,8 +222,9 @@
                 gap: 10px;
             }
             
-            .thumbnail-wrapper {
-                aspect-ratio: 4/3; /* Maintain 4:3 aspect ratio on mobile */
+            .thumbnail {
+                min-height: 100px;
+                max-height: 150px;
             }
             
             .sensor-value {
@@ -258,8 +250,9 @@
                 gap: 8px;
             }
             
-            .thumbnail-wrapper {
-                aspect-ratio: 4/3; /* Maintain 4:3 aspect ratio on small mobile */
+            .thumbnail {
+                min-height: 80px;
+                max-height: 120px;
             }
             
             .sensor-section,
