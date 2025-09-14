@@ -61,21 +61,38 @@
             margin-top: 10px;
         }
         
-        .tap-instruction {
-            text-align: center;
-            color: white;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            opacity: 0.8;
-        }
-        
         .main-image-section {
             background: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
         }
+
+        .image-container-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .tap-instruction {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 8px;
+            z-index: 10;
+            pointer-events: none;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
         .main-image {
             width: 100%;
             height: auto;
@@ -85,6 +102,7 @@
             object-fit: contain;
             max-height: 70vh;
             cursor: pointer;
+            display: block;
         }
         .thumbnails-section {
             background: rgba(255,255,255,0.95);
@@ -233,7 +251,7 @@
             
             .tap-instruction {
                 font-size: 1em;
-                top: 40px;
+                top: 10px;
                 padding: 6px 12px;
             }
         }
@@ -262,6 +280,12 @@
                 max-height: 40vh;
                 min-height: 200px;
             }
+
+            .tap-instruction {
+                font-size: 0.9em;
+                top: 8px;
+                padding: 5px 10px;
+            }
         }
     </style>
 </head>
@@ -288,10 +312,11 @@
             </div>
         </div>
 
-        <div class="tap-instruction">Tap to make full screen</div>
-
         <div class="main-image-section">
-            <img id="main-image" class="main-image" alt="Main View">
+            <div class="image-container-wrapper">
+                <div class="tap-instruction">Tap to make full screen</div>
+                <img id="main-image" class="main-image" alt="Main View">
+            </div>
             <div id="main-title">Loading main image...</div>
         </div>
 
