@@ -16,29 +16,42 @@ jobs:
         RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
       run: |
         action="${{ github.event.client_payload.action }}"
+        timestamp="${{ github.event.client_payload.timestamp }}"
+        
+        echo "Received lamp control request: $action at $timestamp"
         
         if [ "$action" = "on" ]; then
           subject="Socket 2 ON"
           body="raspberrypiKitchen: python3 /home/pi/socket2_on.py"
-        else
+        elif [ "$action" = "off" ]; then
           subject="Socket 2 OFF"
           body="raspberrypiKitchen: python3 /home/pi/socket2_off.py"
+        else
+          echo "Invalid action: $action"
+          exit 1
         fi
+        
+        echo "Sending email with subject: $subject"
+        echo "Body: $body"
         
         python3 -c "
 import smtplib
 from email.message import EmailMessage
 import os
 
-msg = EmailMessage()
-msg['From'] = os.environ['GMAIL_USER']
-msg['To'] = os.environ['RECIPIENT_EMAIL']
-msg['Subject'] = '$subject'
-msg.set_content('$body')
+try:
+    msg = EmailMessage()
+    msg['From'] = os.environ['GMAIL_USER']
+    msg['To'] = os.environ['RECIPIENT_EMAIL']
+    msg['Subject'] = '$subject'
+    msg.set_content('$body')
 
-with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-    smtp.login(os.environ['GMAIL_USER'], os.environ['GMAIL_PASSWORD'])
-    smtp.send_message(msg)
-    
-print('Email sent successfully')
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(os.environ['GMAIL_USER'], os.environ['GMAIL_PASSWORD'])
+        smtp.send_message(msg)
+        
+    print('Email sent successfully')
+except Exception as e:
+    print(f'Email sending failed: {e}')
+    exit(1)
 "
