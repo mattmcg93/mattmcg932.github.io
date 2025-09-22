@@ -445,74 +445,39 @@
             const offBtn = document.getElementById('lamp-off-btn');
             const statusDiv = document.getElementById('lamp-status');
             
-            // Validate configuration
-            if (GITHUB_CONFIG.TOKEN === 'YOUR_GITHUB_TOKEN_HERE' || 
-                GITHUB_CONFIG.OWNER === 'YOUR_USERNAME' || 
-                GITHUB_CONFIG.REPO === 'YOUR_REPO_NAME') {
-                statusDiv.textContent = 'Error: GitHub configuration not set up. Check console.';
-                statusDiv.style.color = '#dc3545';
-                console.error('GitHub configuration incomplete. Please update GITHUB_CONFIG in the script.');
-                return;
-            }
-            
-            // Disable buttons and show status
             onBtn.disabled = true;
             offBtn.disabled = true;
             statusDiv.textContent = `Sending lamp ${action.toUpperCase()} command...`;
             statusDiv.style.color = '#667eea';
             
             try {
-                log(`Attempting to send lamp ${action} command via GitHub Actions...`);
+                // This will redirect to GitHub to manually trigger the workflow
+                const workflowUrl = `https://github.com/${GITHUB_CONFIG.OWNER}/${GITHUB_CONFIG.REPO}/actions/workflows/lamp-proxy.yml`;
                 
-                const response = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.OWNER}/${GITHUB_CONFIG.REPO}/dispatches`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `token ${GITHUB_CONFIG.TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        event_type: 'lamp_control',
-                        client_payload: {
-                            action: action,
-                            timestamp: new Date().toISOString(),
-                            source: 'doughrock_webpage'
-                        }
-                    })
-                });
+                statusDiv.textContent = `Opening GitHub to trigger lamp ${action.toUpperCase()}...`;
+                statusDiv.style.color = '#28a745';
                 
-                if (response.ok) {
-                    log(`Lamp ${action.toUpperCase()} command sent successfully via GitHub Actions`);
-                    statusDiv.textContent = `Lamp ${action.toUpperCase()} command sent successfully!`;
-                    statusDiv.style.color = '#28a745';
-                    
-                    // Visual feedback on button
-                    const activeBtn = action === 'on' ? onBtn : offBtn;
-                    const originalText = activeBtn.textContent;
-                    activeBtn.textContent = 'Sent!';
-                    activeBtn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
-                    
-                    setTimeout(() => {
-                        activeBtn.textContent = originalText;
-                        activeBtn.style.background = action === 'on' ? 
-                            'linear-gradient(135deg, #28a745, #20c997)' : 
-                            'linear-gradient(135deg, #dc3545, #c82333)';
-                        statusDiv.textContent = '';
-                    }, 3000);
-                } else {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP ${response.status}: ${errorText}`);
-                }
-            } catch (error) {
-                log(`Failed to send lamp ${action} command: ${error.message}`);
-                statusDiv.textContent = `Failed to send command: ${error.message}`;
-                statusDiv.style.color = '#dc3545';
+                // Store the action in localStorage so we know what to select
+                localStorage.setItem('lampAction', action);
+                
+                // Open GitHub Actions page
+                window.open(workflowUrl, '_blank');
+                
+                // Visual feedback
+                const activeBtn = action === 'on' ? onBtn : offBtn;
+                const originalText = activeBtn.textContent;
+                activeBtn.textContent = 'Check GitHub!';
                 
                 setTimeout(() => {
-                    statusDiv.textContent = '';
-                }, 5000);
+                    activeBtn.textContent = originalText;
+                    statusDiv.textContent = 'Complete the action on the GitHub page that opened';
+                }, 3000);
+                
+            } catch (error) {
+                log(`Failed to trigger lamp ${action}: ${error.message}`);
+                statusDiv.textContent = `Failed: ${error.message}`;
+                statusDiv.style.color = '#dc3545';
             } finally {
-                // Re-enable buttons
                 onBtn.disabled = false;
                 offBtn.disabled = false;
             }
