@@ -1,0 +1,51 @@
+name: Lamp Proxy
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Lamp action (on/off)'
+        required: true
+        type: choice
+        options:
+        - on
+        - off
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Send Lamp Control Email
+      env:
+        GMAIL_USER: ${{ secrets.GMAIL_USER }}
+        GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+      run: |
+        action="${{ github.event.inputs.action }}"
+        
+        if [ "$action" = "on" ]; then
+          subject="Socket 2 ON"
+          body="raspberrypiKitchen: python3 /home/pi/socket2_on.py"
+        else
+          subject="Socket 2 OFF"
+          body="raspberrypiKitchen: python3 /home/pi/socket2_off.py"
+        fi
+        
+        python3 -c "
+import smtplib
+from email.message import EmailMessage
+import os
+
+msg = EmailMessage()
+msg['From'] = os.environ['GMAIL_USER']
+msg['To'] = os.environ['RECIPIENT_EMAIL']
+msg['Subject'] = '$subject'
+msg.set_content('$body')
+
+with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+    smtp.login(os.environ['GMAIL_USER'], os.environ['GMAIL_PASSWORD'])
+    smtp.send_message(msg)
+    
+print('Email sent successfully')
+"
