@@ -451,7 +451,10 @@
             statusDiv.style.color = '#667eea';
             
             try {
-                const response = await fetch('https://doughrock.free.beeceptor.com/lamp-control', {
+                // Use specific trigger URLs for each action
+                const triggerUrl = `https://doughrock.free.beeceptor.com/lamp-${action}`;
+                
+                const response = await fetch(triggerUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
