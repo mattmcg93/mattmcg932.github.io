@@ -451,32 +451,43 @@
             statusDiv.style.color = '#667eea';
             
             try {
-                // This will redirect to GitHub to manually trigger the workflow
-                const workflowUrl = `https://github.com/${GITHUB_CONFIG.OWNER}/${GITHUB_CONFIG.REPO}/actions/workflows/lamp-proxy.yml`;
+                const response = await fetch('https://doughrock.free.beeceptor.com/lamp-control', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: action,
+                        device: 'doughrock-lamp',
+                        timestamp: new Date().toISOString(),
+                        source: 'webpage'
+                    })
+                });
                 
-                statusDiv.textContent = `Opening GitHub to trigger lamp ${action.toUpperCase()}...`;
-                statusDiv.style.color = '#28a745';
-                
-                // Store the action in localStorage so we know what to select
-                localStorage.setItem('lampAction', action);
-                
-                // Open GitHub Actions page
-                window.open(workflowUrl, '_blank');
-                
-                // Visual feedback
-                const activeBtn = action === 'on' ? onBtn : offBtn;
-                const originalText = activeBtn.textContent;
-                activeBtn.textContent = 'Check GitHub!';
-                
-                setTimeout(() => {
-                    activeBtn.textContent = originalText;
-                    statusDiv.textContent = 'Complete the action on the GitHub page that opened';
-                }, 3000);
-                
+                if (response.ok) {
+                    log(`Lamp ${action.toUpperCase()} webhook sent successfully`);
+                    statusDiv.textContent = `Lamp ${action.toUpperCase()} command sent!`;
+                    statusDiv.style.color = '#28a745';
+                    
+                    const activeBtn = action === 'on' ? onBtn : offBtn;
+                    const originalText = activeBtn.textContent;
+                    activeBtn.textContent = 'Sent!';
+                    
+                    setTimeout(() => {
+                        activeBtn.textContent = originalText;
+                        statusDiv.textContent = '';
+                    }, 3000);
+                } else {
+                    throw new Error(`Webhook failed: ${response.status}`);
+                }
             } catch (error) {
-                log(`Failed to trigger lamp ${action}: ${error.message}`);
+                log(`Failed to send lamp ${action} command: ${error.message}`);
                 statusDiv.textContent = `Failed: ${error.message}`;
                 statusDiv.style.color = '#dc3545';
+                
+                setTimeout(() => {
+                    statusDiv.textContent = '';
+                }, 5000);
             } finally {
                 onBtn.disabled = false;
                 offBtn.disabled = false;
