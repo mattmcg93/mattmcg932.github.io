@@ -441,48 +441,52 @@
         
         // Replace the controlLamp function with this:
         async function controlLamp() {
-            const toggleBtn = document.getElementById('lamp-toggle-btn');
-            const statusDiv = document.getElementById('lamp-status');
+        const toggleBtn = document.getElementById('lamp-toggle-btn');
+        const statusDiv = document.getElementById('lamp-status');
+        
+        toggleBtn.disabled = true;
+        statusDiv.textContent = 'Toggling lamp...';
+        statusDiv.style.color = '#667eea';
+        
+        try {
+            // Send the actual toggle request with a unique identifier
+            const toggleId = Date.now() + Math.random().toString(36).substring(2, 8);
             
-            toggleBtn.disabled = true;
-            statusDiv.textContent = 'Toggling lamp...';
-            statusDiv.style.color = '#667eea';
+            const response = await fetch('https://doughrock.free.beeceptor.com/lamp-toggle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    device: 'doughrock-lamp',
+                    toggle_id: toggleId,
+                    timestamp: new Date().toISOString(),
+                    source: 'webpage_button'
+                })
+            });
             
-            try {
-                const response = await fetch('https://doughrock.free.beeceptor.com/lamp-toggle', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        device: 'doughrock-lamp',
-                        timestamp: new Date().toISOString(),
-                        source: 'webpage'
-                    })
-                });
+            if (response.ok) {
+                log(`Lamp toggle sent with ID: ${toggleId}`);
+                statusDiv.textContent = 'Lamp toggle sent!';
+                statusDiv.style.color = '#28a745';
                 
-                if (response.ok) {
-                    log('Lamp toggle command sent successfully');
-                    statusDiv.textContent = 'Lamp toggle sent!';
-                    statusDiv.style.color = '#28a745';
-                    
-                    toggleBtn.textContent = 'Sent!';
-                    
-                    setTimeout(() => {
-                        toggleBtn.textContent = 'Toggle Lamp';
-                        statusDiv.textContent = '';
-                    }, 3000);
-                } else {
-                    throw new Error(`Toggle failed: ${response.status}`);
-                }
-            } catch (error) {
-                log(`Failed to send lamp toggle: ${error.message}`);
-                statusDiv.textContent = `Failed: ${error.message}`;
-                statusDiv.style.color = '#dc3545';
-            } finally {
-                toggleBtn.disabled = false;
+                toggleBtn.textContent = 'Sent!';
+                
+                setTimeout(() => {
+                    toggleBtn.textContent = 'Toggle Lamp';
+                    statusDiv.textContent = '';
+                }, 3000);
+            } else {
+                throw new Error(`Toggle failed: ${response.status}`);
             }
+        } catch (error) {
+            log(`Failed to send lamp toggle: ${error.message}`);
+            statusDiv.textContent = `Failed: ${error.message}`;
+            statusDiv.style.color = '#dc3545';
+        } finally {
+            toggleBtn.disabled = false;
         }
+    }
 
         // [Rest of the existing JavaScript functions remain the same...]
         // [I'll truncate here as the remaining functions are identical to your original code]
