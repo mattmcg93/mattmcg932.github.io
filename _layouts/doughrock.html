@@ -439,28 +439,25 @@
             debugLog.scrollTop = debugLog.scrollHeight;
         }
 
-        // Lamp control function
-        async function controlLamp(action) {
-            const onBtn = document.getElementById('lamp-on-btn');
-            const offBtn = document.getElementById('lamp-off-btn');
+        // Add this variable near the top with your other variables
+        let lampState = 'unknown'; // Track current state
+        
+        // Replace the controlLamp function with this:
+        async function controlLamp() {
+            const toggleBtn = document.getElementById('lamp-toggle-btn');
             const statusDiv = document.getElementById('lamp-status');
             
-            onBtn.disabled = true;
-            offBtn.disabled = true;
-            statusDiv.textContent = `Sending lamp ${action.toUpperCase()} command...`;
+            toggleBtn.disabled = true;
+            statusDiv.textContent = 'Toggling lamp...';
             statusDiv.style.color = '#667eea';
             
             try {
-                // Use specific trigger URLs for each action
-                const triggerUrl = `https://doughrock.free.beeceptor.com/lamp-${action}`;
-                
-                const response = await fetch(triggerUrl, {
+                const response = await fetch('https://doughrock.free.beeceptor.com/lamp-toggle', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        action: action,
                         device: 'doughrock-lamp',
                         timestamp: new Date().toISOString(),
                         source: 'webpage'
@@ -468,32 +465,25 @@
                 });
                 
                 if (response.ok) {
-                    log(`Lamp ${action.toUpperCase()} webhook sent successfully`);
-                    statusDiv.textContent = `Lamp ${action.toUpperCase()} command sent!`;
+                    log('Lamp toggle command sent successfully');
+                    statusDiv.textContent = 'Lamp toggle sent!';
                     statusDiv.style.color = '#28a745';
                     
-                    const activeBtn = action === 'on' ? onBtn : offBtn;
-                    const originalText = activeBtn.textContent;
-                    activeBtn.textContent = 'Sent!';
+                    toggleBtn.textContent = 'Sent!';
                     
                     setTimeout(() => {
-                        activeBtn.textContent = originalText;
+                        toggleBtn.textContent = 'Toggle Lamp';
                         statusDiv.textContent = '';
                     }, 3000);
                 } else {
-                    throw new Error(`Webhook failed: ${response.status}`);
+                    throw new Error(`Toggle failed: ${response.status}`);
                 }
             } catch (error) {
-                log(`Failed to send lamp ${action} command: ${error.message}`);
+                log(`Failed to send lamp toggle: ${error.message}`);
                 statusDiv.textContent = `Failed: ${error.message}`;
                 statusDiv.style.color = '#dc3545';
-                
-                setTimeout(() => {
-                    statusDiv.textContent = '';
-                }, 5000);
             } finally {
-                onBtn.disabled = false;
-                offBtn.disabled = false;
+                toggleBtn.disabled = false;
             }
         }
 
