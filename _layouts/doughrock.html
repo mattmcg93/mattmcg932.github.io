@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock2</title>
+    <title>Doughrock</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -105,6 +105,31 @@
             font-size: 0.9em;
             color: #666;
             min-height: 20px;
+        }
+
+        .countdown-timer {
+            text-align: center;
+            margin-top: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .countdown-number {
+            font-size: 2em;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .countdown-message {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
         }
 
         .firebase-status {
@@ -397,6 +422,11 @@
                 </button>
             </div>
             <div class="lamp-status" id="lamp-status"></div>
+            <div class="countdown-timer" id="countdown-timer">
+                <div>Sending lamp command...</div>
+                <div class="countdown-number" id="countdown-number">45</div>
+                <div class="countdown-message">Wait for picture to update below</div>
+            </div>
             <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
         </div>
 
@@ -428,14 +458,13 @@
 
         // Firebase configuration - REPLACE WITH YOUR CONFIG FROM FIREBASE CONSOLE
         const firebaseConfig = {
-          apiKey: "AIzaSyD2g8-C2jQBvByd0AUxU23OsU6jCObLRAw",
-          authDomain: "lamp-785f9.firebaseapp.com",
-          databaseURL: "https://lamp-785f9-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "lamp-785f9",
-          storageBucket: "lamp-785f9.firebasestorage.app",
-          messagingSenderId: "679499776298",
-          appId: "1:679499776298:web:38b485bf83f9fc9aff1e53",
-          measurementId: "G-NL1WLPE5EG"
+            apiKey: "your-api-key-here",
+            authDomain: "lamp-78519.firebaseapp.com",
+            databaseURL: "https://lamp-78519-default-rtdb.firebaseio.com",
+            projectId: "lamp-78519",
+            storageBucket: "lamp-78519.appspot.com",
+            messagingSenderId: "679499776298",
+            appId: "your-app-id-here"
         };
 
         // Initialize Firebase
@@ -470,6 +499,9 @@
             }
         }
 
+        // Global countdown timer variable
+        let countdownInterval = null;
+
         // Make lamp control functions available globally
         window.lampOn = async function() {
             await sendLampCommand('on');
@@ -478,6 +510,45 @@
         window.lampOff = async function() {
             await sendLampCommand('off');
         };
+
+        function startCountdownTimer() {
+            const countdownDiv = document.getElementById('countdown-timer');
+            const countdownNumber = document.getElementById('countdown-number');
+            const statusDiv = document.getElementById('lamp-status');
+            
+            // Hide status and show countdown
+            statusDiv.style.display = 'none';
+            countdownDiv.style.display = 'block';
+            
+            let seconds = 45;
+            countdownNumber.textContent = seconds;
+            
+            countdownInterval = setInterval(() => {
+                seconds--;
+                countdownNumber.textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownDiv.style.display = 'none';
+                    statusDiv.style.display = 'block';
+                    statusDiv.textContent = 'Picture should have updated - check camera views below';
+                    statusDiv.style.color = '#28a745';
+                }
+            }, 1000);
+        }
+
+        function stopCountdownTimer() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            
+            const countdownDiv = document.getElementById('countdown-timer');
+            const statusDiv = document.getElementById('lamp-status');
+            
+            countdownDiv.style.display = 'none';
+            statusDiv.style.display = 'block';
+        }
 
         async function sendLampCommand(action) {
             const onBtn = document.getElementById('lamp-on-btn');
@@ -490,12 +561,12 @@
                 return;
             }
             
+            // Stop any existing countdown
+            stopCountdownTimer();
+            
             // Disable both buttons
             onBtn.disabled = true;
             offBtn.disabled = true;
-            
-            statusDiv.textContent = `Turning lamp ${action.toUpperCase()}...`;
-            statusDiv.style.color = '#667eea';
             
             try {
                 const command = {
@@ -507,31 +578,34 @@
                 
                 await push(lampCommandsRef, command);
                 
-                statusDiv.textContent = `Lamp ${action.toUpperCase()} command sent successfully!`;
-                statusDiv.style.color = '#28a745';
-                
                 // Update button text temporarily
                 if (action === 'on') {
-                    onBtn.textContent = 'ON Sent!';
+                    onBtn.textContent = 'Command Sent!';
                 } else {
-                    offBtn.textContent = 'OFF Sent!';
+                    offBtn.textContent = 'Command Sent!';
                 }
                 
+                // Start the countdown timer
+                startCountdownTimer();
+                
+                // Reset button text after countdown
                 setTimeout(() => {
                     onBtn.textContent = 'Lamp ON';
                     offBtn.textContent = 'Lamp OFF';
-                    statusDiv.textContent = '';
-                }, 3000);
+                }, 45000);
                 
                 log(`Lamp ${action} command sent: ${command.id}`);
             } catch (error) {
+                stopCountdownTimer();
                 statusDiv.textContent = `Error: ${error.message}`;
                 statusDiv.style.color = '#dc3545';
                 log(`Firebase error: ${error.message}`);
             } finally {
-                // Re-enable both buttons
-                onBtn.disabled = false;
-                offBtn.disabled = false;
+                // Re-enable both buttons after 3 seconds
+                setTimeout(() => {
+                    onBtn.disabled = false;
+                    offBtn.disabled = false;
+                }, 3000);
             }
         }
 
