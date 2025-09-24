@@ -426,15 +426,15 @@
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getDatabase, ref, push, onValue, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-        // Firebase configuration - REPLACE WITH YOUR CONFIG
+        // Firebase configuration - REPLACE WITH YOUR CONFIG FROM FIREBASE CONSOLE
         const firebaseConfig = {
-            apiKey: "your-api-key-here",
-            authDomain: "your-project-id.firebaseapp.com",
-            databaseURL: "https://your-project-id-default-rtdb.firebaseio.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project-id.appspot.com",
-            messagingSenderId: "your-sender-id",
-            appId: "your-app-id"
+          apiKey: "AIzaSyD2g8-C2jQBvByd0AUxU23OsU6jCObLRAw",
+          authDomain: "lamp-785f9.firebaseapp.com",
+          projectId: "lamp-785f9",
+          storageBucket: "lamp-785f9.firebasestorage.app",
+          messagingSenderId: "679499776298",
+          appId: "1:679499776298:web:38b485bf83f9fc9aff1e53",
+          measurementId: "G-NL1WLPE5EG"
         };
 
         // Initialize Firebase
@@ -542,9 +542,9 @@
     <script>
         // Configuration - UPDATE THESE VALUES WITH YOUR ACTUAL DETAILS
         const GITHUB_CONFIG = {
-            TOKEN: '', // We'll handle this differently
-            OWNER: 'mattmcg93',          // Replace with your GitHub username
-            REPO: 'mattmcg932.github.io'           // Replace with your repository name
+            TOKEN: '',
+            OWNER: 'mattmcg93',
+            REPO: 'mattmcg932.github.io'
         };
 
         const driveIds = [
@@ -704,7 +704,6 @@
             
             log(`Attempting to load image ${driveId}...`);
             
-            // Try direct URLs first
             for (let i = 0; i < urls.length; i++) {
                 const url = urls[i];
                 log(`Trying direct URL ${i + 1}/${urls.length}: ${url.substring(0, 80)}...`);
@@ -736,7 +735,6 @@
                 }
             }
             
-            // Try with CORS proxies
             for (const proxy of proxies) {
                 for (const url of urls.slice(0, 5)) {
                     try {
