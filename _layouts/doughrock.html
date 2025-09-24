@@ -424,7 +424,7 @@
             <div class="lamp-status" id="lamp-status"></div>
             <div class="countdown-timer" id="countdown-timer">
                 <div>Sending lamp command...</div>
-                <div class="countdown-number" id="countdown-number">45</div>
+                <div class="countdown-number" id="countdown-number">30</div>
                 <div class="countdown-message">Wait for picture to update below</div>
             </div>
             <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
@@ -521,7 +521,7 @@
             statusDiv.style.display = 'none';
             countdownDiv.style.display = 'block';
             
-            let seconds = 45;
+            let seconds = 30;
             countdownNumber.textContent = seconds;
             
             countdownInterval = setInterval(() => {
@@ -593,7 +593,7 @@
                 setTimeout(() => {
                     onBtn.textContent = 'Lamp ON';
                     offBtn.textContent = 'Lamp OFF';
-                }, 45000);
+                }, 30000);
                 
                 log(`Lamp ${action} command sent: ${command.id}`);
             } catch (error) {
