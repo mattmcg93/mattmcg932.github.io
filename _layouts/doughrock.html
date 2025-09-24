@@ -388,6 +388,7 @@
             <div class="sensor-data">
                 <span class="sensor-text" id="humidity-display">Humidity: Loading...</span>
                 <span class="sensor-text" id="temperature-display">Temperature: Loading...</span>
+                <span class="sensor-text" id="lamp-status-display">Lamp: Unknown</span>
             </div>
             
             <!-- Firebase Lamp Control -->
@@ -447,13 +448,14 @@
         };
 
         // Initialize Firebase
-        let app, database, lampCommandsRef;
+        let app, database, lampCommandsRef, lampStatusRef;
         let firebaseConnected = false;
 
         try {
             app = initializeApp(firebaseConfig);
             database = getDatabase(app);
             lampCommandsRef = ref(database, 'lamp_commands');
+            lampStatusRef = ref(database, 'lamp_status');
             
             // Test connection
             onValue(ref(database, '.info/connected'), (snapshot) => {
@@ -461,10 +463,33 @@
                 updateFirebaseStatus();
             });
 
+            // Listen for lamp status changes
+            onValue(lampStatusRef, (snapshot) => {
+                const status = snapshot.val();
+                updateLampStatusDisplay(status);
+            });
+
             log('Firebase initialized successfully');
         } catch (error) {
             log(`Firebase initialization failed: ${error.message}`);
             updateFirebaseStatus();
+        }
+
+        function updateLampStatusDisplay(status) {
+            const lampStatusElement = document.getElementById('lamp-status-display');
+            if (status && status.state) {
+                const state = status.state.toUpperCase();
+                const lastUpdated = status.timestamp ? 
+                    new Date(status.timestamp).toLocaleTimeString() : 'Unknown';
+                
+                lampStatusElement.textContent = `Lamp: ${state}`;
+                lampStatusElement.style.color = state === 'ON' ? '#28a745' : '#6c757d';
+                
+                log(`Lamp status updated: ${state} (${lastUpdated})`);
+            } else {
+                lampStatusElement.textContent = 'Lamp: Unknown';
+                lampStatusElement.style.color = '#6c757d';
+            }
         }
 
         function updateFirebaseStatus() {
@@ -591,6 +616,7 @@
         // Make Firebase available to other functions
         window.firebaseDB = database;
         window.firebaseConnected = () => firebaseConnected;
+        window.updateLampStatusDisplay = updateLampStatusDisplay;
     </script>
 
     <script>
