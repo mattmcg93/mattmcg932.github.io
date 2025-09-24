@@ -19,10 +19,10 @@
         }
         .header h1 {
             font-size: 2.5em;
-            font-weight: 300;
+            font-weight: bold;
             margin-bottom: 10px;
         }
-        .status { color: #4CAF50; }
+        .status { color: white; }
         .main-container { max-width: 1400px; margin: 0 auto; }
         
         /* Sensor data section */
@@ -33,32 +33,18 @@
             margin-bottom: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        .sensor-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        .sensor-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
+        
+        .sensor-data {
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
-        .sensor-value {
-            font-size: 2.5em;
+        
+        .sensor-text {
+            font-size: 1.2em;
             font-weight: bold;
-            margin: 10px 0;
-        }
-        .sensor-label {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        .sensor-updated {
-            font-size: 0.8em;
-            opacity: 0.7;
-            margin-top: 10px;
+            color: #333;
+            margin: 5px 15px;
+            display: inline-block;
         }
         
         /* Lamp control buttons */
@@ -399,17 +385,9 @@
 
         <!-- Sensor Data Section -->
         <div class="sensor-section">
-            <div class="sensor-grid">
-                <div class="sensor-card">
-                    <div class="sensor-label">Humidity</div>
-                    <div class="sensor-value" id="humidity-value">--%</div>
-                    <div class="sensor-updated" id="humidity-updated">Loading...</div>
-                </div>
-                <div class="sensor-card">
-                    <div class="sensor-label">Temperature</div>
-                    <div class="sensor-value" id="temperature-value">--°C</div>
-                    <div class="sensor-updated" id="temperature-updated">Loading...</div>
-                </div>
+            <div class="sensor-data">
+                <span class="sensor-text" id="humidity-display">Humidity: Loading...</span>
+                <span class="sensor-text" id="temperature-display">Temperature: Loading...</span>
             </div>
             
             <!-- Firebase Lamp Control -->
@@ -424,7 +402,7 @@
             <div class="lamp-status" id="lamp-status"></div>
             <div class="countdown-timer" id="countdown-timer">
                 <div>Sending lamp command...</div>
-                <div class="countdown-number" id="countdown-number">30</div>
+                <div class="countdown-number" id="countdown-number">45</div>
                 <div class="countdown-message">Wait for picture to update below</div>
             </div>
             <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
@@ -521,7 +499,7 @@
             statusDiv.style.display = 'none';
             countdownDiv.style.display = 'block';
             
-            let seconds = 30;
+            let seconds = 45;
             countdownNumber.textContent = seconds;
             
             countdownInterval = setInterval(() => {
@@ -593,7 +571,7 @@
                 setTimeout(() => {
                     onBtn.textContent = 'Lamp ON';
                     offBtn.textContent = 'Lamp OFF';
-                }, 30000);
+                }, 45000);
                 
                 log(`Lamp ${action} command sent: ${command.id}`);
             } catch (error) {
@@ -715,28 +693,24 @@
             if (humidityData) {
                 const humidityValue = parseFloat(humidityData);
                 if (!isNaN(humidityValue)) {
-                    document.getElementById('humidity-value').textContent = `${humidityValue.toFixed(1)}%`;
-                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                    document.getElementById('humidity-display').textContent = `Humidity: ${humidityValue.toFixed(1)}%`;
                 } else {
-                    document.getElementById('humidity-value').textContent = `${humidityData}%`;
-                    document.getElementById('humidity-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                    document.getElementById('humidity-display').textContent = `Humidity: ${humidityData}%`;
                 }
             } else {
-                document.getElementById('humidity-updated').textContent = 'Failed to update';
+                document.getElementById('humidity-display').textContent = 'Humidity: Failed to update';
             }
             
             const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
             if (temperatureData) {
                 const temperatureValue = parseFloat(temperatureData);
                 if (!isNaN(temperatureValue)) {
-                    document.getElementById('temperature-value').textContent = `${temperatureValue.toFixed(1)}°C`;
-                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                    document.getElementById('temperature-display').textContent = `Temperature: ${temperatureValue.toFixed(1)}°C`;
                 } else {
-                    document.getElementById('temperature-value').textContent = `${temperatureData}°C`;
-                    document.getElementById('temperature-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                    document.getElementById('temperature-display').textContent = `Temperature: ${temperatureData}°C`;
                 }
             } else {
-                document.getElementById('temperature-updated').textContent = 'Failed to update';
+                document.getElementById('temperature-display').textContent = 'Temperature: Failed to update';
             }
         }
 
