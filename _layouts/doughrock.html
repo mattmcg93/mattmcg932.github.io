@@ -388,22 +388,25 @@
             <div class="sensor-data">
                 <span class="sensor-text" id="humidity-display">Humidity: Loading...</span>
                 <span class="sensor-text" id="temperature-display">Temperature: Loading...</span>
-                <span class="sensor-text" id="lamp-status-display">Lamp: Unknown</span>
+                <div class="sensor-text" id="lamp-status-display" style="margin-top: 10px;">Lamp is currently: Unknown</div>
+                <div id="lamp-helper-text" style="font-size: 0.9em; color: #666; margin-top: 5px;">(Light should be visible in Living Room camera below)</div>
             </div>
             
             <!-- Firebase Lamp Control -->
             <div class="lamp-controls">
-                <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()">
-                    Lamp ON
+                <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display: none;">
+                    <span>Turn Lamp ON</span>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Check Living Room camera below to see the lamp turn on</div>
                 </button>
-                <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()">
-                    Lamp OFF
+                <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()" style="display: none;">
+                    <span>Turn Lamp OFF</span>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Check Living Room camera below to see the lamp turn off</div>
                 </button>
             </div>
             <div class="lamp-status" id="lamp-status"></div>
             <div class="countdown-timer" id="countdown-timer">
                 <div>Sending lamp command...</div>
-                <div class="countdown-number" id="countdown-number">45</div>
+                <div class="countdown-number" id="countdown-number">30</div>
                 <div class="countdown-message">Wait for picture to update below</div>
             </div>
             <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
@@ -418,7 +421,7 @@
         </div>
 
         <div class="thumbnails-section">
-            <h2>Camera Views (Click to View)</h2>
+            <h2>Living Room Camera (Click to View)</h2>
             <div id="image-container"></div>
             <div id="debug-log" class="debug"></div>
         </div>
@@ -477,18 +480,33 @@
 
         function updateLampStatusDisplay(status) {
             const lampStatusElement = document.getElementById('lamp-status-display');
+            const lampOnBtn = document.getElementById('lamp-on-btn');
+            const lampOffBtn = document.getElementById('lamp-off-btn');
+            
             if (status && status.state) {
                 const state = status.state.toUpperCase();
                 const lastUpdated = status.timestamp ? 
                     new Date(status.timestamp).toLocaleTimeString() : 'Unknown';
                 
-                lampStatusElement.textContent = `Lamp: ${state}`;
+                lampStatusElement.textContent = `Lamp is currently: ${state}`;
                 lampStatusElement.style.color = state === 'ON' ? '#28a745' : '#6c757d';
+                
+                // Show only the opposite button
+                if (state === 'ON') {
+                    lampOnBtn.style.display = 'none';
+                    lampOffBtn.style.display = 'block';
+                } else {
+                    lampOnBtn.style.display = 'block';
+                    lampOffBtn.style.display = 'none';
+                }
                 
                 log(`Lamp status updated: ${state} (${lastUpdated})`);
             } else {
-                lampStatusElement.textContent = 'Lamp: Unknown';
+                lampStatusElement.textContent = 'Lamp is currently: Unknown';
                 lampStatusElement.style.color = '#6c757d';
+                // Show both buttons if status is unknown
+                lampOnBtn.style.display = 'block';
+                lampOffBtn.style.display = 'block';
             }
         }
 
@@ -524,7 +542,7 @@
             statusDiv.style.display = 'none';
             countdownDiv.style.display = 'block';
             
-            let seconds = 45;
+            let seconds = 30;
             countdownNumber.textContent = seconds;
             
             countdownInterval = setInterval(() => {
@@ -535,8 +553,7 @@
                     clearInterval(countdownInterval);
                     countdownDiv.style.display = 'none';
                     statusDiv.style.display = 'block';
-                    statusDiv.textContent = 'Picture should have updated - check camera views below';
-                    statusDiv.style.color = '#28a745';
+                    statusDiv.innerHTML = '<strong style="color: black;">Picture should have updated - check Living Room camera below</strong>';
                 }
             }, 1000);
         }
@@ -594,9 +611,11 @@
                 
                 // Reset button text after countdown
                 setTimeout(() => {
-                    onBtn.textContent = 'Lamp ON';
-                    offBtn.textContent = 'Lamp OFF';
-                }, 45000);
+                    const onBtn = document.getElementById('lamp-on-btn');
+                    const offBtn = document.getElementById('lamp-off-btn');
+                    onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Check Living Room camera below to see the lamp turn on</div>';
+                    offBtn.innerHTML = '<span>Turn Lamp OFF</span><div style="font-size: 0.8em; margin-top: 5px;">Check Living Room camera below to see the lamp turn off</div>';
+                }, 30000);
                 
                 log(`Lamp ${action} command sent: ${command.id}`);
             } catch (error) {
