@@ -389,8 +389,11 @@
             
             <!-- Firebase Lamp Control -->
             <div class="lamp-controls">
-                <button class="lamp-button" id="lamp-toggle-btn" onclick="toggleLamp()">
-                    Toggle Lamp
+                <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()">
+                    Lamp ON
+                </button>
+                <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()">
+                    Lamp OFF
                 </button>
             </div>
             <div class="lamp-status" id="lamp-status"></div>
@@ -466,9 +469,18 @@
             }
         }
 
-        // Make toggleLamp available globally
-        window.toggleLamp = async function() {
-            const toggleBtn = document.getElementById('lamp-toggle-btn');
+        // Make lamp control functions available globally
+        window.lampOn = async function() {
+            await sendLampCommand('on');
+        };
+
+        window.lampOff = async function() {
+            await sendLampCommand('off');
+        };
+
+        async function sendLampCommand(action) {
+            const onBtn = document.getElementById('lamp-on-btn');
+            const offBtn = document.getElementById('lamp-off-btn');
             const statusDiv = document.getElementById('lamp-status');
             
             if (!firebaseConnected) {
@@ -477,13 +489,16 @@
                 return;
             }
             
-            toggleBtn.disabled = true;
-            statusDiv.textContent = 'Sending command to lamp...';
+            // Disable both buttons
+            onBtn.disabled = true;
+            offBtn.disabled = true;
+            
+            statusDiv.textContent = `Turning lamp ${action.toUpperCase()}...`;
             statusDiv.style.color = '#667eea';
             
             try {
                 const command = {
-                    action: 'toggle',
+                    action: action,
                     timestamp: serverTimestamp(),
                     source: 'webpage',
                     id: Date.now() + '_' + Math.random().toString(36).substring(2, 8)
@@ -491,25 +506,33 @@
                 
                 await push(lampCommandsRef, command);
                 
-                statusDiv.textContent = 'Lamp command sent successfully!';
+                statusDiv.textContent = `Lamp ${action.toUpperCase()} command sent successfully!`;
                 statusDiv.style.color = '#28a745';
                 
-                toggleBtn.textContent = 'Command Sent!';
+                // Update button text temporarily
+                if (action === 'on') {
+                    onBtn.textContent = 'ON Sent!';
+                } else {
+                    offBtn.textContent = 'OFF Sent!';
+                }
                 
                 setTimeout(() => {
-                    toggleBtn.textContent = 'Toggle Lamp';
+                    onBtn.textContent = 'Lamp ON';
+                    offBtn.textContent = 'Lamp OFF';
                     statusDiv.textContent = '';
                 }, 3000);
                 
-                log(`Lamp toggle command sent: ${command.id}`);
+                log(`Lamp ${action} command sent: ${command.id}`);
             } catch (error) {
                 statusDiv.textContent = `Error: ${error.message}`;
                 statusDiv.style.color = '#dc3545';
                 log(`Firebase error: ${error.message}`);
             } finally {
-                toggleBtn.disabled = false;
+                // Re-enable both buttons
+                onBtn.disabled = false;
+                offBtn.disabled = false;
             }
-        };
+        }
 
         // Make Firebase available to other functions
         window.firebaseDB = database;
