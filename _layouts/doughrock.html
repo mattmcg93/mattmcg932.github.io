@@ -951,6 +951,7 @@
         
         async function refreshMainImage() {
             const mainImage = document.getElementById('main-image');
+            const fullscreenImg = document.getElementById('fullscreen-image');
             const mainTitle = document.getElementById('main-title');
             
             log(`Refreshing main image for ${cameraNames[selectedIndex]}...`);
@@ -968,6 +969,12 @@
             if (newMainUrl) {
                 mainImage.src = '';
                 mainImage.src = newMainUrl;
+                
+                // Also update fullscreen image if modal is active
+                if (document.getElementById('fullscreen-modal').classList.contains('active')) {
+                    fullscreenImg.src = newMainUrl;
+                }
+                
                 mainImage.onload = () => {
                     mainImage.style.opacity = '1';
                     mainTitle.textContent = `${cameraNames[selectedIndex]} - Updated at ${new Date().toLocaleTimeString()}`;
@@ -986,6 +993,12 @@
                 setTimeout(async () => {
                     const fallbackUrl = `https://lh3.googleusercontent.com/d/${driveIds[selectedIndex]}=w2000&t=${Date.now()}&force=${Math.random()}`;
                     mainImage.src = fallbackUrl;
+                    
+                    // Update fullscreen too if active
+                    if (document.getElementById('fullscreen-modal').classList.contains('active')) {
+                        fullscreenImg.src = fallbackUrl;
+                    }
+                    
                     mainTitle.textContent = `${cameraNames[selectedIndex]} - Fallback refresh attempt`;
                 }, 1000);
             }
@@ -1109,6 +1122,7 @@
             
             function openFullscreen() {
                 if (mainImage.src) {
+                    // Always use the current main image source for fullscreen
                     fullscreenImg.src = mainImage.src;
                     
                     if (isMobilePortrait()) {
