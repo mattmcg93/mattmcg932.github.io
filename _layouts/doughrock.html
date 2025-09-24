@@ -34,17 +34,49 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
         
+        .control-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+        }
+        
+        .control-box-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
         .sensor-data {
             text-align: center;
-            margin-bottom: 20px;
         }
         
         .sensor-text {
-            font-size: 1.2em;
-            font-weight: bold;
+            font-size: 1.1em;
             color: #333;
             margin: 5px 15px;
             display: inline-block;
+        }
+        
+        .lamp-status-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .lamp-helper-text {
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 15px;
         }
         
         /* Lamp control buttons */
@@ -385,29 +417,38 @@
 
         <!-- Sensor Data Section -->
         <div class="sensor-section">
-            <div class="sensor-data">
-                <span class="sensor-text" id="humidity-display">Humidity: Loading...</span>
-                <span class="sensor-text" id="temperature-display">Temperature: Loading...</span>
-                <div class="sensor-text" id="lamp-status-display" style="margin-top: 10px;">Lamp is currently: Unknown</div>
-                <div id="lamp-helper-text" style="font-size: 0.9em; color: #666; margin-top: 5px;">(Light should be visible in Living Room camera below)</div>
+            <!-- Sensors Box -->
+            <div class="control-box">
+                <div class="control-box-title">Doughrock Sensors</div>
+                <div class="sensor-data">
+                    <span class="sensor-text"><strong>Humidity:</strong> <span id="humidity-value">Loading...</span></span>
+                    <span class="sensor-text"><strong>Temperature:</strong> <span id="temperature-value">Loading...</span></span>
+                </div>
             </div>
             
-            <!-- Firebase Lamp Control -->
-            <div class="lamp-controls">
-                <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display: none;">
-                    <span>Turn Lamp ON</span>
-                    <div style="font-size: 0.8em; margin-top: 5px;">Check Living Room camera below to see the lamp turn on</div>
-                </button>
-                <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()" style="display: none;">
-                    <span>Turn Lamp OFF</span>
-                    <div style="font-size: 0.8em; margin-top: 5px;">Check Living Room camera below to see the lamp turn off</div>
-                </button>
-            </div>
-            <div class="lamp-status" id="lamp-status"></div>
-            <div class="countdown-timer" id="countdown-timer">
-                <div>Sending lamp command...</div>
-                <div class="countdown-number" id="countdown-number">30</div>
-                <div class="countdown-message">Wait for picture to update below</div>
+            <!-- Lamp Control Box -->
+            <div class="control-box">
+                <div class="control-box-title">Living Room Lamp Controls</div>
+                <div class="lamp-status-text" id="lamp-status-display">Lamp is currently: Unknown</div>
+                <div class="lamp-helper-text">Light should be visible in Living Room camera below</div>
+                
+                <div class="lamp-controls">
+                    <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display: none;">
+                        <span>Turn Lamp ON</span>
+                        <div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>
+                    </button>
+                    <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()" style="display: none;">
+                        <span>Turn Lamp OFF</span>
+                        <div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>
+                    </button>
+                </div>
+                
+                <div class="lamp-status" id="lamp-status"></div>
+                <div class="countdown-timer" id="countdown-timer">
+                    <div>Sending lamp command...</div>
+                    <div class="countdown-number" id="countdown-number">30</div>
+                    <div class="countdown-message">Wait for picture to update below</div>
+                </div>
             </div>
             <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
         </div>
@@ -738,24 +779,24 @@
             if (humidityData) {
                 const humidityValue = parseFloat(humidityData);
                 if (!isNaN(humidityValue)) {
-                    document.getElementById('humidity-display').textContent = `Humidity: ${humidityValue.toFixed(1)}%`;
+                    document.getElementById('humidity-value').textContent = `${humidityValue.toFixed(1)}%`;
                 } else {
-                    document.getElementById('humidity-display').textContent = `Humidity: ${humidityData}%`;
+                    document.getElementById('humidity-value').textContent = `${humidityData}%`;
                 }
             } else {
-                document.getElementById('humidity-display').textContent = 'Humidity: Failed to update';
+                document.getElementById('humidity-value').textContent = 'Failed to update';
             }
             
             const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
             if (temperatureData) {
                 const temperatureValue = parseFloat(temperatureData);
                 if (!isNaN(temperatureValue)) {
-                    document.getElementById('temperature-display').textContent = `Temperature: ${temperatureValue.toFixed(1)}°C`;
+                    document.getElementById('temperature-value').textContent = `${temperatureValue.toFixed(1)}°C`;
                 } else {
-                    document.getElementById('temperature-display').textContent = `Temperature: ${temperatureData}°C`;
+                    document.getElementById('temperature-value').textContent = `${temperatureData}°C`;
                 }
             } else {
-                document.getElementById('temperature-display').textContent = 'Temperature: Failed to update';
+                document.getElementById('temperature-value').textContent = 'Failed to update';
             }
         }
 
