@@ -536,6 +536,7 @@
         // Initialize Firebase
         let app, database, lampCommandsRef, lampStatusRef;
         let firebaseConnected = false;
+        let lampActivity = [];
 
         try {
             app = initializeApp(firebaseConfig);
@@ -555,10 +556,126 @@
                 updateLampStatusDisplay(status);
             });
 
+            // Listen for new lamp commands to track activity
+            onValue(lampCommandsRef, (snapshot) => {
+                const commands = snapshot.val();
+                if (commands) {
+                    updateLampActivity(commands);
+                }
+            });
+
+            // Load existing activity from localStorage
+            loadLampActivity();
+
             log('Firebase initialized successfully');
         } catch (error) {
             log(`Firebase initialization failed: ${error.message}`);
             updateFirebaseStatus();
+        }
+
+        function loadLampActivity() {
+            try {
+                const stored = JSON.parse(localStorage.getItem('lampActivity') || '[]');
+                lampActivity = stored.filter(activity => {
+                    const activityTime = new Date(activity.timestamp);
+                    const now = new Date();
+                    const hoursDiff = (now - activityTime) / (1000 * 60 * 60);
+                    return hoursDiff <= 24; // Keep only last 24 hours
+                });
+                updateActivityDisplay();
+            } catch (e) {
+                lampActivity = [];
+            }
+        }
+
+        function saveLampActivity() {
+            try {
+                localStorage.setItem('lampActivity', JSON.stringify(lampActivity));
+            } catch (e) {
+                // localStorage not available, that's okay
+            }
+        }
+
+        function updateLampActivity(commands) {
+            const now = new Date();
+            const last24Hours = now.getTime() - (24 * 60 * 60 * 1000);
+            
+            Object.entries(commands).forEach(([commandId, commandData]) => {
+                // Check if we already have this command in our activity log
+                const existingActivity = lampActivity.find(activity => activity.commandId === commandId);
+                if (existingActivity) return;
+                
+                // Parse timestamp
+                let commandTime;
+                if (commandData.timestamp) {
+                    if (typeof commandData.timestamp === 'string') {
+                        commandTime = new Date(commandData.timestamp);
+                    } else {
+                        // Assume Unix timestamp in milliseconds
+                        commandTime = new Date(commandData.timestamp);
+                    }
+                } else {
+                    // Fallback to current time
+                    commandTime = now;
+                }
+                
+                // Only add if within last 24 hours and from webpage
+                if (commandTime.getTime() > last24Hours && commandData.source === 'webpage') {
+                    lampActivity.push({
+                        commandId: commandId,
+                        action: commandData.action,
+                        timestamp: commandTime.toISOString(),
+                        source: commandData.source
+                    });
+                }
+            });
+            
+            // Sort by timestamp (newest first) and keep only last 24 hours
+            lampActivity = lampActivity
+                .filter(activity => {
+                    const activityTime = new Date(activity.timestamp);
+                    const hoursDiff = (now - activityTime) / (1000 * 60 * 60);
+                    return hoursDiff <= 24;
+                })
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                .slice(0, 10); // Keep max 10 entries
+            
+            saveLampActivity();
+            updateActivityDisplay();
+        }
+
+        function updateActivityDisplay() {
+            const activityLog = document.getElementById('lamp-activity-log');
+            
+            if (lampActivity.length === 0) {
+                activityLog.innerHTML = 'No recent activity';
+                return;
+            }
+            
+            const activityHTML = lampActivity.map(activity => {
+                const activityTime = new Date(activity.timestamp);
+                const now = new Date();
+                const isToday = activityTime.toDateString() === now.toDateString();
+                const isYesterday = activityTime.toDateString() === new Date(now.getTime() - 24*60*60*1000).toDateString();
+                
+                let timeStr;
+                if (isToday) {
+                    timeStr = activityTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' Today';
+                } else if (isYesterday) {
+                    timeStr = activityTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' Yesterday';
+                } else {
+                    timeStr = activityTime.toLocaleString([], {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+                
+                return `Lamp Turned ${activity.action.toUpperCase()} at: ${timeStr}`;
+            }).join('<br>');
+            
+            activityLog.innerHTML = activityHTML;
         }
 
         function updateLampStatusDisplay(status) {
