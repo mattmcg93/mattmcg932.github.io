@@ -319,6 +319,41 @@
             background: rgba(255, 255, 255, 1);
         }
 
+        /* Fullscreen lamp control overlay */
+        .fullscreen-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 1002;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: none;
+        }
+
+        .fullscreen-overlay-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .fullscreen-countdown-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .fullscreen-overlay-message {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
         /* Mobile portrait rotation */
         @media (max-width: 768px) and (orientation: portrait) {
             .fullscreen-image.rotated {
@@ -413,20 +448,14 @@
         <div class="header">
             <h1>Doughrock Live Stream</h1>
             <div class="status">Welcome to Doughrock.</div>
+            <div style="color: white; font-weight: bold; margin-top: 10px;">
+                <span id="humidity-value">Humidity: Loading...</span> | 
+                <span id="temperature-value">Temperature: Loading...</span>
+            </div>
         </div>
 
-        <!-- Sensor Data Section -->
+        <!-- Lamp Control Box -->
         <div class="sensor-section">
-            <!-- Sensors Box -->
-            <div class="control-box">
-                <div class="control-box-title">Doughrock Sensors</div>
-                <div class="sensor-data">
-                    <span class="sensor-text"><strong>Humidity:</strong> <span id="humidity-value">Loading...</span></span>
-                    <span class="sensor-text"><strong>Temperature:</strong> <span id="temperature-value">Loading...</span></span>
-                </div>
-            </div>
-            
-            <!-- Lamp Control Box -->
             <div class="control-box">
                 <div class="control-box-title">Living Room Lamp Controls</div>
                 <div class="lamp-status-text" id="lamp-status-display">Lamp is currently: Unknown</div>
@@ -442,14 +471,8 @@
                         <div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>
                     </button>
                 </div>
-                
-                <div class="lamp-status" id="lamp-status"></div>
-                <div class="countdown-timer" id="countdown-timer">
-                    <div>Sending lamp command...</div>
-                    <div class="countdown-number" id="countdown-number">30</div>
-                    <div class="countdown-message">Wait for picture to update below</div>
-                </div>
             </div>
+        </div>
             <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
         </div>
 
@@ -472,6 +495,13 @@
     <div class="fullscreen-modal" id="fullscreen-modal">
         <button class="close-button" id="close-modal">&times;</button>
         <img class="fullscreen-image" id="fullscreen-image" alt="Fullscreen View">
+        
+        <!-- Fullscreen lamp control overlay -->
+        <div class="fullscreen-overlay" id="fullscreen-overlay">
+            <div class="fullscreen-overlay-title" id="fullscreen-overlay-title">Currently turning Living Room lamp ON</div>
+            <div class="fullscreen-countdown-number" id="fullscreen-countdown-number">30</div>
+            <div class="fullscreen-overlay-message">Please wait...</div>
+        </div>
     </div>
 
     <!-- Firebase SDK -->
@@ -564,6 +594,7 @@
 
         // Global countdown timer variable
         let countdownInterval = null;
+        let overlayTimeoutInterval = null;
 
         // Make lamp control functions available globally
         window.lampOn = async function() {
@@ -574,14 +605,37 @@
             await sendLampCommand('off');
         };
 
-        function startCountdownTimer() {
-            const countdownDiv = document.getElementById('countdown-timer');
-            const countdownNumber = document.getElementById('countdown-number');
-            const statusDiv = document.getElementById('lamp-status');
+        function openFullscreenForLamp(action) {
+            // First, open the Living Room camera (index 0)
+            const mainImage = document.getElementById('main-image');
+            const fullscreenModal = document.getElementById('fullscreen-modal');
+            const fullscreenImg = document.getElementById('fullscreen-image');
             
-            // Hide status and show countdown
-            statusDiv.style.display = 'none';
-            countdownDiv.style.display = 'block';
+            // Load the Living Room camera image
+            if (driveIds[0]) {
+                extremeFetchImage(driveIds[0]).then(imageUrl => {
+                    if (imageUrl) {
+                        fullscreenImg.src = imageUrl;
+                    }
+                });
+            }
+            
+            // Open fullscreen modal
+            fullscreenModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Show the overlay with countdown
+            startFullscreenCountdown(action);
+        }
+
+        function startFullscreenCountdown(action) {
+            const overlay = document.getElementById('fullscreen-overlay');
+            const overlayTitle = document.getElementById('fullscreen-overlay-title');
+            const countdownNumber = document.getElementById('fullscreen-countdown-number');
+            
+            // Set up overlay content
+            overlayTitle.textContent = `Currently turning Living Room lamp ${action.toUpperCase()}`;
+            overlay.style.display = 'block';
             
             let seconds = 30;
             countdownNumber.textContent = seconds;
@@ -592,43 +646,41 @@
                 
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
-                    countdownDiv.style.display = 'none';
-                    statusDiv.style.display = 'block';
-                    statusDiv.innerHTML = '<strong style="color: black;">Picture should have updated - check Living Room camera below</strong>';
+                    // Show completion message
+                    overlayTitle.textContent = `Should have turned ${action.toUpperCase()}!`;
+                    countdownNumber.textContent = '';
+                    overlay.querySelector('.fullscreen-overlay-message').textContent = 'If not, try again';
+                    
+                    // Hide overlay after 10 seconds
+                    overlayTimeoutInterval = setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 10000);
                 }
             }, 1000);
         }
 
-        function stopCountdownTimer() {
+        function stopFullscreenCountdown() {
             if (countdownInterval) {
                 clearInterval(countdownInterval);
                 countdownInterval = null;
             }
+            if (overlayTimeoutInterval) {
+                clearTimeout(overlayTimeoutInterval);
+                overlayTimeoutInterval = null;
+            }
             
-            const countdownDiv = document.getElementById('countdown-timer');
-            const statusDiv = document.getElementById('lamp-status');
-            
-            countdownDiv.style.display = 'none';
-            statusDiv.style.display = 'block';
+            const overlay = document.getElementById('fullscreen-overlay');
+            overlay.style.display = 'none';
         }
 
         async function sendLampCommand(action) {
             const onBtn = document.getElementById('lamp-on-btn');
             const offBtn = document.getElementById('lamp-off-btn');
-            const statusDiv = document.getElementById('lamp-status');
             
             if (!firebaseConnected) {
-                statusDiv.textContent = 'Error: Firebase not connected';
-                statusDiv.style.color = '#dc3545';
+                alert('Error: Firebase not connected');
                 return;
             }
-            
-            // Stop any existing countdown
-            stopCountdownTimer();
-            
-            // Disable both buttons
-            onBtn.disabled = true;
-            offBtn.disabled = true;
             
             try {
                 const command = {
@@ -640,36 +692,36 @@
                 
                 await push(lampCommandsRef, command);
                 
-                // Update button text temporarily
+                // Update button to show "Please wait" and hide it
                 if (action === 'on') {
-                    onBtn.textContent = 'Command Sent!';
+                    onBtn.innerHTML = 'Please wait...';
+                    onBtn.disabled = true;
                 } else {
-                    offBtn.textContent = 'Command Sent!';
+                    offBtn.innerHTML = 'Please wait...';
+                    offBtn.disabled = true;
                 }
                 
-                // Start the countdown timer
-                startCountdownTimer();
+                // Open fullscreen with countdown
+                openFullscreenForLamp(action);
                 
-                // Reset button text after countdown
+                // Re-enable buttons and restore text after 30 seconds
                 setTimeout(() => {
-                    const onBtn = document.getElementById('lamp-on-btn');
-                    const offBtn = document.getElementById('lamp-off-btn');
-                    onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Check Living Room camera below to see the lamp turn on</div>';
-                    offBtn.innerHTML = '<span>Turn Lamp OFF</span><div style="font-size: 0.8em; margin-top: 5px;">Check Living Room camera below to see the lamp turn off</div>';
+                    onBtn.disabled = false;
+                    offBtn.disabled = false;
+                    onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
+                    offBtn.innerHTML = '<span>Turn Lamp OFF</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
                 }, 30000);
                 
                 log(`Lamp ${action} command sent: ${command.id}`);
             } catch (error) {
-                stopCountdownTimer();
-                statusDiv.textContent = `Error: ${error.message}`;
-                statusDiv.style.color = '#dc3545';
+                alert(`Error: ${error.message}`);
                 log(`Firebase error: ${error.message}`);
-            } finally {
-                // Re-enable both buttons after 3 seconds
-                setTimeout(() => {
-                    onBtn.disabled = false;
-                    offBtn.disabled = false;
-                }, 3000);
+                
+                // Re-enable buttons immediately on error
+                onBtn.disabled = false;
+                offBtn.disabled = false;
+                onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
+                offBtn.innerHTML = '<span>Turn Lamp OFF</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
             }
         }
 
