@@ -329,19 +329,23 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.2);
             color: white;
             padding: 30px;
             border-radius: 15px;
             text-align: center;
             z-index: 1002;
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             display: none;
         }
 
         .fullscreen-overlay.rotated {
             transform: translate(-50%, -50%) rotate(90deg);
+        }
+
+        .close-button.rotated {
+            transform: rotate(90deg);
         }
 
         .fullscreen-overlay-title {
@@ -619,6 +623,7 @@
             const fullscreenModal = document.getElementById('fullscreen-modal');
             const fullscreenImg = document.getElementById('fullscreen-image');
             const fullscreenOverlay = document.getElementById('fullscreen-overlay');
+            const closeButton = document.getElementById('close-modal');
             
             // Load the Living Room camera image
             if (driveIds[0]) {
@@ -633,9 +638,11 @@
             if (isMobilePortrait()) {
                 fullscreenImg.classList.add('rotated');
                 fullscreenOverlay.classList.add('rotated');
+                closeButton.classList.add('rotated');
             } else {
                 fullscreenImg.classList.remove('rotated');
                 fullscreenOverlay.classList.remove('rotated');
+                closeButton.classList.remove('rotated');
             }
             
             // Open fullscreen modal
@@ -853,24 +860,24 @@
             if (humidityData) {
                 const humidityValue = parseFloat(humidityData);
                 if (!isNaN(humidityValue)) {
-                    document.getElementById('humidity-value').textContent = `${humidityValue.toFixed(1)}%`;
+                    document.getElementById('humidity-value').textContent = `Humidity: ${humidityValue.toFixed(1)}%`;
                 } else {
-                    document.getElementById('humidity-value').textContent = `${humidityData}%`;
+                    document.getElementById('humidity-value').textContent = `Humidity: ${humidityData}%`;
                 }
             } else {
-                document.getElementById('humidity-value').textContent = 'Failed to update';
+                document.getElementById('humidity-value').textContent = 'Humidity: Failed to update';
             }
             
             const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
             if (temperatureData) {
                 const temperatureValue = parseFloat(temperatureData);
                 if (!isNaN(temperatureValue)) {
-                    document.getElementById('temperature-value').textContent = `${temperatureValue.toFixed(1)}°C`;
+                    document.getElementById('temperature-value').textContent = `Temperature: ${temperatureValue.toFixed(1)}°C`;
                 } else {
-                    document.getElementById('temperature-value').textContent = `${temperatureData}°C`;
+                    document.getElementById('temperature-value').textContent = `Temperature: ${temperatureData}°C`;
                 }
             } else {
-                document.getElementById('temperature-value').textContent = 'Failed to update';
+                document.getElementById('temperature-value').textContent = 'Temperature: Failed to update';
             }
         }
 
@@ -1287,8 +1294,10 @@
                     
                     if (isMobilePortrait()) {
                         fullscreenImg.classList.add('rotated');
+                        closeButton.classList.add('rotated');
                     } else {
                         fullscreenImg.classList.remove('rotated');
+                        closeButton.classList.remove('rotated');
                     }
                     
                     modal.classList.add('active');
@@ -1322,8 +1331,10 @@
                     if (modal.classList.contains('active')) {
                         if (isMobilePortrait()) {
                             fullscreenImg.classList.add('rotated');
+                            closeButton.classList.add('rotated');
                         } else {
                             fullscreenImg.classList.remove('rotated');
+                            closeButton.classList.remove('rotated');
                         }
                     }
                 }, 100);
