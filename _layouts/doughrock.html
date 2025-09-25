@@ -92,14 +92,14 @@
             background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 15px 30px;
             border-radius: 10px;
-            font-size: 1em;
+            font-size: 1.2em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            min-width: 120px;
+            min-width: 140px;
         }
 
         .lamp-button:hover:not(:disabled) {
@@ -300,7 +300,7 @@
 
         .close-button {
             position: absolute;
-            top: 20px;
+            top: 60px;
             right: 20px;
             background: rgba(0, 0, 0, 0.7);
             color: white;
@@ -661,9 +661,17 @@
             const overlay = document.getElementById('fullscreen-overlay');
             const overlayTitle = document.getElementById('fullscreen-overlay-title');
             const countdownNumber = document.getElementById('fullscreen-countdown-number');
+            const overlayMessage = overlay.querySelector('.fullscreen-overlay-message');
             
-            // Set up overlay content
-            overlayTitle.textContent = `Currently turning Living Room lamp ${action.toUpperCase()}`;
+            // Set up overlay content with fun messages
+            if (action === 'on') {
+                overlayTitle.textContent = 'LET THERE BE LIGHT!';
+                overlayMessage.textContent = 'Turning on the Living Room lamp...';
+            } else {
+                overlayTitle.textContent = 'LIGHTS OUT!';
+                overlayMessage.textContent = 'Time to go dark...';
+            }
+            
             overlay.style.display = 'block';
             
             let seconds = 30;
@@ -676,9 +684,14 @@
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
                     // Show completion message
-                    overlayTitle.textContent = `Should have turned ${action.toUpperCase()}!`;
+                    if (action === 'on') {
+                        overlayTitle.textContent = 'Should be bright and shiny now!';
+                        overlayMessage.textContent = 'If still dark, try again';
+                    } else {
+                        overlayTitle.textContent = 'Should be nice and dark now!';
+                        overlayMessage.textContent = 'If still bright, try again';
+                    }
                     countdownNumber.textContent = '';
-                    overlay.querySelector('.fullscreen-overlay-message').textContent = 'If not, try again';
                     
                     // Hide overlay after 3 seconds
                     overlayTimeoutInterval = setTimeout(() => {
