@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doughrock</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .top-bar {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .sensor-readings {
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+        
+        .firebase-status {
+            font-size: 0.9em;
+            padding: 5px 15px;
+            border-radius: 5px;
+        }
+        
+        .firebase-connected {
+            background: rgba(40, 167, 69, 0.3);
+            color: #90EE90;
+        }
+        
+        .firebase-disconnected {
+            background: rgba(220, 53, 69, 0.3);
+            color: #FFB6C1;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            padding: 20px;
+            overflow: hidden;
+        }
+        
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .main-image-container {
+            flex: 1;
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .image-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tap-instruction {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 8px;
+            z-index: 10;
+            pointer-events: none;
+            backdrop-filter: blur(5px);
+        }
+        
+        .main-image {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+            object-fit: contain;
+            cursor: pointer;
+        }
+        
+        .thumbnails-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            height: 120px;
+        }
+        
+        .thumbnail-wrapper {
+            border: 3px solid transparent;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            background: #f8f9fa;
+        }
+        
+        .thumbnail-wrapper:hover { 
+            transform: scale(1.05);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+        
+        .thumbnail-wrapper.selected { 
+            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+        }
+        
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .info {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #666;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .spinner {
+            width: 25px;
+            height: 25px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .control-box {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .control-box-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .lamp-status-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .lamp-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .lamp-button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .lamp-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .lamp-button.off {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+        
+        .lamp-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .lamp-helper-text {
+            font-size: 0.85em;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .fullscreen-modal.active {
+            display: flex;
+        }
+        
+        .fullscreen-image {
+            max-width: 95vw;
+            max-height: 95vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .close-button:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        .fullscreen-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 1002;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+        
+        .fullscreen-overlay-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .fullscreen-countdown-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .fullscreen-overlay-message {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="sensor-readings">
+            <span id="humidity-value">Humidity: Loading...</span> | 
+            <span id="temperature-value">Temperature: Loading...</span>
+        </div>
+        <div class="firebase-status" id="firebase-status">Connecting...</div>
+    </div>
+    
+    <div class="main-content">
+        <div class="left-section">
+            <div class="main-image-container">
+                <div class="image-wrapper">
+                    <div class="tap-instruction">Tap to make full screen</div>
+                    <img id="main-image" class="main-image" alt="Main View">
+                </div>
+            </div>
+            
+            <div class="thumbnails-row" id="image-container"></div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="control-box">
+                <div class="control-box-title">Living Room Lamp</div>
+                <div class="lamp-status-text" id="lamp-status-display">Status: Unknown</div>
+                
+                <div class="lamp-controls">
+                    <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display: none;">
+                        Turn ON
+                    </button>
+                    <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()" style="display: none;">
+                        Turn OFF
+                    </button>
+                </div>
+                
+                <div class="lamp-helper-text">Check Living Room camera</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="fullscreen-modal" id="fullscreen-modal">
+        <button class="close-button" id="close-modal">EXIT FULLSCREEN</button>
+        <img class="fullscreen-image" id="fullscreen-image" alt="Fullscreen View">
+        
+        <div class="fullscreen-overlay" id="fullscreen-overlay">
+            <div class="fullscreen-overlay-title" id="fullscreen-overlay-title">Currently turning Living Room lamp ON</div>
+            <div class="fullscreen-countdown-number" id="fullscreen-countdown-number">30</div>
+            <div class="fullscreen-overlay-message">Please wait...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, push, onValue, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2g8-C2jQBvByd0AUxU23OsU6jCObLRAw",
+            authDomain: "lamp-785f9.firebaseapp.com",
+            databaseURL: "https://lamp-785f9-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "lamp-785f9",
+            storageBucket: "lamp-785f9.firebasestorage.app",
+            messagingSenderId: "679499776298",
+            appId: "1:679499776298:web:38b485bf83f9fc9aff1e53",
+            measurementId: "G-NL1WLPE5EG"
+        };
+
+        let app, database, lampCommandsRef, lampStatusRef, firebaseConnected = false;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            database = getDatabase(app);
+            lampCommandsRef = ref(database, 'lamp_commands');
+            lampStatusRef = ref(database, 'lamp_status');
+            
+            onValue(ref(database, '.info/connected'), (snapshot) => {
+                firebaseConnected = snapshot.val();
+                updateFirebaseStatus();
+            });
+
+            onValue(lampStatusRef, (snapshot) => {
+                const status = snapshot.val();
+                updateLampStatusDisplay(status);
+            });
+        } catch (error) {
+            console.error('Firebase init failed:', error);
+        }
+
+        function updateLampStatusDisplay(status) {
+            const lampStatusElement = document.getElementById('lamp-status-display');
+            const lampOnBtn = document.getElementById('lamp-on-btn');
+            const lampOffBtn = document.getElementById('lamp-off-btn');
+            
+            if (status && status.state) {
+                const state = status.state.toUpperCase();
+                lampStatusElement.textContent = `Status: ${state}`;
+                lampStatusElement.style.color = state === 'ON' ? '#28a745' : '#6c757d';
+                
+                if (state === 'ON') {
+                    lampOnBtn.style.display = 'none';
+                    lampOffBtn.style.display = 'block';
+                } else {
+                    lampOnBtn.style.display = 'block';
+                    lampOffBtn.style.display = 'none';
+                }
+            } else {
+                lampStatusElement.textContent = 'Status: Unknown';
+                lampOnBtn.style.display = 'block';
+                lampOffBtn.style.display = 'block';
+            }
+        }
+
+        function updateFirebaseStatus() {
+            const statusDiv = document.getElementById('firebase-status');
+            if (firebaseConnected) {
+                statusDiv.textContent = 'Connected';
+                statusDiv.className = 'firebase-status firebase-connected';
+            } else {
+                statusDiv.textContent = 'Disconnected';
+                statusDiv.className = 'firebase-status firebase-disconnected';
+            }
+        }
+
+        let countdownInterval = null, overlayTimeoutInterval = null;
+
+        window.lampOn = async function() {
+            await sendLampCommand('on');
+        };
+
+        window.lampOff = async function() {
+            await sendLampCommand('off');
+        };
+
+        async function sendLampCommand(action) {
+            const onBtn = document.getElementById('lamp-on-btn');
+            const offBtn = document.getElementById('lamp-off-btn');
+            
+            if (!firebaseConnected) {
+                alert('Error: Firebase not connected');
+                return;
+            }
+            
+            try {
+                const command = {
+                    action: action,
+                    timestamp: serverTimestamp(),
+                    source: 'webpage',
+                    id: Date.now() + '_' + Math.random().toString(36).substring(2, 8)
+                };
+                
+                await push(lampCommandsRef, command);
+                
+                if (action === 'on') {
+                    onBtn.textContent = 'Please wait...';
+                    onBtn.disabled = true;
+                } else {
+                    offBtn.textContent = 'Please wait...';
+                    offBtn.disabled = true;
+                }
+                
+                openFullscreenForLamp(action);
+                
+                setTimeout(() => {
+                    onBtn.disabled = false;
+                    offBtn.disabled = false;
+                    onBtn.textContent = 'Turn ON';
+                    offBtn.textContent = 'Turn OFF';
+                }, 30000);
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+                onBtn.disabled = false;
+                offBtn.disabled = false;
+                onBtn.textContent = 'Turn ON';
+                offBtn.textContent = 'Turn OFF';
+            }
+        }
+
+        function openFullscreenForLamp(action) {
+            const fullscreenModal = document.getElementById('fullscreen-modal');
+            const fullscreenImg = document.getElementById('fullscreen-image');
+            
+            if (driveIds[0]) {
+                extremeFetchImage(driveIds[0]).then(imageUrl => {
+                    if (imageUrl) fullscreenImg.src = imageUrl;
+                });
+            }
+            
+            fullscreenModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            startFullscreenCountdown(action);
+        }
+
+        function startFullscreenCountdown(action) {
+            const overlay = document.getElementById('fullscreen-overlay');
+            const overlayTitle = document.getElementById('fullscreen-overlay-title');
+            const countdownNumber = document.getElementById('fullscreen-countdown-number');
+            const overlayMessage = overlay.querySelector('.fullscreen-overlay-message');
+            
+            if (action === 'on') {
+                overlayTitle.textContent = 'LET THERE BE LIGHT!';
+                overlayMessage.textContent = 'Turning on the Living Room lamp...';
+            } else {
+                overlayTitle.textContent = 'LIGHTS OUT!';
+                overlayMessage.textContent = 'Time to go dark...';
+            }
+            
+            overlay.style.display = 'block';
+            let seconds = 30;
+            countdownNumber.textContent = seconds;
+            
+            countdownInterval = setInterval(() => {
+                seconds--;
+                countdownNumber.textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    if (action === 'on') {
+                        overlayTitle.textContent = 'Should be bright now!';
+                        overlayMessage.textContent = 'If still dark, try again';
+                    } else {
+                        overlayTitle.textContent = 'Should be dark now!';
+                        overlayMessage.textContent = 'If still bright, try again';
+                    }
+                    countdownNumber.textContent = '';
+                    
+                    overlayTimeoutInterval = setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 3000);
+                }
+            }, 1000);
+        }
+
+        window.firebaseDB = database;
+        window.firebaseConnected = () => firebaseConnected;
+    </script>
+
+    <script>
+        const driveIds = [
+            "1vrr26I23p4XUdAlN_2tnevs4VYE7PIoI",
+            "1jVn1wKSIoHepUjxdZRS6xlh4JC90q55c",
+            "19KHRWco6o_U3SB1Zsof58MvGyPbO6j__",
+            "10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI"
+        ];
+
+        const cameraNames = [
+            "Living Room",
+            "Front of House",
+            "Side of House",
+            "Back of House"
+        ];
+
+        const sensorIds = {
+            humidity: "1Ajb8r6TB5aKkWDAr99iDAlo3TlqReT2O",
+            temperature: "1GPWSQIFjLR25lmuP-ljgIFriLNBS-FyQ"
+        };
+
+        let selectedIndex = 0;
+
+        async function fetchSensorData(fileId, sensorType) {
+            const urls = [
+                `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
+                `https://docs.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
+            ];
+            
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url, {
+                        cache: 'no-store',
+                        headers: { 'Cache-Control': 'no-cache' }
+                    });
+                    
+                    if (response.ok) {
+                        const text = await response.text();
+                        if (text && text.trim()) return text.trim();
+                    }
+                } catch (e) {}
+            }
+            return null;
+        }
+
+        async function updateSensorData() {
+            const humidityData = await fetchSensorData(sensorIds.humidity, 'humidity');
+            if (humidityData) {
+                const value = parseFloat(humidityData);
+                document.getElementById('humidity-value').textContent = 
+                    `Humidity: ${!isNaN(value) ? value.toFixed(1) : humidityData}%`;
+            }
+            
+            const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
+            if (temperatureData) {
+                const value = parseFloat(temperatureData);
+                document.getElementById('temperature-value').textContent = 
+                    `Temperature: ${!isNaN(value) ? value.toFixed(1) : temperatureData}°C`;
+            }
+        }
+
+        function generateAllPossibleUrls(driveId) {
+            const timestamp = Date.now();
+            const randomParam = Math.random().toString(36).substring(7);
+            return [
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}`,
+                `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}`,
+            ];
+        }
+
+        async function extremeFetchImage(driveId) {
+            const urls = generateAllPossibleUrls(driveId);
+            
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url, { mode: 'cors', credentials: 'omit' });
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        if (blob.size > 0 && blob.type.startsWith('image/')) {
+                            return URL.createObjectURL(blob);
+                        }
+                    }
+                } catch (e) {}
+            }
+            return urls[0];
+        }
+
+        async function createThumbnail(driveId, index) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'thumbnail-wrapper';
+            wrapper.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+                <div class="info">${cameraNames[index]}</div>
+            `;
+            
+            wrapper.addEventListener('click', () => selectThumbnail(index));
+            
+            extremeFetchImage(driveId).then(imageUrl => {
+                if (imageUrl) {
+                    const img = document.createElement('img');
+                    img.className = 'thumbnail';
+                    img.src = imageUrl;
+                    img.onload = () => {
+                        wrapper.innerHTML = `<div class="info">${cameraNames[index]}</div>`;
+                        wrapper.insertBefore(img, wrapper.firstChild);
+                    };
+                }
+            });
+            
+            return wrapper;
+        }
+
+        async function selectThumbnail(index) {
+            selectedIndex = index;
+            const mainImage = document.getElementById('main-image');
+            mainImage.style.opacity = '0.5';
+            
+            const imageUrl = await extremeFetchImage(driveIds[index]);
+            if (imageUrl) {
+                mainImage.src = imageUrl;
+                mainImage.onload = () => { mainImage.style.opacity = '1'; };
+            }
+            
+            document.querySelectorAll('.thumbnail-wrapper').forEach((w, i) => {
+                w.classList.toggle('selected', i === index);
+            });
+        }
+
+        function setupFullscreenModal() {
+            const modal = document.getElementById('fullscreen-modal');
+            const fullscreenImg = document.getElementById('fullscreen-image');
+            const closeButton = document.getElementById('close-modal');
+            const mainImage = document.getElementById('main-image');
+            
+            function openFullscreen() {
+                if (mainImage.src) {
+                    fullscreenImg.src = mainImage.src;
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+            
+            function closeFullscreen() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            mainImage.addEventListener('click', openFullscreen);
+            closeButton.addEventListener('click', closeFullscreen);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeFullscreen();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) closeFullscreen();
+            });
+        }
+
+        async function refreshImages() {
+            await updateSensorData();
+            
+            const mainImage = document.getElementById('main-image');
+            const newUrl = await extremeFetchImage(driveIds[selectedIndex]);
+            if (newUrl) mainImage.src = newUrl;
+            
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            for (let i = 0; i < thumbnails.length; i++) {
+                const newUrl = await extremeFetchImage(driveIds[i]);
+                if (newUrl) thumbnails[i].src = newUrl;
+            }
+        }
+
+        async function init() {
+            const container = document.getElementById('image-container');
+            await updateSensorData();
+            
+            for (let i = 0; i < driveIds.length; i++) {
+                const thumbnail = await createThumbnail(driveIds[i], i);
+                container.appendChild(thumbnail);
+            }
+            
+            selectThumbnail(0);
+            setupFullscreenModal();
+            setInterval(refreshImages, 10000);
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
