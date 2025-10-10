@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock7</title>
+    <title>Doughrock8</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -719,7 +719,7 @@
 
         async function extremeFetchImage(driveId, isRefresh = false) {
             const urls = generateAllPossibleUrls(driveId);
-            const urlsToTry = isRefresh ? urls.slice(0, 2) : urls;
+            const urlsToTry = isRefresh ? urls : urls;
             
             for (let i = 0; i < urlsToTry.length; i++) {
                 const url = urlsToTry[i];
@@ -727,7 +727,8 @@
                     let response = await fetch(url, { 
                         mode: 'cors',
                         credentials: 'omit',
-                        referrerPolicy: 'no-referrer'
+                        referrerPolicy: 'no-referrer',
+                        cache: 'no-store'
                     });
                     
                     if (response.ok) {
@@ -738,7 +739,7 @@
                     }
                 } catch (e) {
                     try {
-                        let response = await fetch(url, { mode: 'no-cors' });
+                        let response = await fetch(url, { mode: 'no-cors', cache: 'no-store' });
                         if (await testImageLoad(url)) {
                             return url;
                         }
@@ -886,10 +887,17 @@
                     }
                     
                     const refreshPromise = (async (idx, imgElement) => {
+                        // Try force refresh first
                         let newUrl = await forceClearCacheAndRefresh(driveIds[idx]);
                         
+                        // If that fails, try extremeFetchImage with refresh mode
                         if (!newUrl) {
-                            log(`Thumbnail ${idx + 1} - no new URL`);
+                            newUrl = await extremeFetchImage(driveIds[idx], true);
+                        }
+                        
+                        // If still no URL, just keep the current image
+                        if (!newUrl) {
+                            log(`Thumbnail ${idx + 1} - keeping current`);
                             return;
                         }
                         
