@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock3</title>
+    <title>Doughrock4</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -1162,9 +1162,8 @@
             const container = document.getElementById('youtube-container');
             
             try {
-                log('Fetching latest YouTube videos from playlist...');
+                log('Loading YouTube playlist embed...');
                 
-                // Add button to view full playlist
                 container.innerHTML = `
                     <div style="text-align: center; margin-bottom: 20px;">
                         <a href="https://www.youtube.com/playlist?list=${YOUTUBE_PLAYLIST_ID}" 
@@ -1175,85 +1174,61 @@
                             📺 View Full Playlist on YouTube
                         </a>
                     </div>
-                    <div id="video-grid" style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));"></div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div class="youtube-video">
+                            <iframe 
+                                src="https://www.youtube.com/embed?listType=playlist&list=${YOUTUBE_PLAYLIST_ID}&index=1" 
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen
+                                loading="lazy"
+                                style="width: 100%; aspect-ratio: 16/9; border-radius: 10px 10px 0 0;">
+                            </iframe>
+                            <div class="youtube-video-title">Most Recent Timelapse</div>
+                        </div>
+                        <div class="youtube-video">
+                            <iframe 
+                                src="https://www.youtube.com/embed?listType=playlist&list=${YOUTUBE_PLAYLIST_ID}&index=2" 
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen
+                                loading="lazy"
+                                style="width: 100%; aspect-ratio: 16/9; border-radius: 10px 10px 0 0;">
+                            </iframe>
+                            <div class="youtube-video-title">Second Most Recent</div>
+                        </div>
+                        <div class="youtube-video">
+                            <iframe 
+                                src="https://www.youtube.com/embed?listType=playlist&list=${YOUTUBE_PLAYLIST_ID}&index=3" 
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen
+                                loading="lazy"
+                                style="width: 100%; aspect-ratio: 16/9; border-radius: 10px 10px 0 0;">
+                            </iframe>
+                            <div class="youtube-video-title">Third Most Recent</div>
+                        </div>
+                        <div class="youtube-video">
+                            <iframe 
+                                src="https://www.youtube.com/embed?listType=playlist&list=${YOUTUBE_PLAYLIST_ID}&index=4" 
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen
+                                loading="lazy"
+                                style="width: 100%; aspect-ratio: 16/9; border-radius: 10px 10px 0 0;">
+                            </iframe>
+                            <div class="youtube-video-title">Fourth Most Recent</div>
+                        </div>
+                    </div>
                 `;
                 
-                const videoGrid = document.getElementById('video-grid');
-                
-                // Try to scrape the playlist page to get video IDs
-                const playlistUrl = `https://www.youtube.com/playlist?list=${YOUTUBE_PLAYLIST_ID}`;
-                
-                // Try multiple CORS proxies
-                const proxies = [
-                    'https://api.allorigins.win/raw?url=',
-                    'https://api.codetabs.com/v1/proxy?quest=',
-                    'https://corsproxy.io/?'
-                ];
-                
-                let htmlContent = null;
-                
-                for (const proxy of proxies) {
-                    try {
-                        log(`Trying proxy: ${proxy.substring(0, 30)}...`);
-                        const response = await fetch(proxy + encodeURIComponent(playlistUrl), {
-                            headers: {
-                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                            }
-                        });
-                        
-                        if (response.ok) {
-                            htmlContent = await response.text();
-                            log('✓ Got playlist HTML');
-                            break;
-                        }
-                    } catch (e) {
-                        log(`Proxy failed: ${e.message.substring(0, 30)}`);
-                        continue;
-                    }
-                }
-                
-                if (!htmlContent) {
-                    throw new Error('Could not fetch playlist');
-                }
-                
-                // Extract video IDs from the HTML using regex
-                const videoIdPattern = /"videoId":"([^"]+)"/g;
-                const matches = [...htmlContent.matchAll(videoIdPattern)];
-                
-                if (matches.length === 0) {
-                    throw new Error('No videos found in playlist');
-                }
-                
-                // Get unique video IDs (first 4)
-                const videoIds = [...new Set(matches.map(m => m[1]))].slice(0, 4);
-                
-                log(`Found ${videoIds.length} videos`);
-                
-                // Create video embeds
-                videoIds.forEach((videoId, index) => {
-                    const videoDiv = document.createElement('div');
-                    videoDiv.className = 'youtube-video';
-                    videoDiv.innerHTML = `
-                        <iframe 
-                            src="https://www.youtube.com/embed/${videoId}" 
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen
-                            loading="lazy"
-                            style="width: 100%; aspect-ratio: 16/9; border-radius: 10px 10px 0 0;">
-                        </iframe>
-                        <div class="youtube-video-title">Recent Timelapse ${index + 1}</div>
-                    `;
-                    videoGrid.appendChild(videoDiv);
-                });
-                
-                log(`✓ Loaded ${videoIds.length} YouTube videos`);
+                log(`✓ Loaded YouTube playlist embeds`);
                 
             } catch (error) {
-                log(`✗ Failed to load YouTube videos: ${error.message}`);
+                log(`✗ Failed to load YouTube: ${error.message}`);
                 container.innerHTML = `
                     <div style="text-align: center; padding: 20px;">
-                        <p style="color: #666; margin-bottom: 15px;">Unable to load videos automatically.</p>
+                        <p style="color: #666; margin-bottom: 15px;">Unable to load videos.</p>
                         <a href="https://www.youtube.com/playlist?list=${YOUTUBE_PLAYLIST_ID}" 
                            target="_blank" 
                            style="display: inline-block; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-weight: bold;">
