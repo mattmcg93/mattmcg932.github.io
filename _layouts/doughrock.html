@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock</title>
+    <title>Doughrock2</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -1254,20 +1254,22 @@
                 container.appendChild(thumbnail);
             }
             
-            // 3. Load sensor data ONCE
-            log('Step 3: Loading sensors (once only)...');
-            await updateSensorData();
-            
-            // 4. Start auto-refresh (images only)
+            // 3. Start auto-refresh (images only)
             startAutoRefresh();
             setupFullscreenModal();
             
-            log('✓ Initialization complete!');
+            log('✓ Core initialization complete!');
             
-            // 5. Load YouTube videos in background (non-blocking)
-            log('Step 4: Loading YouTube videos in background...');
+            // 4. Load YouTube videos in background (non-blocking)
+            log('Step 3: Loading YouTube videos in background...');
             loadYouTubeVideos().catch(err => {
                 log(`YouTube loading failed: ${err.message}`);
+            });
+            
+            // 5. Load sensor data LAST (non-blocking)
+            log('Step 4: Loading sensors in background...');
+            updateSensorData().catch(err => {
+                log(`Sensor loading failed: ${err.message}`);
             });
         }
 
