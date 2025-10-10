@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock9</title>
+    <title>Doughrock10</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -226,6 +226,47 @@
         .info { position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 3px; font-size: 12px; }
         .debug { margin-top: 20px; background: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
 
+        /* YouTube video styles */
+        #youtube-container {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .youtube-video {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .youtube-video:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .youtube-video iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: none;
+        }
+
+        .youtube-video-title {
+            padding: 12px;
+            font-size: 0.95em;
+            color: #333;
+            font-weight: 500;
+            background: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            #youtube-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
         .fullscreen-modal {
             display: none;
             position: fixed;
@@ -390,6 +431,16 @@
             <h2>All Cameras (Click to View)</h2>
             <div id="image-container"></div>
             <div id="debug-log" class="debug"></div>
+        </div>
+
+        <div class="thumbnails-section" style="margin-top: 30px;">
+            <h2>Watch Today's Timelapses</h2>
+            <div id="youtube-container" style="margin-top: 20px;">
+                <div class="loading" style="position: relative; height: 100px;">
+                    <div class="spinner"></div>
+                    <div>Loading latest videos...</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -634,6 +685,9 @@
             humidity: "1Ajb8r6TB5aKkWDAr99iDAlo3TlqReT2O",
             temperature: "1GPWSQIFjLR25lmuP-ljgIFriLNBS-FyQ"
         };
+
+        const YOUTUBE_API_KEY = "AIzaSyD2g8-C2jQBvByd0AUxU23OsU6jCObLRAw"; // Using your Firebase API key
+        const YOUTUBE_PLAYLIST_ID = "PLYjYqBhMDqYWl6SYlqmYEfZv_Z5UH9PJ4";
 
         let selectedIndex = 0;
         const debugLog = document.getElementById('debug-log');
@@ -1105,6 +1159,55 @@
             });
         }
 
+        async function loadYouTubeVideos() {
+            const container = document.getElementById('youtube-container');
+            
+            try {
+                log('Loading YouTube videos from playlist...');
+                
+                const response = await fetch(
+                    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=4&playlistId=${YOUTUBE_PLAYLIST_ID}&key=${YOUTUBE_API_KEY}`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`YouTube API error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.items || data.items.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #666;">No videos found in playlist</p>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                
+                data.items.forEach(item => {
+                    const videoId = item.snippet.resourceId.videoId;
+                    const title = item.snippet.title;
+                    
+                    const videoDiv = document.createElement('div');
+                    videoDiv.className = 'youtube-video';
+                    videoDiv.innerHTML = `
+                        <iframe 
+                            src="https://www.youtube.com/embed/${videoId}" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                        <div class="youtube-video-title">${title}</div>
+                    `;
+                    
+                    container.appendChild(videoDiv);
+                });
+                
+                log(`✓ Loaded ${data.items.length} YouTube videos`);
+                
+            } catch (error) {
+                log(`✗ Failed to load YouTube videos: ${error.message}`);
+                container.innerHTML = '<p style="text-align: center; color: #dc3545;">Failed to load videos. Please refresh the page.</p>';
+            }
+        }
+
         async function init() {
             log('🚀 Starting Doughrock...');
             const container = document.getElementById('image-container');
@@ -1124,7 +1227,11 @@
             log('Step 3: Loading sensors (once only)...');
             await updateSensorData();
             
-            // 4. Start auto-refresh (images only)
+            // 4. Load YouTube videos
+            log('Step 4: Loading YouTube videos...');
+            await loadYouTubeVideos();
+            
+            // 5. Start auto-refresh (images only)
             startAutoRefresh();
             setupFullscreenModal();
             
