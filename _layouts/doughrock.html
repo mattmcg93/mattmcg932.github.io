@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock8</title>
+    <title>Doughrock9</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -645,37 +645,76 @@
         }
 
         async function fetchSensorData(fileId, sensorType) {
+            const timestamp = Date.now();
             const urls = [
-                `https://drive.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
-                `https://docs.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
+                `https://drive.google.com/uc?id=${fileId}&export=download&t=${timestamp}`,
+                `https://docs.google.com/uc?id=${fileId}&export=download&t=${timestamp}`,
+                `https://drive.google.com/uc?export=download&id=${fileId}&t=${timestamp}`,
+                `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=AIzaSyD2g8-C2jQBvByd0AUxU23OsU6jCObLRAw`,
             ];
             
+            // Try direct fetch first
             for (const url of urls) {
                 try {
                     const response = await fetch(url, {
                         cache: 'no-store',
-                        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' }
+                        headers: { 
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache'
+                        }
                     });
                     
                     if (response.ok) {
                         const text = await response.text();
                         if (text && text.trim()) {
-                            log(`${sensorType} data: ${text.trim()}`);
+                            log(`✓ ${sensorType}: ${text.trim()}`);
                             return text.trim();
                         }
                     }
                 } catch (e) {
-                    log(`${sensorType} fetch failed: ${e.message}`);
+                    log(`Direct ${sensorType} fetch failed: ${e.message.substring(0, 50)}`);
                 }
             }
             
+            // Try with CORS proxies
+            const proxies = getCORSProxies();
+            for (const proxy of proxies) {
+                for (const url of urls.slice(0, 2)) {
+                    try {
+                        const proxyUrl = proxy + encodeURIComponent(url);
+                        const response = await fetch(proxyUrl, {
+                            cache: 'no-store'
+                        });
+                        
+                        if (response.ok) {
+                            const text = await response.text();
+                            if (text && text.trim()) {
+                                log(`✓ ${sensorType} via proxy: ${text.trim()}`);
+                                return text.trim();
+                            }
+                        }
+                    } catch (e) {
+                        log(`Proxy ${sensorType} failed: ${e.message.substring(0, 30)}`);
+                    }
+                }
+            }
+            
+            log(`✗ Failed to fetch ${sensorType} data after all retries`);
             return null;
         }
 
         async function updateSensorData() {
-            log('Loading sensor data (once)...');
+            log('Loading sensor data (with retries)...');
             
-            const humidityData = await fetchSensorData(sensorIds.humidity, 'humidity');
+            // Try humidity with retries
+            let humidityData = null;
+            for (let attempt = 1; attempt <= 3; attempt++) {
+                log(`Humidity attempt ${attempt}/3...`);
+                humidityData = await fetchSensorData(sensorIds.humidity, 'humidity');
+                if (humidityData) break;
+                if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            
             if (humidityData) {
                 const humidityValue = parseFloat(humidityData);
                 if (!isNaN(humidityValue)) {
@@ -684,10 +723,18 @@
                     document.getElementById('humidity-value').textContent = `Humidity: ${humidityData}%`;
                 }
             } else {
-                document.getElementById('humidity-value').textContent = 'Humidity: Failed';
+                document.getElementById('humidity-value').textContent = 'Humidity: Failed to load';
             }
             
-            const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
+            // Try temperature with retries
+            let temperatureData = null;
+            for (let attempt = 1; attempt <= 3; attempt++) {
+                log(`Temperature attempt ${attempt}/3...`);
+                temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
+                if (temperatureData) break;
+                if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            
             if (temperatureData) {
                 const temperatureValue = parseFloat(temperatureData);
                 if (!isNaN(temperatureValue)) {
@@ -696,7 +743,7 @@
                     document.getElementById('temperature-value').textContent = `Temperature: ${temperatureData}°C`;
                 }
             } else {
-                document.getElementById('temperature-value').textContent = 'Temperature: Failed';
+                document.getElementById('temperature-value').textContent = 'Temperature: Failed to load';
             }
         }
 
@@ -714,6 +761,8 @@
             return [
                 'https://api.allorigins.win/raw?url=',
                 'https://api.codetabs.com/v1/proxy?quest=',
+                'https://corsproxy.io/?',
+                'https://thingproxy.freeboard.io/fetch/',
             ];
         }
 
