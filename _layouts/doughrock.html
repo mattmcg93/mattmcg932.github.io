@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock5</title>
+    <title>Doughrock6</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -1318,60 +1318,60 @@
                 await refreshMainImage();
                 
                 const thumbnailWrappers = document.querySelectorAll('.thumbnail-wrapper');
+                
+                // Process thumbnails in parallel for faster refresh
+                const refreshPromises = [];
+                
                 for (let index = 0; index < thumbnailWrappers.length && index < driveIds.length; index++) {
                     const wrapper = thumbnailWrappers[index];
                     let img = wrapper.querySelector('.thumbnail');
                     
                     // If no img element exists or if the wrapper shows an error, skip this thumbnail
                     if (!img) {
-                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - no img element found, skipping`);
+                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - no img element, skipping`);
                         continue;
                     }
                     
                     // Check if the wrapper contains error text - if so, skip refresh
                     const loadingDiv = wrapper.querySelector('.loading');
                     if (loadingDiv && (loadingDiv.textContent.includes('failed') || loadingDiv.textContent.includes('Error'))) {
-                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - in error state, skipping refresh`);
+                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - error state, skipping`);
                         continue;
                     }
                     
-                    // Use the same aggressive refresh method as the main image
-                    let newUrl = await forceClearCacheAndRefresh(driveIds[index]);
-                    
-                    // Fallback to extremeFetchImage if forceClearCacheAndRefresh fails
-                    if (!newUrl) {
-                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - force refresh failed, keeping current image`);
-                        continue; // Skip this thumbnail rather than trying extremeFetchImage
-                    }
-                    
-                    if (newUrl) {
-                        img.style.opacity = '0.7';
-                        const oldSrc = img.src;
+                    // Create refresh promise for this thumbnail
+                    const refreshPromise = (async (idx, imgElement) => {
+                        let newUrl = await forceClearCacheAndRefresh(driveIds[idx]);
                         
-                        // Revoke old blob URL if it exists
+                        if (!newUrl) {
+                            log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) - refresh failed, keeping current`);
+                            return;
+                        }
+                        
+                        imgElement.style.opacity = '0.7';
+                        const oldSrc = imgElement.src;
+                        
                         if (oldSrc && oldSrc.startsWith('blob:')) {
                             URL.revokeObjectURL(oldSrc);
                         }
                         
-                        img.src = '';
+                        imgElement.src = newUrl;
                         
-                        setTimeout(() => {
-                            img.src = newUrl;
-                            img.onload = () => {
-                                img.style.opacity = '1';
-                                log(`Thumbnail ${index + 1} (${cameraNames[index]}) refreshed successfully`);
-                            };
-                            img.onerror = () => {
-                                img.style.opacity = '1';
-                                log(`Thumbnail ${index + 1} (${cameraNames[index]}) image load error`);
-                            };
-                        }, 200 + (index * 100));
-                    } else {
-                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - all refresh methods failed`);
-                    }
+                        imgElement.onload = () => {
+                            imgElement.style.opacity = '1';
+                            log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) ✓ refreshed`);
+                        };
+                        imgElement.onerror = () => {
+                            imgElement.style.opacity = '1';
+                            log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) ✗ load error`);
+                        };
+                    })(index, img);
                     
-                    await new Promise(resolve => setTimeout(resolve, 300));
+                    refreshPromises.push(refreshPromise);
                 }
+                
+                // Wait for all thumbnail refreshes to complete
+                await Promise.all(refreshPromises);
                 
                 log('Auto-refresh cycle completed');
             }, 10000);
