@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock2</title>
+    <title>Doughrock3</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -1317,40 +1317,54 @@
                 
                 await refreshMainImage();
                 
-                const thumbnails = document.querySelectorAll('.thumbnail');
-                for (let index = 0; index < thumbnails.length && index < driveIds.length; index++) {
-                    const img = thumbnails[index];
+                const thumbnailWrappers = document.querySelectorAll('.thumbnail-wrapper');
+                for (let index = 0; index < thumbnailWrappers.length && index < driveIds.length; index++) {
+                    const wrapper = thumbnailWrappers[index];
+                    let img = wrapper.querySelector('.thumbnail');
+                    
+                    // If no img element exists, skip this thumbnail
+                    if (!img) {
+                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - no img element found, skipping`);
+                        continue;
+                    }
                     
                     // Use the same aggressive refresh method as the main image
                     let newUrl = await forceClearCacheAndRefresh(driveIds[index]);
                     
                     // Fallback to extremeFetchImage if forceClearCacheAndRefresh fails
                     if (!newUrl) {
+                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - trying extremeFetchImage fallback`);
                         newUrl = await extremeFetchImage(driveIds[index]);
                     }
                     
                     if (newUrl) {
                         img.style.opacity = '0.7';
                         const oldSrc = img.src;
-                        img.src = '';
                         
                         // Revoke old blob URL if it exists
                         if (oldSrc && oldSrc.startsWith('blob:')) {
                             URL.revokeObjectURL(oldSrc);
                         }
                         
+                        img.src = '';
+                        
                         setTimeout(() => {
                             img.src = newUrl;
                             img.onload = () => {
                                 img.style.opacity = '1';
-                                log(`Thumbnail ${index + 1} (${cameraNames[index]}) refreshed`);
+                                log(`Thumbnail ${index + 1} (${cameraNames[index]}) refreshed successfully`);
                             };
                             img.onerror = () => {
                                 img.style.opacity = '1';
-                                log(`Thumbnail ${index + 1} (${cameraNames[index]}) refresh failed`);
+                                log(`Thumbnail ${index + 1} (${cameraNames[index]}) image load error`);
                             };
                         }, 200 + (index * 100));
+                    } else {
+                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - all refresh methods failed`);
                     }
+                    
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
                     
                     await new Promise(resolve => setTimeout(resolve, 300));
                 }
