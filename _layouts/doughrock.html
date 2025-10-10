@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock6</title>
+    <title>Doughrock7</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -25,7 +25,6 @@
         .status { color: white; }
         .main-container { max-width: 1400px; margin: 0 auto; }
         
-        /* Sensor data section */
         .sensor-section {
             background: rgba(255,255,255,0.95);
             border-radius: 20px;
@@ -53,17 +52,6 @@
             letter-spacing: 1px;
         }
         
-        .sensor-data {
-            text-align: center;
-        }
-        
-        .sensor-text {
-            font-size: 1.1em;
-            color: #333;
-            margin: 5px 15px;
-            display: inline-block;
-        }
-        
         .lamp-status-text {
             font-size: 1.2em;
             font-weight: bold;
@@ -79,7 +67,6 @@
             margin-bottom: 15px;
         }
         
-        /* Lamp control buttons */
         .lamp-controls {
             display: flex;
             gap: 15px;
@@ -115,39 +102,6 @@
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
-        }
-
-        .lamp-status {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: #666;
-            min-height: 20px;
-        }
-
-        .countdown-timer {
-            text-align: center;
-            margin-top: 15px;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-            display: none;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .countdown-number {
-            font-size: 2em;
-            margin: 10px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .countdown-message {
-            font-size: 0.9em;
-            opacity: 0.9;
-            margin-top: 5px;
         }
 
         .firebase-status {
@@ -272,7 +226,6 @@
         .info { position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 3px; font-size: 12px; }
         .debug { margin-top: 20px; background: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
 
-        /* Fullscreen modal styles */
         .fullscreen-modal {
             display: none;
             position: fixed;
@@ -323,7 +276,6 @@
             border-color: rgba(255, 255, 255, 0.5);
         }
 
-        /* Fullscreen lamp control overlay */
         .fullscreen-overlay {
             position: absolute;
             top: 50%;
@@ -366,7 +318,6 @@
             margin-top: 20px;
         }
 
-        /* Mobile portrait rotation */
         @media (max-width: 768px) and (orientation: portrait) {
             .fullscreen-image.rotated {
                 transform: rotate(90deg);
@@ -375,83 +326,24 @@
             }
         }
 
-        /* Mobile-specific responsive adjustments */
         @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .sensor-section,
-            .main-image-section,
-            .thumbnails-section {
-                padding: 20px;
-            }
-            
-            .main-image {
-                max-height: 50vh;
-            }
-            
-            #image-container {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 10px;
-            }
-            
-            .sensor-value {
-                font-size: 2em;
-            }
-            
-            .tap-instruction {
-                font-size: 1em;
-                top: 10px;
-                padding: 6px 12px;
-            }
-
-            .lamp-controls {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .lamp-button {
-                padding: 10px 20px;
-                font-size: 0.9em;
-                min-width: unset;
-            }
+            body { padding: 15px; }
+            .header h1 { font-size: 2em; }
+            .sensor-section, .main-image-section, .thumbnails-section { padding: 20px; }
+            .main-image { max-height: 50vh; }
+            #image-container { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+            .tap-instruction { font-size: 1em; top: 10px; padding: 6px 12px; }
+            .lamp-controls { flex-direction: column; gap: 10px; }
+            .lamp-button { padding: 10px 20px; font-size: 0.9em; min-width: unset; }
         }
 
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            #image-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-            
-            .sensor-section,
-            .main-image-section,
-            .thumbnails-section {
-                padding: 15px;
-            }
-            
-            .main-image {
-                max-height: 40vh;
-                min-height: 200px;
-            }
-
-            .tap-instruction {
-                font-size: 0.9em;
-                top: 8px;
-                padding: 5px 10px;
-            }
+            body { padding: 10px; }
+            .header h1 { font-size: 1.8em; }
+            #image-container { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .sensor-section, .main-image-section, .thumbnails-section { padding: 15px; }
+            .main-image { max-height: 40vh; min-height: 200px; }
+            .tap-instruction { font-size: 0.9em; top: 8px; padding: 5px 10px; }
         }
     </style>
 </head>
@@ -466,7 +358,6 @@
             </div>
         </div>
 
-        <!-- Lamp Control Box -->
         <div class="sensor-section">
             <div class="control-box">
                 <div class="control-box-title">Living Room Lamp Controls</div>
@@ -484,7 +375,6 @@
                     </button>
                 </div>
             </div>
-        </div>
             <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
         </div>
 
@@ -497,18 +387,16 @@
         </div>
 
         <div class="thumbnails-section">
-            <h2>Living Room Camera (Click to View)</h2>
+            <h2>All Cameras (Click to View)</h2>
             <div id="image-container"></div>
             <div id="debug-log" class="debug"></div>
         </div>
     </div>
 
-    <!-- Fullscreen Modal -->
     <div class="fullscreen-modal" id="fullscreen-modal">
         <button class="close-button" id="close-modal">EXIT FULLSCREEN</button>
         <img class="fullscreen-image" id="fullscreen-image" alt="Fullscreen View">
         
-        <!-- Fullscreen lamp control overlay -->
         <div class="fullscreen-overlay" id="fullscreen-overlay">
             <div class="fullscreen-overlay-title" id="fullscreen-overlay-title">Currently turning Living Room lamp ON</div>
             <div class="fullscreen-countdown-number" id="fullscreen-countdown-number">30</div>
@@ -516,12 +404,10 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getDatabase, ref, push, onValue, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-        // Firebase configuration - YOUR ACTUAL CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyD2g8-C2jQBvByd0AUxU23OsU6jCObLRAw",
             authDomain: "lamp-785f9.firebaseapp.com",
@@ -533,10 +419,8 @@
             measurementId: "G-NL1WLPE5EG"
         };
 
-        // Initialize Firebase
         let app, database, lampCommandsRef, lampStatusRef;
         let firebaseConnected = false;
-        let lampActivity = [];
 
         try {
             app = initializeApp(firebaseConfig);
@@ -544,138 +428,20 @@
             lampCommandsRef = ref(database, 'lamp_commands');
             lampStatusRef = ref(database, 'lamp_status');
             
-            // Test connection
             onValue(ref(database, '.info/connected'), (snapshot) => {
                 firebaseConnected = snapshot.val();
                 updateFirebaseStatus();
             });
 
-            // Listen for lamp status changes
             onValue(lampStatusRef, (snapshot) => {
                 const status = snapshot.val();
                 updateLampStatusDisplay(status);
             });
 
-            // Listen for new lamp commands to track activity
-            onValue(lampCommandsRef, (snapshot) => {
-                const commands = snapshot.val();
-                if (commands) {
-                    updateLampActivity(commands);
-                }
-            });
-
-            // Load existing activity from localStorage
-            loadLampActivity();
-
             log('Firebase initialized successfully');
         } catch (error) {
             log(`Firebase initialization failed: ${error.message}`);
             updateFirebaseStatus();
-        }
-
-        function loadLampActivity() {
-            try {
-                const stored = JSON.parse(localStorage.getItem('lampActivity') || '[]');
-                lampActivity = stored.filter(activity => {
-                    const activityTime = new Date(activity.timestamp);
-                    const now = new Date();
-                    const hoursDiff = (now - activityTime) / (1000 * 60 * 60);
-                    return hoursDiff <= 24; // Keep only last 24 hours
-                });
-                updateActivityDisplay();
-            } catch (e) {
-                lampActivity = [];
-            }
-        }
-
-        function saveLampActivity() {
-            try {
-                localStorage.setItem('lampActivity', JSON.stringify(lampActivity));
-            } catch (e) {
-                // localStorage not available, that's okay
-            }
-        }
-
-        function updateLampActivity(commands) {
-            const now = new Date();
-            const last24Hours = now.getTime() - (24 * 60 * 60 * 1000);
-            
-            Object.entries(commands).forEach(([commandId, commandData]) => {
-                // Check if we already have this command in our activity log
-                const existingActivity = lampActivity.find(activity => activity.commandId === commandId);
-                if (existingActivity) return;
-                
-                // Parse timestamp
-                let commandTime;
-                if (commandData.timestamp) {
-                    if (typeof commandData.timestamp === 'string') {
-                        commandTime = new Date(commandData.timestamp);
-                    } else {
-                        // Assume Unix timestamp in milliseconds
-                        commandTime = new Date(commandData.timestamp);
-                    }
-                } else {
-                    // Fallback to current time
-                    commandTime = now;
-                }
-                
-                // Only add if within last 24 hours and from webpage
-                if (commandTime.getTime() > last24Hours && commandData.source === 'webpage') {
-                    lampActivity.push({
-                        commandId: commandId,
-                        action: commandData.action,
-                        timestamp: commandTime.toISOString(),
-                        source: commandData.source
-                    });
-                }
-            });
-            
-            // Sort by timestamp (newest first) and keep only last 24 hours
-            lampActivity = lampActivity
-                .filter(activity => {
-                    const activityTime = new Date(activity.timestamp);
-                    const hoursDiff = (now - activityTime) / (1000 * 60 * 60);
-                    return hoursDiff <= 24;
-                })
-                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                .slice(0, 10); // Keep max 10 entries
-            
-            saveLampActivity();
-            updateActivityDisplay();
-        }
-
-        function updateActivityDisplay() {
-            const activityLog = document.getElementById('lamp-activity-log');
-            
-            if (lampActivity.length === 0) {
-                activityLog.innerHTML = 'No recent activity';
-                return;
-            }
-            
-            const activityHTML = lampActivity.map(activity => {
-                const activityTime = new Date(activity.timestamp);
-                const now = new Date();
-                const isToday = activityTime.toDateString() === now.toDateString();
-                const isYesterday = activityTime.toDateString() === new Date(now.getTime() - 24*60*60*1000).toDateString();
-                
-                let timeStr;
-                if (isToday) {
-                    timeStr = activityTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' Today';
-                } else if (isYesterday) {
-                    timeStr = activityTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' Yesterday';
-                } else {
-                    timeStr = activityTime.toLocaleString([], {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                }
-                
-                return `Lamp Turned ${activity.action.toUpperCase()} at: ${timeStr}`;
-            }).join('<br>');
-            
-            activityLog.innerHTML = activityHTML;
         }
 
         function updateLampStatusDisplay(status) {
@@ -685,13 +451,9 @@
             
             if (status && status.state) {
                 const state = status.state.toUpperCase();
-                const lastUpdated = status.timestamp ? 
-                    new Date(status.timestamp).toLocaleTimeString() : 'Unknown';
-                
                 lampStatusElement.textContent = `Lamp is currently: ${state}`;
                 lampStatusElement.style.color = state === 'ON' ? '#28a745' : '#6c757d';
                 
-                // Show only the opposite button
                 if (state === 'ON') {
                     lampOnBtn.style.display = 'none';
                     lampOffBtn.style.display = 'block';
@@ -699,12 +461,9 @@
                     lampOnBtn.style.display = 'block';
                     lampOffBtn.style.display = 'none';
                 }
-                
-                log(`Lamp status updated: ${state} (${lastUpdated})`);
             } else {
                 lampStatusElement.textContent = 'Lamp is currently: Unknown';
                 lampStatusElement.style.color = '#6c757d';
-                // Show both buttons if status is unknown
                 lampOnBtn.style.display = 'block';
                 lampOffBtn.style.display = 'block';
             }
@@ -721,11 +480,9 @@
             }
         }
 
-        // Global countdown timer variable
         let countdownInterval = null;
         let overlayTimeoutInterval = null;
 
-        // Make lamp control functions available globally
         window.lampOn = async function() {
             await sendLampCommand('on');
         };
@@ -735,23 +492,17 @@
         };
 
         function openFullscreenForLamp(action) {
-            // First, open the Living Room camera (index 0)
-            const mainImage = document.getElementById('main-image');
             const fullscreenModal = document.getElementById('fullscreen-modal');
             const fullscreenImg = document.getElementById('fullscreen-image');
             const fullscreenOverlay = document.getElementById('fullscreen-overlay');
             const closeButton = document.getElementById('close-modal');
             
-            // Load the Living Room camera image
             if (driveIds[0]) {
                 extremeFetchImage(driveIds[0]).then(imageUrl => {
-                    if (imageUrl) {
-                        fullscreenImg.src = imageUrl;
-                    }
+                    if (imageUrl) fullscreenImg.src = imageUrl;
                 });
             }
             
-            // Check if mobile portrait and apply rotation
             if (isMobilePortrait()) {
                 fullscreenImg.classList.add('rotated');
                 fullscreenOverlay.classList.add('rotated');
@@ -762,11 +513,8 @@
                 closeButton.classList.remove('rotated');
             }
             
-            // Open fullscreen modal
             fullscreenModal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            
-            // Show the overlay with countdown
             startFullscreenCountdown(action);
         }
 
@@ -780,7 +528,6 @@
             const countdownNumber = document.getElementById('fullscreen-countdown-number');
             const overlayMessage = overlay.querySelector('.fullscreen-overlay-message');
             
-            // Set up overlay content with fun messages
             if (action === 'on') {
                 overlayTitle.textContent = 'LET THERE BE LIGHT!';
                 overlayMessage.textContent = 'Turning on the Living Room lamp...';
@@ -790,7 +537,6 @@
             }
             
             overlay.style.display = 'block';
-            
             let seconds = 30;
             countdownNumber.textContent = seconds;
             
@@ -800,7 +546,6 @@
                 
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
-                    // Show completion message
                     if (action === 'on') {
                         overlayTitle.textContent = 'Should be bright and shiny now!';
                         overlayMessage.textContent = 'If still dark, try again';
@@ -809,27 +554,11 @@
                         overlayMessage.textContent = 'If still bright, try again';
                     }
                     countdownNumber.textContent = '';
-                    
-                    // Hide overlay after 3 seconds
                     overlayTimeoutInterval = setTimeout(() => {
                         overlay.style.display = 'none';
                     }, 3000);
                 }
             }, 1000);
-        }
-
-        function stopFullscreenCountdown() {
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-                countdownInterval = null;
-            }
-            if (overlayTimeoutInterval) {
-                clearTimeout(overlayTimeoutInterval);
-                overlayTimeoutInterval = null;
-            }
-            
-            const overlay = document.getElementById('fullscreen-overlay');
-            overlay.style.display = 'none';
         }
 
         async function sendLampCommand(action) {
@@ -851,7 +580,6 @@
                 
                 await push(lampCommandsRef, command);
                 
-                // Update button to show "Please wait" and hide it
                 if (action === 'on') {
                     onBtn.innerHTML = 'Please wait...';
                     onBtn.disabled = true;
@@ -860,10 +588,8 @@
                     offBtn.disabled = true;
                 }
                 
-                // Open fullscreen with countdown
                 openFullscreenForLamp(action);
                 
-                // Re-enable buttons and restore text after 30 seconds
                 setTimeout(() => {
                     onBtn.disabled = false;
                     offBtn.disabled = false;
@@ -874,9 +600,6 @@
                 log(`Lamp ${action} command sent: ${command.id}`);
             } catch (error) {
                 alert(`Error: ${error.message}`);
-                log(`Firebase error: ${error.message}`);
-                
-                // Re-enable buttons immediately on error
                 onBtn.disabled = false;
                 offBtn.disabled = false;
                 onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
@@ -884,20 +607,12 @@
             }
         }
 
-        // Make Firebase available to other functions
         window.firebaseDB = database;
         window.firebaseConnected = () => firebaseConnected;
         window.updateLampStatusDisplay = updateLampStatusDisplay;
     </script>
 
     <script>
-        // Configuration - UPDATE THESE VALUES WITH YOUR ACTUAL DETAILS
-        const GITHUB_CONFIG = {
-            TOKEN: '',
-            OWNER: 'mattmcg93',
-            REPO: 'mattmcg932.github.io'
-        };
-
         const driveIds = [
             "1vrr26I23p4XUdAlN_2tnevs4VYE7PIoI",
             "1jVn1wKSIoHepUjxdZRS6xlh4JC90q55c",
@@ -935,56 +650,30 @@
                 `https://docs.google.com/uc?id=${fileId}&export=download&t=${Date.now()}`,
             ];
             
-            const corsProxies = getCORSProxies();
-            
             for (const url of urls) {
                 try {
                     const response = await fetch(url, {
                         cache: 'no-store',
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate'
-                        }
+                        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' }
                     });
                     
                     if (response.ok) {
                         const text = await response.text();
                         if (text && text.trim()) {
-                            log(`${sensorType} data fetched directly: ${text.trim()}`);
+                            log(`${sensorType} data: ${text.trim()}`);
                             return text.trim();
                         }
                     }
                 } catch (e) {
-                    log(`Direct ${sensorType} fetch failed: ${e.message}`);
+                    log(`${sensorType} fetch failed: ${e.message}`);
                 }
             }
             
-            for (const proxy of corsProxies) {
-                try {
-                    const url = `https://drive.google.com/uc?id=${fileId}&export=download`;
-                    const proxyUrl = proxy + encodeURIComponent(url);
-                    
-                    const response = await fetch(proxyUrl, {
-                        cache: 'no-store'
-                    });
-                    
-                    if (response.ok) {
-                        const text = await response.text();
-                        if (text && text.trim()) {
-                            log(`${sensorType} data fetched via proxy: ${text.trim()}`);
-                            return text.trim();
-                        }
-                    }
-                } catch (e) {
-                    log(`Proxy ${sensorType} fetch failed: ${e.message}`);
-                }
-            }
-            
-            log(`Failed to fetch ${sensorType} data`);
             return null;
         }
 
         async function updateSensorData() {
-            log('Updating sensor data...');
+            log('Loading sensor data (once)...');
             
             const humidityData = await fetchSensorData(sensorIds.humidity, 'humidity');
             if (humidityData) {
@@ -995,7 +684,7 @@
                     document.getElementById('humidity-value').textContent = `Humidity: ${humidityData}%`;
                 }
             } else {
-                document.getElementById('humidity-value').textContent = 'Humidity: Failed to update';
+                document.getElementById('humidity-value').textContent = 'Humidity: Failed';
             }
             
             const temperatureData = await fetchSensorData(sensorIds.temperature, 'temperature');
@@ -1007,7 +696,7 @@
                     document.getElementById('temperature-value').textContent = `Temperature: ${temperatureData}°C`;
                 }
             } else {
-                document.getElementById('temperature-value').textContent = 'Temperature: Failed to update';
+                document.getElementById('temperature-value').textContent = 'Temperature: Failed';
             }
         }
 
@@ -1015,20 +704,9 @@
             const timestamp = Date.now();
             const randomParam = Math.random().toString(36).substring(7);
             return [
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
                 `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
-                `https://drive.google.com/uc?export=download&id=${driveId}&t=${timestamp}&nocache=${randomParam}`,
-                `https://drive.google.com/file/d/${driveId}/view?usp=sharing&t=${timestamp}`,
-                `https://drive.google.com/file/d/${driveId}/preview?t=${timestamp}&r=${randomParam}`,
                 `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`,
-                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&nocache=${randomParam}`,
-                `https://lh3.googleusercontent.com/d/${driveId}=s2000&t=${timestamp}`,
-                `https://lh4.googleusercontent.com/d/${driveId}?t=${timestamp}`,
-                `https://lh5.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}`,
-                `https://drive.google.com/thumbnail?id=${driveId}&t=${timestamp}&r=${randomParam}`,
-                `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000&t=${timestamp}`,
-                `https://docs.google.com/uc?id=${driveId}&export=download&t=${timestamp}`,
-                `https://drive.google.com/uc?id=${driveId}&export=download&confirm=t&t=${timestamp}`,
-                `https://drive.google.com/uc?id=${driveId}&export=download&confirm=no_antivirus&t=${timestamp}`,
             ];
         }
 
@@ -1036,25 +714,15 @@
             return [
                 'https://api.allorigins.win/raw?url=',
                 'https://api.codetabs.com/v1/proxy?quest=',
-                'https://cors-anywhere.herokuapp.com/',
-                'https://thingproxy.freeboard.io/fetch/',
-                'https://cors.io/?',
-                'https://jsonp.afeld.me/?url=',
-                'https://whatever-origin.herokuapp.com/get?url=',
-                'https://cors-proxy.htmldriven.com/?url=',
             ];
         }
 
-        async function extremeFetchImage(driveId) {
+        async function extremeFetchImage(driveId, isRefresh = false) {
             const urls = generateAllPossibleUrls(driveId);
-            const proxies = getCORSProxies();
+            const urlsToTry = isRefresh ? urls.slice(0, 2) : urls;
             
-            log(`Attempting to load image ${driveId}...`);
-            
-            for (let i = 0; i < urls.length; i++) {
-                const url = urls[i];
-                log(`Trying direct URL ${i + 1}/${urls.length}: ${url.substring(0, 80)}...`);
-                
+            for (let i = 0; i < urlsToTry.length; i++) {
+                const url = urlsToTry[i];
                 try {
                     let response = await fetch(url, { 
                         mode: 'cors',
@@ -1065,7 +733,6 @@
                     if (response.ok) {
                         const blob = await response.blob();
                         if (blob.size > 0 && blob.type.startsWith('image/')) {
-                            log(`Success with direct URL!`);
                             return URL.createObjectURL(blob);
                         }
                     }
@@ -1073,51 +740,35 @@
                     try {
                         let response = await fetch(url, { mode: 'no-cors' });
                         if (await testImageLoad(url)) {
-                            log(`Success with no-cors direct load!`);
                             return url;
                         }
                     } catch (e2) {
-                        log(`Direct fetch failed: ${e2.message.substring(0, 50)}...`);
+                        continue;
                     }
                 }
             }
             
+            if (isRefresh) return null;
+            
+            const proxies = getCORSProxies();
             for (const proxy of proxies) {
-                for (const url of urls.slice(0, 5)) {
+                for (const url of urls.slice(0, 2)) {
                     try {
                         const proxyUrl = proxy + encodeURIComponent(url);
-                        log(`Trying proxy: ${proxy.substring(0, 30)}... with URL`);
-                        
-                        const response = await fetch(proxyUrl, {
-                            headers: {
-                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                            }
-                        });
+                        const response = await fetch(proxyUrl);
                         
                         if (response.ok) {
                             const blob = await response.blob();
                             if (blob.size > 1000) {
-                                log(`Success with proxy!`);
                                 return URL.createObjectURL(blob);
                             }
                         }
                     } catch (e) {
-                        log(`Proxy failed: ${e.message.substring(0, 30)}...`);
+                        continue;
                     }
                 }
             }
             
-            try {
-                const iframeResult = await iframeExtraction(driveId);
-                if (iframeResult) {
-                    log(`Success with iframe extraction!`);
-                    return iframeResult;
-                }
-            } catch (e) {
-                log(`Iframe extraction failed: ${e.message}`);
-            }
-            
-            log(`All methods failed for ${driveId}`);
             return null;
         }
         
@@ -1131,72 +782,13 @@
             });
         }
         
-        function iframeExtraction(driveId) {
-            return new Promise((resolve) => {
-                const iframe = document.createElement('iframe');
-                iframe.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;';
-                iframe.src = `https://drive.google.com/file/d/${driveId}/preview`;
-                document.body.appendChild(iframe);
-                
-                let resolved = false;
-                
-                iframe.onload = () => {
-                    setTimeout(() => {
-                        if (resolved) return;
-                        try {
-                            const doc = iframe.contentDocument || iframe.contentWindow.document;
-                            const images = doc.querySelectorAll('img');
-                            for (const img of images) {
-                                if (img.src && img.src.includes('googleusercontent')) {
-                                    resolved = true;
-                                    document.body.removeChild(iframe);
-                                    resolve(img.src);
-                                    return;
-                                }
-                            }
-                        } catch (e) {
-                            log(`Iframe access blocked by CORS: ${e.message}`);
-                        }
-                        
-                        if (!resolved) {
-                            resolved = true;
-                            document.body.removeChild(iframe);
-                            resolve(`https://drive.google.com/file/d/${driveId}/preview`);
-                        }
-                    }, 3000);
-                };
-                
-                setTimeout(() => {
-                    if (!resolved) {
-                        resolved = true;
-                        if (iframe.parentNode) document.body.removeChild(iframe);
-                        resolve(null);
-                    }
-                }, 8000);
-            });
-        }
-        
         async function forceClearCacheAndRefresh(driveId) {
-            if ('caches' in window) {
-                try {
-                    const cacheNames = await caches.keys();
-                    await Promise.all(
-                        cacheNames.map(cacheName => caches.delete(cacheName))
-                    );
-                } catch (e) {
-                    log('Cache clearing failed, continuing...');
-                }
-            }
-            
             const timestamp = Date.now();
             const randomId = Math.random().toString(36).substring(2, 15);
-            const sessionId = Math.random().toString(36).substring(2, 10);
             
             const urls = [
-                `https://lh3.googleusercontent.com/d/${driveId}=w2000&v=${timestamp}&_cb=${randomId}&sid=${sessionId}`,
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000&v=${timestamp}&_cb=${randomId}`,
                 `https://drive.google.com/uc?id=${driveId}&export=download&v=${timestamp}&_nocache=${randomId}`,
-                `https://lh3.googleusercontent.com/d/${driveId}?v=${timestamp}&r=${randomId}&s=${sessionId}`,
-                `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000&v=${timestamp}&_=${randomId}`,
             ];
             
             for (const url of urls) {
@@ -1221,28 +813,6 @@
                 }
             }
             
-            const corsProxies = getCORSProxies();
-            for (const proxy of corsProxies) {
-                try {
-                    const url = `https://lh3.googleusercontent.com/d/${driveId}=w2000&v=${timestamp}`;
-                    const response = await fetch(proxy + encodeURIComponent(url), {
-                        cache: 'no-store',
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        const blob = await response.blob();
-                        if (blob.size > 1000) {
-                            return URL.createObjectURL(blob);
-                        }
-                    }
-                } catch (e) {
-                    continue;
-                }
-            }
-            
             return null;
         }
         
@@ -1251,100 +821,75 @@
             const fullscreenImg = document.getElementById('fullscreen-image');
             const mainTitle = document.getElementById('main-title');
             
-            log(`Refreshing main image for ${cameraNames[selectedIndex]}...`);
-            
+            log(`Refreshing ${cameraNames[selectedIndex]}...`);
             mainImage.style.opacity = '0.5';
-            mainTitle.textContent = `Refreshing ${cameraNames[selectedIndex]}...`;
             
             let newMainUrl = await forceClearCacheAndRefresh(driveIds[selectedIndex]);
             
             if (!newMainUrl) {
-                log(`Force refresh failed, trying extremeFetchImage...`);
-                newMainUrl = await extremeFetchImage(driveIds[selectedIndex]);
+                newMainUrl = await extremeFetchImage(driveIds[selectedIndex], true);
             }
             
             if (newMainUrl) {
-                mainImage.src = '';
+                const oldSrc = mainImage.src;
+                if (oldSrc && oldSrc.startsWith('blob:')) {
+                    URL.revokeObjectURL(oldSrc);
+                }
+                
                 mainImage.src = newMainUrl;
                 
-                // Also update fullscreen image if modal is active
                 if (document.getElementById('fullscreen-modal').classList.contains('active')) {
                     fullscreenImg.src = newMainUrl;
                 }
                 
                 mainImage.onload = () => {
                     mainImage.style.opacity = '1';
-                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Updated at ${new Date().toLocaleTimeString()}`;
-                    log(`Main image refreshed successfully: ${cameraNames[selectedIndex]}`);
+                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Updated ${new Date().toLocaleTimeString()}`;
+                    log(`✓ Main image refreshed`);
                 };
                 mainImage.onerror = () => {
                     mainImage.style.opacity = '1';
-                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Failed to refresh`;
-                    log(`Main image refresh failed: ${cameraNames[selectedIndex]}`);
+                    log(`✗ Main image load error`);
                 };
             } else {
                 mainImage.style.opacity = '1';
-                mainTitle.textContent = `${cameraNames[selectedIndex]} - Refresh failed, retrying...`;
-                log(`All refresh methods failed for main image`);
-                
-                setTimeout(async () => {
-                    const fallbackUrl = `https://lh3.googleusercontent.com/d/${driveIds[selectedIndex]}=w2000&t=${Date.now()}&force=${Math.random()}`;
-                    mainImage.src = fallbackUrl;
-                    
-                    // Update fullscreen too if active
-                    if (document.getElementById('fullscreen-modal').classList.contains('active')) {
-                        fullscreenImg.src = fallbackUrl;
-                    }
-                    
-                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Fallback refresh attempt`;
-                }, 1000);
+                log(`✗ Main refresh failed`);
             }
         }
         
         function startAutoRefresh() {
-            log('Starting auto-refresh every 10 seconds with forced main image updates...');
+            log('Starting auto-refresh (images only, every 10 seconds)...');
             
             setInterval(async () => {
-                log('Auto-refreshing all images and sensor data...');
+                log('--- Refresh cycle starting ---');
                 
-                await updateSensorData();
-                
-                document.querySelectorAll('img').forEach(img => {
-                    if (img.src && img.src.startsWith('blob:')) {
-                        URL.revokeObjectURL(img.src);
-                    }
-                });
-                
+                // Refresh main image first
                 await refreshMainImage();
                 
+                // Then refresh all thumbnails in parallel
                 const thumbnailWrappers = document.querySelectorAll('.thumbnail-wrapper');
-                
-                // Process thumbnails in parallel for faster refresh
                 const refreshPromises = [];
                 
                 for (let index = 0; index < thumbnailWrappers.length && index < driveIds.length; index++) {
                     const wrapper = thumbnailWrappers[index];
                     let img = wrapper.querySelector('.thumbnail');
                     
-                    // If no img element exists or if the wrapper shows an error, skip this thumbnail
                     if (!img) {
-                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - no img element, skipping`);
+                        log(`Thumbnail ${index + 1} - no img, skip`);
                         continue;
                     }
                     
-                    // Check if the wrapper contains error text - if so, skip refresh
                     const loadingDiv = wrapper.querySelector('.loading');
                     if (loadingDiv && (loadingDiv.textContent.includes('failed') || loadingDiv.textContent.includes('Error'))) {
-                        log(`Thumbnail ${index + 1} (${cameraNames[index]}) - error state, skipping`);
+                        log(`Thumbnail ${index + 1} - error state, skip`);
                         continue;
                     }
                     
-                    // Create refresh promise for this thumbnail
                     const refreshPromise = (async (idx, imgElement) => {
                         let newUrl = await forceClearCacheAndRefresh(driveIds[idx]);
                         
                         if (!newUrl) {
-                            log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) - refresh failed, keeping current`);
+                            log(`Thumbnail ${idx + 1} - no new URL`);
                             return;
                         }
                         
@@ -1359,21 +904,19 @@
                         
                         imgElement.onload = () => {
                             imgElement.style.opacity = '1';
-                            log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) ✓ refreshed`);
+                            log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) ✓`);
                         };
                         imgElement.onerror = () => {
                             imgElement.style.opacity = '1';
-                            log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) ✗ load error`);
+                            log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) ✗`);
                         };
                     })(index, img);
                     
                     refreshPromises.push(refreshPromise);
                 }
                 
-                // Wait for all thumbnail refreshes to complete
                 await Promise.all(refreshPromises);
-                
-                log('Auto-refresh cycle completed');
+                log('--- Refresh cycle complete ---');
             }, 10000);
         }
         
@@ -1407,8 +950,8 @@
                     };
                 } else {
                     wrapper.innerHTML = `
-                        <div class="loading">All methods failed</div>
-                        <div class="info">${cameraNames[index]} - Failed</div>
+                        <div class="loading">Failed</div>
+                        <div class="info">${cameraNames[index]} - Error</div>
                     `;
                 }
             });
@@ -1429,10 +972,10 @@
                 mainImage.src = imageUrl;
                 mainImage.onload = () => {
                     mainImage.style.opacity = '1';
-                    mainTitle.textContent = `${cameraNames[index]} - Loaded successfully!`;
+                    mainTitle.textContent = `${cameraNames[index]} - Loaded`;
                 };
                 mainImage.onerror = () => {
-                    mainTitle.textContent = `${cameraNames[index]} - Failed to display`;
+                    mainTitle.textContent = `${cameraNames[index]} - Failed`;
                 };
             } else {
                 mainImage.style.opacity = '1';
@@ -1456,7 +999,6 @@
             
             function openFullscreen() {
                 if (mainImage.src) {
-                    // Always use the current main image source for fullscreen
                     fullscreenImg.src = mainImage.src;
                     
                     if (isMobilePortrait()) {
@@ -1482,9 +1024,7 @@
             closeButton.addEventListener('click', closeFullscreen);
             
             modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeFullscreen();
-                }
+                if (e.target === modal) closeFullscreen();
             });
             
             document.addEventListener('keydown', (e) => {
@@ -1509,21 +1049,29 @@
         }
 
         async function init() {
-            log('Starting Doughrock live stream with Firebase lamp controls...');
+            log('🚀 Starting Doughrock...');
             const container = document.getElementById('image-container');
             
-            await updateSensorData();
+            // 1. Load main image FIRST
+            log('Step 1: Loading main image...');
+            await selectThumbnail(0);
             
+            // 2. Load thumbnails
+            log('Step 2: Loading thumbnails...');
             for (let i = 0; i < driveIds.length; i++) {
                 const thumbnail = await createThumbnail(driveIds[i], i);
                 container.appendChild(thumbnail);
             }
             
-            selectThumbnail(0);
+            // 3. Load sensor data ONCE
+            log('Step 3: Loading sensors (once only)...');
+            await updateSensorData();
+            
+            // 4. Start auto-refresh (images only)
             startAutoRefresh();
             setupFullscreenModal();
             
-            log('Initialization complete. Firebase lamp control ready.');
+            log('✓ Initialization complete!');
         }
 
         window.addEventListener('load', init);
