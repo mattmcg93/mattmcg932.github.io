@@ -16,10 +16,9 @@
         .grid-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 1fr);
             gap: 10px;
-            height: calc(100vh - 20px);
             max-width: 100vw;
+            padding: 10px;
         }
         
         .camera-wrapper {
@@ -30,6 +29,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            aspect-ratio: 4 / 3;
         }
         
         .camera-image {
@@ -83,7 +83,7 @@
             body { padding: 5px; }
             .grid-container {
                 gap: 5px;
-                height: calc(100vh - 10px);
+                padding: 5px;
             }
             .camera-label {
                 font-size: 0.9em;
