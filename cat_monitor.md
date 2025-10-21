@@ -1,7 +1,7 @@
 ---
 layout: cat_monitor
-title: "DOUGHROCK"
-excerpt: "DOUGHROCK"
+title: "cat_monitor"
+excerpt: "cat_monitor"
 image: /assets/images/Venus.PNG
 ---
 
