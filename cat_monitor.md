@@ -1,5 +1,5 @@
 ---
-layout: doughrock_widescreen
+layout: cat_monitor
 title: "DOUGHROCK"
 excerpt: "DOUGHROCK"
 image: /assets/images/Venus.PNG
