@@ -3,6 +3,304 @@
         import { getDatabase, ref, push, onValue, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
         const firebaseConfig = {
+            apiKey: "AIzaSyCO_RAFv35TbeamOtsUDT4tPZm2NcyVVSg",
+            authDomain: "westlandneopixel.firebaseapp.com",
+            databaseURL: "https://westlandneopixel-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "westlandneopixel",
+            storageBucket: "westlandneopixel.firebasestorage.app",
+            messagingSenderId: "367685507811",
+            appId: "1:367685507811:web:dcdbb08de7669dc862c3d6",
+            measurementId: "G-ZW7K5VTPPD"
+        };
+
+        let app, database, lampCommandsRef, lampStatusRef;
+        let firebaseConnected = false;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            database = getDatabase(app);
+            lampCommandsRef = ref(database, 'lamp_commands');
+            lampStatusRef = ref(database, 'lamp_status');
+            
+            onValue(ref(database, '.info/connected'), (snapshot) => {
+                firebaseConnected = snapshot.val();
+                updateFirebaseStatus();
+            });
+
+            onValue(lampStatusRef, (snapshot) => {
+                const status = snapshot.val();
+                updateLampStatusDisplay(status);
+            });
+        } catch (error) {
+            updateFirebaseStatus();
+        }
+
+        function updateLampStatusDisplay(status) {
+            const lampStatusElement = document.getElementById('lamp-status-display');
+            const lampOnBtn = document.getElementById('lamp-on-btn');
+            const lampOffBtn = document.getElementById('lamp-off-btn');
+            
+            if (status && status.state) {
+                const state = status.state.toUpperCase();
+                lampStatusElement.textContent = `Lamp is currently: ${state}`;
+                lampStatusElement.style.color = state === 'ON' ? '#28a745' : '#6c757d';
+                
+                if (state === 'ON') {
+                    lampOnBtn.style.display = 'none';
+                    lampOffBtn.style.display = 'block';
+                } else {
+                    lampOnBtn.style.display = 'block';
+                    lampOffBtn.style.display = 'none';
+                }
+            } else {
+                lampStatusElement.textContent = 'Lamp is currently: Unknown';
+                lampStatusElement.style.color = '#6c757d';
+                lampOnBtn.style.display = 'block';
+                lampOffBtn.style.display = 'block';
+            }
+        }
+
+        function updateFirebaseStatus() {
+            const statusDiv = document.getElementById('firebase-status');
+            if (firebaseConnected) {
+                statusDiv.textContent = 'Firebase Connected';
+                statusDiv.className = 'firebase-status firebase-connected';
+            } else {
+                statusDiv.textContent = 'Firebase Disconnected';
+                statusDiv.className = 'firebase-status firebase-disconnected';
+            }
+        }
+
+        async function sendLampCommand(action) {
+            const onBtn = document.getElementById('lamp-on-btn');
+            const offBtn = document.getElementById('lamp-off-btn');
+            
+            if (!firebaseConnected) {
+                alert('Error: Firebase not connected');
+                return;
+            }
+            
+            try {
+                const command = {
+                    action: action,
+                    timestamp: serverTimestamp(),
+                    source: 'webpage',
+                    id: Date.now() + '_' + Math.random().toString(36).substring(2, 8)
+                };
+                
+                await push(lampCommandsRef, command);
+                
+                if (action === 'on') {
+                    onBtn.innerHTML = 'Please wait...';
+                    onBtn.disabled = true;
+                } else {
+                    offBtn.innerHTML = 'Please wait...';
+                    offBtn.disabled = true;
+                }
+                
+                setTimeout(() => {
+                    onBtn.disabled = false;
+                    offBtn.disabled = false;
+                    onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Camera below</div>';
+                    offBtn.innerHTML = '<span>Turn Lamp OFF</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Camera below</div>';
+                }, 30000);
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+                onBtn.disabled = false;
+                offBtn.disabled = false;
+                onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Camera below</div>';
+                offBtn.innerHTML = '<span>Turn Lamp OFF</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Camera below</div>';
+            }
+        }
+
+        // Expose lamp control functions to global scope
+        window.lampOn = async function() {
+            await sendLampCommand('on');
+        };
+
+        window.lampOff = async function() {
+            await sendLampCommand('off');
+        };
+    </script>
+    <script>
+        const driveIds = [
+            "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i"
+        ];
+
+        function generateAllPossibleUrls(driveId) {
+            const timestamp = Date.now();
+            const randomParam = Math.random().toString(36).substring(7);
+            return [
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
+                `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`,
+            ];
+        }
+
+        function getCORSProxies() {
+            return [
+                'https://api.allorigins.win/raw?url=',
+                'https://api.codetabs.com/v1/proxy?quest=',
+                'https://corsproxy.io/?',
+                'https://thingproxy.freeboard.io/fetch/',
+            ];
+        }
+
+        async function extremeFetchImage(driveId, isRefresh = false) {
+            const urls = generateAllPossibleUrls(driveId);
+            const urlsToTry = isRefresh ? urls : urls;
+            
+            for (let i = 0; i < urlsToTry.length; i++) {
+                const url = urlsToTry[i];
+                try {
+                    let response = await fetch(url, { 
+                        mode: 'cors',
+                        credentials: 'omit',
+                        referrerPolicy: 'no-referrer',
+                        cache: 'no-store'
+                    });
+                    
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        if (blob.size > 0 && blob.type.startsWith('image/')) {
+                            return URL.createObjectURL(blob);
+                        }
+                    }
+                } catch (e) {
+                    try {
+                        let response = await fetch(url, { mode: 'no-cors', cache: 'no-store' });
+                        if (await testImageLoad(url)) {
+                            return url;
+                        }
+                    } catch (e2) {
+                        continue;
+                    }
+                }
+            }
+            
+            if (isRefresh) return null;
+            
+            const proxies = getCORSProxies();
+            for (const proxy of proxies) {
+                for (const url of urls.slice(0, 2)) {
+                    try {
+                        const proxyUrl = proxy + encodeURIComponent(url);
+                        const response = await fetch(proxyUrl);
+                        
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            if (blob.size > 1000) {
+                                return URL.createObjectURL(blob);
+                            }
+                        }
+                    } catch (e) {
+                        continue;
+                    }
+                }
+            }
+            
+            return null;
+        }
+        
+        function testImageLoad(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+                setTimeout(() => resolve(false), 5000);
+            });
+        }
+        
+        async function refreshMainImage() {
+            const mainImage = document.getElementById('main-image');
+            
+            mainImage.style.opacity = '0.5';
+            
+            let newMainUrl = await extremeFetchImage(driveIds[0], true);
+            
+            if (newMainUrl) {
+                const oldSrc = mainImage.src;
+                if (oldSrc && oldSrc.startsWith('blob:')) {
+                    URL.revokeObjectURL(oldSrc);
+                }
+                
+                mainImage.src = newMainUrl;
+                
+                mainImage.onload = () => {
+                    mainImage.style.opacity = '1';
+                };
+                mainImage.onerror = () => {
+                    mainImage.style.opacity = '1';
+                };
+            } else {
+                mainImage.style.opacity = '1';
+            }
+        }
+        
+        function startAutoRefresh() {
+            setInterval(async () => {
+                await refreshMainImage();
+            }, 10000);
+        }
+
+        async function init() {
+            const mainImage = document.getElementById('main-image');
+            const imageUrl = await extremeFetchImage(driveIds[0]);
+            
+            if (imageUrl) {
+                mainImage.src = imageUrl;
+                
+                // Start auto-refresh after initial image load
+                startAutoRefresh();
+            } else {
+                console.error('Failed to load initial image');
+            }
+            
+            setupFullscreenModal();
+        }
+
+        function setupFullscreenModal() {
+            const modal = document.getElementById('fullscreen-modal');
+            const fullscreenImg = document.getElementById('fullscreen-image');
+            const closeButton = document.getElementById('close-modal');
+            const mainImage = document.getElementById('main-image');
+            
+            function openFullscreen() {
+                if (mainImage.src) {
+                    fullscreenImg.src = mainImage.src;
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+            
+            function closeFullscreen() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            mainImage.addEventListener('click', openFullscreen);
+            closeButton.addEventListener('click', closeFullscreen);
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeFullscreen();
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeFullscreen();
+                }
+            });
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, push, onValue, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        const firebaseConfig = {
             apiKey: "AIzaSyD2g8-C2jQBvByd0AUxU23OsU6jCObLRAw",
             authDomain: "lamp-785f9.firebaseapp.com",
             databaseURL: "https://lamp-785f9-default-rtdb.europe-west1.firebasedatabase.app",
