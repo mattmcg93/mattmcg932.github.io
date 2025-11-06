@@ -415,7 +415,7 @@
                 img.onload = () => resolve(true);
                 img.onerror = () => resolve(false);
                 img.src = url;
-                setTimeout(() => resolve(false), 5000);
+                setTimeout(() => resolve(false), 10000);
             });
         }
         
@@ -452,7 +452,7 @@
         function startAutoRefresh(modal = false) {
             return setInterval(async () => {
                 await refreshMainImage(modal);
-            }, 5000);
+            }, 10000);
         }
 
         async function init() {
