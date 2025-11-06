@@ -195,9 +195,6 @@
     <div class="main-container">
         <div class="header">
             <h1>Cat Monitor</h1>
-            <div style="color: white; font-weight: bold; margin-top: 15px; font-size: 1.3em;">
-                <span id="cat-status">Cat Status: Loading...</span>
-            </div>
         </div>
 
         <div class="sensor-section">
@@ -335,139 +332,101 @@
     </script>
 
     <script>
-        const CAT_STATUS_ID = "1K2iYzfv57zktNGYwWMRMLdZ9ukiCiHp4";
         const DRIVE_ID = "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i";
 
-        async function fetchCatStatus() {
-            const strategies = [
-                // Try direct download link with different variations
-                `https://drive.google.com/uc?id=${CAT_STATUS_ID}&export=download`,
-                `https://drive.google.com/uc?export=download&id=${CAT_STATUS_ID}`,
-                `https://docs.google.com/uc?id=${CAT_STATUS_ID}&export=download`,
-                
-                // Try public share link
-                `https://drive.google.com/file/d/${CAT_STATUS_ID}/view`
+        function generateAllPossibleUrls(driveId) {
+            const timestamp = Date.now();
+            const randomParam = Math.random().toString(36).substring(7);
+            return [
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
+                `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`,
             ];
-
-            for (const url of strategies) {
-                try {
-                    console.log(`Attempting to fetch cat status from: ${url}`);
-                    
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        mode: 'no-cors',
-                        cache: 'no-store',
-                        headers: {
-                            'Content-Type': 'text/plain'
-                        }
-                    });
-
-                    // For no-cors responses, we can't read the content directly
-                    if (response.type === 'opaque') {
-                        console.warn('Opaque response received');
-                        continue;
-                    }
-
-                    const text = await response.text();
-                    console.log('Fetched text:', text);
-
-                    const cleanText = text.trim().toUpperCase();
-                    
-                    if (cleanText === 'IN' || cleanText === 'OUT') {
-                        return cleanText;
-                    }
-                } catch (error) {
-                    console.error('Cat status fetch error:', error);
-                }
-            }
-
-            console.error('All cat status fetch attempts failed');
-            return null;
         }
 
-        async function extremeFetchImage(driveId) {
-            const strategies = [
-                `https://drive.google.com/uc?id=${driveId}&export=download`,
-                `https://docs.google.com/uc?id=${driveId}&export=download`,
-                `https://lh3.googleusercontent.com/d/${driveId}=w2000`,
-                `https://drive.google.com/thumbnail?id=${driveId}`
+        function getCORSProxies() {
+            return [
+                'https://api.allorigins.win/raw?url=',
+                'https://api.codetabs.com/v1/proxy?quest=',
+                'https://corsproxy.io/?',
+                'https://thingproxy.freeboard.io/fetch/',
             ];
+        }
 
-            for (const url of strategies) {
+        async function extremeFetchImage(driveId, isRefresh = false) {
+            const urls = generateAllPossibleUrls(driveId);
+            const urlsToTry = isRefresh ? urls : urls;
+            
+            for (let i = 0; i < urlsToTry.length; i++) {
+                const url = urlsToTry[i];
                 try {
-                    console.log(`Attempting to fetch image from: ${url}`);
-                    
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        mode: 'no-cors',
+                    let response = await fetch(url, { 
+                        mode: 'cors',
+                        credentials: 'omit',
+                        referrerPolicy: 'no-referrer',
                         cache: 'no-store'
                     });
-
-                    // For no-cors responses, we can't read the content directly
-                    if (response.type === 'opaque') {
-                        // Attempt to create an Image object
-                        return await new Promise((resolve, reject) => {
-                            const img = new Image();
-                            img.onload = () => resolve(url);
-                            img.onerror = () => resolve(null);
-                            img.src = url;
-                        });
-                    }
-
-                    const blob = await response.blob();
                     
-                    if (blob.size > 0 && blob.type.startsWith('image/')) {
-                        return URL.createObjectURL(blob);
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        if (blob.size > 0 && blob.type.startsWith('image/')) {
+                            return URL.createObjectURL(blob);
+                        }
                     }
-                } catch (error) {
-                    console.error('Image fetch error:', error);
+                } catch (e) {
+                    try {
+                        let response = await fetch(url, { mode: 'no-cors', cache: 'no-store' });
+                        if (await testImageLoad(url)) {
+                            return url;
+                        }
+                    } catch (e2) {
+                        continue;
+                    }
                 }
             }
-
-            console.error('All image fetch attempts failed');
+            
+            if (isRefresh) return null;
+            
+            const proxies = getCORSProxies();
+            for (const proxy of proxies) {
+                for (const url of urls.slice(0, 2)) {
+                    try {
+                        const proxyUrl = proxy + encodeURIComponent(url);
+                        const response = await fetch(proxyUrl);
+                        
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            if (blob.size > 1000) {
+                                return URL.createObjectURL(blob);
+                            }
+                        }
+                    } catch (e) {
+                        continue;
+                    }
+                }
+            }
+            
             return null;
         }
         
-        function setupFullscreenModal() {
-            const modal = document.getElementById('fullscreen-modal');
-            const fullscreenImg = document.getElementById('fullscreen-image');
-            const closeButton = document.getElementById('close-modal');
-            const mainImage = document.getElementById('main-image');
-            
-            function openFullscreen() {
-                if (mainImage.src) {
-                    fullscreenImg.src = mainImage.src;
-                    modal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
-            }
-            
-            function closeFullscreen() {
-                modal.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-            
-            mainImage.addEventListener('click', openFullscreen);
-            closeButton.addEventListener('click', closeFullscreen);
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeFullscreen();
-            });
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closeFullscreen();
-                }
+        function testImageLoad(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+                setTimeout(() => resolve(false), 5000);
             });
         }
-
-        async function refreshMainImage() {
-            const mainImage = document.getElementById('main-image');
-            const fullscreenImg = document.getElementById('fullscreen-image');
+        
+        async function refreshMainImage(modal = false) {
+            const mainImage = modal 
+                ? document.getElementById('fullscreen-image') 
+                : document.getElementById('main-image');
             
             mainImage.style.opacity = '0.5';
             
-            const newMainUrl = await extremeFetchImage(DRIVE_ID);
+            let newMainUrl = await extremeFetchImage(DRIVE_ID, true);
             
             if (newMainUrl) {
                 const oldSrc = mainImage.src;
@@ -476,10 +435,6 @@
                 }
                 
                 mainImage.src = newMainUrl;
-                
-                if (document.getElementById('fullscreen-modal').classList.contains('active')) {
-                    fullscreenImg.src = newMainUrl;
-                }
                 
                 mainImage.onload = () => {
                     mainImage.style.opacity = '1';
@@ -494,40 +449,73 @@
             }
         }
         
-        function startAutoRefresh() {
+        function startAutoRefresh(modal = false) {
             return setInterval(async () => {
-                await refreshMainImage();
+                await refreshMainImage(modal);
             }, 5000);
         }
 
         async function init() {
-            // Fetch and update cat status
-            try {
-                const catStatus = await fetchCatStatus();
-                if (catStatus) {
-                    document.getElementById('cat-status').textContent = `Cat is Currently: ${catStatus}`;
-                } else {
-                    document.getElementById('cat-status').textContent = 'Cat Status: Failed to load';
-                }
-            } catch (error) {
-                console.error('Error fetching cat status:', error);
-                document.getElementById('cat-status').textContent = 'Cat Status: Failed to load';
-            }
-
-            // Load main image
+            const mainImage = document.getElementById('main-image');
+            
             try {
                 const imageUrl = await extremeFetchImage(DRIVE_ID);
+                
                 if (imageUrl) {
-                    const mainImage = document.getElementById('main-image');
                     mainImage.src = imageUrl;
+                    
+                    // Start auto-refresh after initial image load
+                    startAutoRefresh();
+                } else {
+                    console.error('Failed to load initial image');
                 }
+                
+                setupFullscreenModal();
             } catch (error) {
-                console.error('Error loading main image:', error);
+                console.error('Initialization error:', error);
             }
+        }
 
-            // Setup fullscreen modal and auto-refresh
-            setupFullscreenModal();
-            startAutoRefresh();
+        function setupFullscreenModal() {
+            const modal = document.getElementById('fullscreen-modal');
+            const fullscreenImg = document.getElementById('fullscreen-image');
+            const closeButton = document.getElementById('close-modal');
+            const mainImage = document.getElementById('main-image');
+            let fullscreenRefreshInterval = null;
+            
+            function openFullscreen() {
+                if (mainImage.src) {
+                    fullscreenImg.src = mainImage.src;
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Start aggressive refresh for fullscreen
+                    fullscreenRefreshInterval = startAutoRefresh(true);
+                }
+            }
+            
+            function closeFullscreen() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                
+                // Stop fullscreen refresh
+                if (fullscreenRefreshInterval) {
+                    clearInterval(fullscreenRefreshInterval);
+                }
+            }
+            
+            mainImage.addEventListener('click', openFullscreen);
+            closeButton.addEventListener('click', closeFullscreen);
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeFullscreen();
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeFullscreen();
+                }
+            });
         }
 
         window.addEventListener('load', init);
