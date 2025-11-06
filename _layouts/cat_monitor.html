@@ -338,29 +338,20 @@
         const CAT_STATUS_ID = "1K2iYzfv57zktNGYwWMRMLdZ9ukiCiHp4";
         const DRIVE_ID = "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i";
 
-        function getCORSProxies() {
-            return [
-                'https://api.allorigins.win/raw?url=',
-                'https://api.codetabs.com/v1/proxy?quest=',
-                'https://corsproxy.io/?',
-                'https://thingproxy.freeboard.io/fetch/',
-            ];
-        }
-
         async function fetchCatStatus() {
-            const timestamp = Date.now();
-            const fileId = "1K2iYzfv57zktNGYwWMRMLdZ9ukiCiHp4";
-            
-            // Use multiple strategies to fetch the file
-            const urls = [
-                `https://drive.google.com/uc?id=${fileId}&export=download&t=${timestamp}`,
-                `https://docs.google.com/uc?id=${fileId}&export=download&t=${timestamp}`,
-                `https://drive.google.com/file/d/${fileId}/view`
+            const strategies = [
+                // Try direct download link with different variations
+                `https://drive.google.com/uc?id=${CAT_STATUS_ID}&export=download`,
+                `https://drive.google.com/uc?export=download&id=${CAT_STATUS_ID}`,
+                `https://docs.google.com/uc?id=${CAT_STATUS_ID}&export=download`,
+                
+                // Try public share link
+                `https://drive.google.com/file/d/${CAT_STATUS_ID}/view`
             ];
-        
-            for (const url of urls) {
+
+            for (const url of strategies) {
                 try {
-                    console.log(`Attempting to fetch from: ${url}`);
+                    console.log(`Attempting to fetch cat status from: ${url}`);
                     
                     const response = await fetch(url, {
                         method: 'GET',
@@ -370,49 +361,39 @@
                             'Content-Type': 'text/plain'
                         }
                     });
-        
-                    console.log('Response status:', response.status);
-        
-                    if (!response.ok) {
-                        console.error('Response not OK');
+
+                    // For no-cors responses, we can't read the content directly
+                    if (response.type === 'opaque') {
+                        console.warn('Opaque response received');
                         continue;
                     }
-        
+
                     const text = await response.text();
                     console.log('Fetched text:', text);
-        
+
                     const cleanText = text.trim().toUpperCase();
                     
                     if (cleanText === 'IN' || cleanText === 'OUT') {
                         return cleanText;
                     }
                 } catch (error) {
-                    console.error('Fetch error for URL:', url, error);
+                    console.error('Cat status fetch error:', error);
                 }
             }
-        
-            console.error('All fetch attempts failed');
+
+            console.error('All cat status fetch attempts failed');
             return null;
         }
 
-        function generateAllPossibleUrls(driveId) {
-            const timestamp = Date.now();
-            const randomParam = Math.random().toString(36).substring(7);
-            return [
-                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
-                `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
-                `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`,
-            ];
-        }
-
         async function extremeFetchImage(driveId) {
-            const urls = [
+            const strategies = [
                 `https://drive.google.com/uc?id=${driveId}&export=download`,
                 `https://docs.google.com/uc?id=${driveId}&export=download`,
-                `https://lh3.googleusercontent.com/d/${driveId}=w2000`
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000`,
+                `https://drive.google.com/thumbnail?id=${driveId}`
             ];
-        
-            for (const url of urls) {
+
+            for (const url of strategies) {
                 try {
                     console.log(`Attempting to fetch image from: ${url}`);
                     
@@ -421,77 +402,32 @@
                         mode: 'no-cors',
                         cache: 'no-store'
                     });
-        
-                    console.log('Image response status:', response.status);
-        
-                    if (response.type === 'opaque' || response.ok) {
-                        // For opaque responses or successful responses
-                        const blob = await response.blob();
-                        
-                        if (blob.size > 0 && blob.type.startsWith('image/')) {
-                            return URL.createObjectURL(blob);
-                        }
+
+                    // For no-cors responses, we can't read the content directly
+                    if (response.type === 'opaque') {
+                        // Attempt to create an Image object
+                        return await new Promise((resolve, reject) => {
+                            const img = new Image();
+                            img.onload = () => resolve(url);
+                            img.onerror = () => resolve(null);
+                            img.src = url;
+                        });
+                    }
+
+                    const blob = await response.blob();
+                    
+                    if (blob.size > 0 && blob.type.startsWith('image/')) {
+                        return URL.createObjectURL(blob);
                     }
                 } catch (error) {
                     console.error('Image fetch error:', error);
                 }
             }
-        
+
             console.error('All image fetch attempts failed');
             return null;
         }
-            
-            
         
-        function testImageLoad(url) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve(true);
-                img.onerror = () => resolve(false);
-                img.src = url;
-                setTimeout(() => resolve(false), 10000);
-            });
-        }
-        
-        async function refreshMainImage() {
-            const mainImage = document.getElementById('main-image');
-            const fullscreenImg = document.getElementById('fullscreen-image');
-            
-            mainImage.style.opacity = '0.5';
-            
-            let newMainUrl = await extremeFetchImage(DRIVE_ID, true);
-            
-            if (newMainUrl) {
-                const oldSrc = mainImage.src;
-                if (oldSrc && oldSrc.startsWith('blob:')) {
-                    URL.revokeObjectURL(oldSrc);
-                }
-                
-                mainImage.src = newMainUrl;
-                
-                if (document.getElementById('fullscreen-modal').classList.contains('active')) {
-                    fullscreenImg.src = newMainUrl;
-                }
-                
-                mainImage.onload = () => {
-                    mainImage.style.opacity = '1';
-                };
-                mainImage.onerror = () => {
-                    mainImage.style.opacity = '1';
-                    console.error('Image load error');
-                };
-            } else {
-                mainImage.style.opacity = '1';
-                console.error('Failed to refresh image');
-            }
-        }
-        
-        function startAutoRefresh() {
-            return setInterval(async () => {
-                await refreshMainImage();
-            }, 10000);
-        }
-
         function setupFullscreenModal() {
             const modal = document.getElementById('fullscreen-modal');
             const fullscreenImg = document.getElementById('fullscreen-image');
@@ -523,6 +459,45 @@
                     closeFullscreen();
                 }
             });
+        }
+
+        async function refreshMainImage() {
+            const mainImage = document.getElementById('main-image');
+            const fullscreenImg = document.getElementById('fullscreen-image');
+            
+            mainImage.style.opacity = '0.5';
+            
+            const newMainUrl = await extremeFetchImage(DRIVE_ID);
+            
+            if (newMainUrl) {
+                const oldSrc = mainImage.src;
+                if (oldSrc && oldSrc.startsWith('blob:')) {
+                    URL.revokeObjectURL(oldSrc);
+                }
+                
+                mainImage.src = newMainUrl;
+                
+                if (document.getElementById('fullscreen-modal').classList.contains('active')) {
+                    fullscreenImg.src = newMainUrl;
+                }
+                
+                mainImage.onload = () => {
+                    mainImage.style.opacity = '1';
+                };
+                mainImage.onerror = () => {
+                    mainImage.style.opacity = '1';
+                    console.error('Image load error');
+                };
+            } else {
+                mainImage.style.opacity = '1';
+                console.error('Failed to refresh image');
+            }
+        }
+        
+        function startAutoRefresh() {
+            return setInterval(async () => {
+                await refreshMainImage();
+            }, 5000);
         }
 
         async function init() {
