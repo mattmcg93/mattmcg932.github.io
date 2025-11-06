@@ -349,30 +349,50 @@
 
         async function fetchCatStatus() {
             const timestamp = Date.now();
-            const directUrl = `https://drive.google.com/uc?id=${CAT_STATUS_ID}&export=download&t=${timestamp}`;
+            const fileId = "1K2iYzfv57zktNGYwWMRMLdZ9ukiCiHp4";
             
-            try {
-                const response = await fetch(directUrl);
-                
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+            // Use multiple strategies to fetch the file
+            const urls = [
+                `https://drive.google.com/uc?id=${fileId}&export=download&t=${timestamp}`,
+                `https://docs.google.com/uc?id=${fileId}&export=download&t=${timestamp}`,
+                `https://drive.google.com/file/d/${fileId}/view`
+            ];
+        
+            for (const url of urls) {
+                try {
+                    console.log(`Attempting to fetch from: ${url}`);
+                    
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        mode: 'no-cors',
+                        cache: 'no-store',
+                        headers: {
+                            'Content-Type': 'text/plain'
+                        }
+                    });
+        
+                    console.log('Response status:', response.status);
+        
+                    if (!response.ok) {
+                        console.error('Response not OK');
+                        continue;
+                    }
+        
+                    const text = await response.text();
+                    console.log('Fetched text:', text);
+        
+                    const cleanText = text.trim().toUpperCase();
+                    
+                    if (cleanText === 'IN' || cleanText === 'OUT') {
+                        return cleanText;
+                    }
+                } catch (error) {
+                    console.error('Fetch error for URL:', url, error);
                 }
-                
-                const text = await response.text();
-                
-                // Check for text that might indicate IN or OUT
-                const cleanText = text.trim().toUpperCase();
-                
-                if (cleanText === 'IN' || cleanText === 'OUT') {
-                    return cleanText;
-                } else {
-                    console.error('Unexpected file content:', text);
-                    return null;
-                }
-            } catch (error) {
-                console.error('Fetch error:', error);
-                return null;
             }
+        
+            console.error('All fetch attempts failed');
+            return null;
         }
 
         function generateAllPossibleUrls(driveId) {
@@ -385,61 +405,43 @@
             ];
         }
 
-        async function extremeFetchImage(driveId, isRefresh = false) {
-            const urls = generateAllPossibleUrls(driveId);
-            const urlsToTry = isRefresh ? urls : urls;
-            
-            for (let i = 0; i < urlsToTry.length; i++) {
-                const url = urlsToTry[i];
+        async function extremeFetchImage(driveId) {
+            const urls = [
+                `https://drive.google.com/uc?id=${driveId}&export=download`,
+                `https://docs.google.com/uc?id=${driveId}&export=download`,
+                `https://lh3.googleusercontent.com/d/${driveId}=w2000`
+            ];
+        
+            for (const url of urls) {
                 try {
-                    let response = await fetch(url, { 
-                        mode: 'cors',
-                        credentials: 'omit',
-                        referrerPolicy: 'no-referrer',
+                    console.log(`Attempting to fetch image from: ${url}`);
+                    
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        mode: 'no-cors',
                         cache: 'no-store'
                     });
-                    
-                    if (response.ok) {
+        
+                    console.log('Image response status:', response.status);
+        
+                    if (response.type === 'opaque' || response.ok) {
+                        // For opaque responses or successful responses
                         const blob = await response.blob();
+                        
                         if (blob.size > 0 && blob.type.startsWith('image/')) {
                             return URL.createObjectURL(blob);
                         }
                     }
-                } catch (e) {
-                    try {
-                        let response = await fetch(url, { mode: 'no-cors', cache: 'no-store' });
-                        if (await testImageLoad(url)) {
-                            return url;
-                        }
-                    } catch (e2) {
-                        continue;
-                    }
+                } catch (error) {
+                    console.error('Image fetch error:', error);
                 }
             }
-            
-            if (isRefresh) return null;
-            
-            const proxies = getCORSProxies();
-            for (const proxy of proxies) {
-                for (const url of urls.slice(0, 2)) {
-                    try {
-                        const proxyUrl = proxy + encodeURIComponent(url);
-                        const response = await fetch(proxyUrl);
-                        
-                        if (response.ok) {
-                            const blob = await response.blob();
-                            if (blob.size > 1000) {
-                                return URL.createObjectURL(blob);
-                            }
-                        }
-                    } catch (e) {
-                        continue;
-                    }
-                }
-            }
-            
+        
+            console.error('All image fetch attempts failed');
             return null;
         }
+            
+            
         
         function testImageLoad(url) {
             return new Promise((resolve) => {
