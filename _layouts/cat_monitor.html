@@ -195,6 +195,9 @@
     <div class="main-container">
         <div class="header">
             <h1>Cat Monitor</h1>
+            <div style="color: white; font-weight: bold; margin-top: 15px; font-size: 1.3em;">
+                <span id="cat-status">Cat Status: Loading...</span>
+            </div>
         </div>
 
         <div class="sensor-section">
@@ -332,7 +335,70 @@
     </script>
 
     <script>
+        const CAT_STATUS_ID = "10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI";
         const DRIVE_ID = "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i";
+
+        function getCORSProxies() {
+            return [
+                'https://api.allorigins.win/raw?url=',
+                'https://api.codetabs.com/v1/proxy?quest=',
+                'https://corsproxy.io/?',
+                'https://thingproxy.freeboard.io/fetch/',
+            ];
+        }
+
+        async function fetchCatStatus() {
+            const timestamp = Date.now();
+            const urls = [
+                `https://drive.google.com/uc?id=${CAT_STATUS_ID}&export=download&t=${timestamp}`,
+                `https://docs.google.com/uc?id=${CAT_STATUS_ID}&export=download&t=${timestamp}`,
+                `https://drive.google.com/uc?export=download&id=${CAT_STATUS_ID}&t=${timestamp}`,
+            ];
+            
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url, {
+                        cache: 'no-store',
+                        headers: { 
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const text = await response.text();
+                        if (text && text.trim()) {
+                            return text.trim();
+                        }
+                    }
+                } catch (e) {
+                    console.error('Direct cat status fetch failed:', e);
+                }
+            }
+            
+            const proxies = getCORSProxies();
+            for (const proxy of proxies) {
+                for (const url of urls.slice(0, 2)) {
+                    try {
+                        const proxyUrl = proxy + encodeURIComponent(url);
+                        const response = await fetch(proxyUrl, {
+                            cache: 'no-store'
+                        });
+                        
+                        if (response.ok) {
+                            const text = await response.text();
+                            if (text && text.trim()) {
+                                return text.trim();
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Proxy cat status fetch failed:', e);
+                    }
+                }
+            }
+            
+            return null;
+        }
 
         function generateAllPossibleUrls(driveId) {
             const timestamp = Date.now();
@@ -341,15 +407,6 @@
                 `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
                 `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
                 `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`,
-            ];
-        }
-
-        function getCORSProxies() {
-            return [
-                'https://api.allorigins.win/raw?url=',
-                'https://api.codetabs.com/v1/proxy?quest=',
-                'https://corsproxy.io/?',
-                'https://thingproxy.freeboard.io/fetch/',
             ];
         }
 
@@ -415,14 +472,13 @@
                 img.onload = () => resolve(true);
                 img.onerror = () => resolve(false);
                 img.src = url;
-                setTimeout(() => resolve(false), 10000);
+                setTimeout(() => resolve(false), 5000);
             });
         }
         
-        async function refreshMainImage(modal = false) {
-            const mainImage = modal 
-                ? document.getElementById('fullscreen-image') 
-                : document.getElementById('main-image');
+        async function refreshMainImage() {
+            const mainImage = document.getElementById('main-image');
+            const fullscreenImg = document.getElementById('fullscreen-image');
             
             mainImage.style.opacity = '0.5';
             
@@ -435,6 +491,10 @@
                 }
                 
                 mainImage.src = newMainUrl;
+                
+                if (document.getElementById('fullscreen-modal').classList.contains('active')) {
+                    fullscreenImg.src = newMainUrl;
+                }
                 
                 mainImage.onload = () => {
                     mainImage.style.opacity = '1';
@@ -449,31 +509,10 @@
             }
         }
         
-        function startAutoRefresh(modal = false) {
+        function startAutoRefresh() {
             return setInterval(async () => {
-                await refreshMainImage(modal);
-            }, 10000);
-        }
-
-        async function init() {
-            const mainImage = document.getElementById('main-image');
-            
-            try {
-                const imageUrl = await extremeFetchImage(DRIVE_ID);
-                
-                if (imageUrl) {
-                    mainImage.src = imageUrl;
-                    
-                    // Start auto-refresh after initial image load
-                    startAutoRefresh();
-                } else {
-                    console.error('Failed to load initial image');
-                }
-                
-                setupFullscreenModal();
-            } catch (error) {
-                console.error('Initialization error:', error);
-            }
+                await refreshMainImage();
+            }, 5000);
         }
 
         function setupFullscreenModal() {
@@ -481,27 +520,18 @@
             const fullscreenImg = document.getElementById('fullscreen-image');
             const closeButton = document.getElementById('close-modal');
             const mainImage = document.getElementById('main-image');
-            let fullscreenRefreshInterval = null;
             
             function openFullscreen() {
                 if (mainImage.src) {
                     fullscreenImg.src = mainImage.src;
                     modal.classList.add('active');
                     document.body.style.overflow = 'hidden';
-                    
-                    // Start aggressive refresh for fullscreen
-                    fullscreenRefreshInterval = startAutoRefresh(true);
                 }
             }
             
             function closeFullscreen() {
                 modal.classList.remove('active');
                 document.body.style.overflow = '';
-                
-                // Stop fullscreen refresh
-                if (fullscreenRefreshInterval) {
-                    clearInterval(fullscreenRefreshInterval);
-                }
             }
             
             mainImage.addEventListener('click', openFullscreen);
@@ -516,6 +546,36 @@
                     closeFullscreen();
                 }
             });
+        }
+
+        async function init() {
+            // Fetch and update cat status
+            try {
+                const catStatus = await fetchCatStatus();
+                if (catStatus) {
+                    document.getElementById('cat-status').textContent = `Cat is Currently: ${catStatus}`;
+                } else {
+                    document.getElementById('cat-status').textContent = 'Cat Status: Failed to load';
+                }
+            } catch (error) {
+                console.error('Error fetching cat status:', error);
+                document.getElementById('cat-status').textContent = 'Cat Status: Failed to load';
+            }
+
+            // Load main image
+            try {
+                const imageUrl = await extremeFetchImage(DRIVE_ID);
+                if (imageUrl) {
+                    const mainImage = document.getElementById('main-image');
+                    mainImage.src = imageUrl;
+                }
+            } catch (error) {
+                console.error('Error loading main image:', error);
+            }
+
+            // Setup fullscreen modal and auto-refresh
+            setupFullscreenModal();
+            startAutoRefresh();
         }
 
         window.addEventListener('load', init);
