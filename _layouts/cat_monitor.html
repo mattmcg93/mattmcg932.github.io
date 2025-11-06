@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cat Monitor2</title>
+    <title>Cat Monitor</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -349,32 +349,31 @@
 
         async function fetchCatStatus() {
             const timestamp = Date.now();
-            const urls = [
-                `https://drive.google.com/uc?id=${CAT_STATUS_ID}&export=download&t=${timestamp}`,
-                `https://docs.google.com/uc?id=${CAT_STATUS_ID}&export=download&t=${timestamp}`,
-                `https://drive.google.com/uc?export=download&id=${CAT_STATUS_ID}&t=${timestamp}`,
-            ];
+            const directUrl = `https://drive.google.com/uc?id=${CAT_STATUS_ID}&export=download&t=${timestamp}`;
             
-            for (const url of urls) {
-                try {
-                    const response = await fetch(url, {
-                        cache: 'no-store',
-                        headers: { 
-                            'Cache-Control': 'no-cache, no-store, must-revalidate',
-                            'Pragma': 'no-cache'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        const text = await response.text();
-                        if (text && text.trim()) {
-                            return text.trim();
-                        }
-                    }
-                } catch (e) {
-                    console.error('Direct cat status fetch failed:', e);
+            try {
+                const response = await fetch(directUrl);
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
+                
+                const text = await response.text();
+                
+                // Check for text that might indicate IN or OUT
+                const cleanText = text.trim().toUpperCase();
+                
+                if (cleanText === 'IN' || cleanText === 'OUT') {
+                    return cleanText;
+                } else {
+                    console.error('Unexpected file content:', text);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                return null;
             }
+        }
             
             const proxies = getCORSProxies();
             for (const proxy of proxies) {
