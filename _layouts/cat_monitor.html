@@ -1,568 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cat Monitor</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .main-container { max-width: 1400px; margin: 0 auto; }
-        
-        .sensor-section {
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        .control-box {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 15px 0;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-        }
-        
-        .lamp-status-text {
-            font-size: 1em;
-            color: #333;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        
-        .lamp-controls {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cat Monitor</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .lamp-button {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 1.2em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            min-width: 140px;
-        }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      font-family: Arial, sans-serif;
+    }
 
-        .lamp-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
+    body {
+      color: white;
+    }
 
-        .lamp-button.off {
-            background: linear-gradient(135deg, #dc3545, #c82333);
-        }
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .lamp-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+    .images-wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      background: #000;
+    }
 
-        .firebase-status {
-            text-align: center;
-            margin-top: 10px;
-            padding: 8px;
-            border-radius: 5px;
-            font-size: 0.85em;
-        }
+    @media (min-width: 769px) {
+      .images-wrap {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
 
-        .firebase-connected {
-            background: rgba(40, 167, 69, 0.1);
-            color: #155724;
-            border: 1px solid rgba(40, 167, 69, 0.2);
-        }
+    .image-box {
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+    }
 
-        .firebase-disconnected {
-            background: rgba(220, 53, 69, 0.1);
-            color: #721c24;
-            border: 1px solid rgba(220, 53, 69, 0.2);
-        }
-        
-        .main-image-section {
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            position: relative;
-        }
+    .camera-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      background: #000;
+    }
 
-        .image-title {
-            text-align: center;
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-        }
+    .controls {
+      margin-top: auto;
+      width: 100%;
+      padding: 16px;
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
 
-        .image-hint {
-            text-align: center;
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-        }
+    .lamp-status-text {
+      text-align: center;
+      font-size: 14px;
+      color: #ddd;
+    }
 
-        .main-image {
-            width: 100%;
-            height: auto;
-            border-radius: 15px;
-            min-height: 300px;
-            background: #f0f0f0;
-            object-fit: contain;
-            max-height: 70vh;
-            cursor: pointer;
-            display: block;
-        }
+    .lamp-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-        @media (max-width: 768px) {
-            body { padding: 15px; }
-            .header h1 { font-size: 2em; }
-            .sensor-section { padding: 20px; }
-            .main-image { max-height: 50vh; }
-        }
+    .lamp-button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 14px 22px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      min-width: 160px;
+    }
 
-        .fullscreen-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
+    .lamp-button.off {
+      background: #dc3545;
+    }
 
-        .fullscreen-modal.active {
-            display: flex;
-        }
+    .lamp-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
-        .fullscreen-image {
-            max-width: 95vw;
-            max-height: 95vh;
-            object-fit: contain;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1001;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-
-        .close-button:hover {
-            background: rgba(0, 0, 0, 0.9);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-    </style>
+    .firebase-status {
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="header">
-            <h1>Cat Monitor</h1>
-        </div>
-
-        <div class="sensor-section">
-            <div class="lamp-status-text" id="lamp-status-description">Lamp is currently: Unknown. To turn it on/off, press the button below (may take ~20 seconds to update image)</div>
-            <div class="control-box">
-                <div class="lamp-controls">
-                    <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display: none;">
-                        <span>Turn Lamp ON</span>
-                        <div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Camera below</div>
-                    </button>
-                    <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()" style="display: none;">
-                        <span>Turn Lamp OFF</span>
-                        <div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Camera below</div>
-                    </button>
-                </div>
-            </div>
-            <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
-        </div>
-
-        <div class="main-image-section">
-            <div class="image-title">Camera 1</div>
-            <div class="image-hint">Click the image to view fullscreen</div>
-            <img id="main-image" class="main-image" alt="Cat Monitor Camera 1">
-        </div>
-
-        <div class="main-image-section">
-            <div class="image-title">Camera 2</div>
-            <div class="image-hint">Click the image to view fullscreen</div>
-            <img id="second-image" class="main-image" alt="Cat Monitor Camera 2">
-        </div>
+  <div class="page">
+    <div class="images-wrap">
+      <div class="image-box">
+        <img id="main-image" class="camera-image" alt="Camera 1" />
+      </div>
+      <div class="image-box">
+        <img id="second-image" class="camera-image" alt="Camera 2" />
+      </div>
     </div>
 
-    <div class="fullscreen-modal" id="fullscreen-modal">
-        <button class="close-button" id="close-modal">EXIT FULLSCREEN</button>
-        <img class="fullscreen-image" id="fullscreen-image" alt="Fullscreen View">
+    <div class="controls">
+      <div class="lamp-status-text" id="lamp-status-description">
+        Lamp is currently: Unknown
+      </div>
+
+      <div class="lamp-controls">
+        <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display:none;">
+          Turn Lamp ON
+        </button>
+        <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()" style="display:none;">
+          Turn Lamp OFF
+        </button>
+      </div>
+
+      <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
     </div>
+  </div>
 
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, push, onValue, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getDatabase, ref, push, onValue, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCO_RAFv35TbeamOtsUDT4tPZm2NcyVVSg",
-            authDomain: "westlandneopixel.firebaseapp.com",
-            databaseURL: "https://westlandneopixel-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "westlandneopixel",
-            storageBucket: "westlandneopixel.firebasestorage.app",
-            messagingSenderId: "367685507811",
-            appId: "1:367685507811:web:dcdbb08de7669dc862c3d6",
-            measurementId: "G-ZW7K5VTPPD"
-        };
+    const firebaseConfig = {
+      apiKey: "AIzaSyCO_RAFv35TbeamOtsUDT4tPZm2NcyVVSg",
+      authDomain: "westlandneopixel.firebaseapp.com",
+      databaseURL: "https://westlandneopixel-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "westlandneopixel",
+      storageBucket: "westlandneopixel.firebasestorage.app",
+      messagingSenderId: "367685507811",
+      appId: "1:367685507811:web:dcdbb08de7669dc862c3d6",
+      measurementId: "G-ZW7K5VTPPD"
+    };
 
-        let database, lampCommandsRef, lampStatusRef;
-        let firebaseConnected = false;
-        let currentLampState = 'Unknown';
+    let database, lampCommandsRef, lampStatusRef;
+    let firebaseConnected = false;
 
+    try {
+      const app = initializeApp(firebaseConfig);
+      database = getDatabase(app);
+      lampCommandsRef = ref(database, 'lamp_commands');
+      lampStatusRef = ref(database, 'lamp_status');
+
+      onValue(ref(database, '.info/connected'), (snapshot) => {
+        firebaseConnected = snapshot.val() === true;
+        updateFirebaseStatus();
+      });
+
+      onValue(lampStatusRef, (snapshot) => {
+        updateLampStatusDisplay(snapshot.val());
+      });
+    } catch (error) {
+      console.error('Firebase initialization error:', error);
+      updateFirebaseStatus();
+    }
+
+    function updateLampStatusDisplay(status) {
+      const lampStatusDesc = document.getElementById('lamp-status-description');
+      const lampOnBtn = document.getElementById('lamp-on-btn');
+      const lampOffBtn = document.getElementById('lamp-off-btn');
+
+      if (status && status.state) {
+        const state = status.state.toUpperCase();
+        lampStatusDesc.textContent = `Lamp is currently: ${state}`;
+
+        lampOnBtn.style.display = state === 'OFF' ? 'inline-block' : 'none';
+        lampOffBtn.style.display = state === 'ON' ? 'inline-block' : 'none';
+      } else {
+        lampStatusDesc.textContent = 'Lamp is currently: Unknown';
+        lampOnBtn.style.display = 'inline-block';
+        lampOffBtn.style.display = 'inline-block';
+      }
+    }
+
+    function updateFirebaseStatus() {
+      const statusDiv = document.getElementById('firebase-status');
+      statusDiv.textContent = firebaseConnected ? 'Firebase Connected' : 'Firebase Disconnected';
+    }
+
+    async function sendLampCommand(action) {
+      if (!firebaseConnected) {
+        alert('Error: Firebase not connected');
+        return;
+      }
+
+      try {
+        await push(lampCommandsRef, {
+          action,
+          timestamp: serverTimestamp(),
+          source: 'webpage',
+          id: Date.now() + '_' + Math.random().toString(36).substring(2, 8)
+        });
+      } catch (error) {
+        console.error('Lamp command error:', error);
+        alert(`Error: ${error.message}`);
+      }
+    }
+
+    window.lampOn = async function () {
+      await sendLampCommand('on');
+    };
+
+    window.lampOff = async function () {
+      await sendLampCommand('off');
+    };
+  </script>
+
+  <script>
+    const IMAGES = [
+      {
+        driveId: "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i",
+        imgId: "main-image"
+      },
+      {
+        driveId: "17lGGBoe3Odciva8GFPOr6sTQtNCKDaD-",
+        imgId: "second-image"
+      }
+    ];
+
+    const activeBlobUrls = {};
+
+    function generateAllPossibleUrls(driveId) {
+      const timestamp = Date.now();
+      const randomParam = Math.random().toString(36).substring(2, 10);
+
+      return [
+        `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
+        `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
+        `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`
+      ];
+    }
+
+    function getCORSProxies() {
+      return [
+        'https://api.allorigins.win/raw?url=',
+        'https://api.codetabs.com/v1/proxy?quest=',
+        'https://corsproxy.io/?',
+        'https://thingproxy.freeboard.io/fetch/'
+      ];
+    }
+
+    async function extremeFetchImage(driveId, isRefresh = false) {
+      const urls = generateAllPossibleUrls(driveId);
+
+      for (const url of urls) {
         try {
-            const app = initializeApp(firebaseConfig);
-            database = getDatabase(app);
-            lampCommandsRef = ref(database, 'lamp_commands');
-            lampStatusRef = ref(database, 'lamp_status');
-            
-            onValue(ref(database, '.info/connected'), (snapshot) => {
-                firebaseConnected = snapshot.val() === true;
-                updateFirebaseStatus();
-            });
+          const response = await fetch(url, {
+            mode: 'cors',
+            credentials: 'omit',
+            referrerPolicy: 'no-referrer',
+            cache: 'no-store'
+          });
 
-            onValue(lampStatusRef, (snapshot) => {
-                const status = snapshot.val();
-                updateLampStatusDisplay(status);
-            });
-        } catch (error) {
-            console.error('Firebase initialization error:', error);
-            updateFirebaseStatus();
-        }
-
-        function updateLampStatusDisplay(status) {
-            const lampStatusDesc = document.getElementById('lamp-status-description');
-            const lampOnBtn = document.getElementById('lamp-on-btn');
-            const lampOffBtn = document.getElementById('lamp-off-btn');
-            
-            if (status && status.state) {
-                const state = status.state.toUpperCase();
-                currentLampState = state;
-                
-                lampStatusDesc.textContent = `Lamp is currently: ${state}. To turn it ${state === 'ON' ? 'OFF' : 'ON'}, press the button below (may take ~20 seconds to update image)`;
-                
-                lampOnBtn.style.display = state === 'OFF' ? 'block' : 'none';
-                lampOffBtn.style.display = state === 'ON' ? 'block' : 'none';
-            } else {
-                currentLampState = 'Unknown';
-                lampStatusDesc.textContent = 'Lamp is currently: Unknown. To turn it on/off, press the button below (may take ~20 seconds to update image)';
-                lampOnBtn.style.display = 'block';
-                lampOffBtn.style.display = 'block';
+          if (response.ok) {
+            const blob = await response.blob();
+            if (blob.size > 0 && blob.type.startsWith('image/')) {
+              return URL.createObjectURL(blob);
             }
-        }
+          }
+        } catch (e) {}
+      }
 
-        function updateFirebaseStatus() {
-            const statusDiv = document.getElementById('firebase-status');
-            if (firebaseConnected) {
-                statusDiv.textContent = 'Firebase Connected';
-                statusDiv.className = 'firebase-status firebase-connected';
-            } else {
-                statusDiv.textContent = 'Firebase Disconnected';
-                statusDiv.className = 'firebase-status firebase-disconnected';
+      if (isRefresh) return null;
+
+      const proxies = getCORSProxies();
+      for (const proxy of proxies) {
+        for (const url of urls.slice(0, 2)) {
+          try {
+            const proxyUrl = proxy + encodeURIComponent(url);
+            const response = await fetch(proxyUrl, { cache: 'no-store' });
+
+            if (response.ok) {
+              const blob = await response.blob();
+              if (blob.size > 1000 && blob.type.startsWith('image/')) {
+                return URL.createObjectURL(blob);
+              }
             }
+          } catch (e) {}
+        }
+      }
+
+      return null;
+    }
+
+    function preloadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    async function swapImageWithoutFlash(imgElement, newSrc, imgKey) {
+      try {
+        await preloadImage(newSrc);
+
+        const oldSrc = imgElement.src;
+        imgElement.src = newSrc;
+
+        if (activeBlobUrls[imgKey] && activeBlobUrls[imgKey].startsWith('blob:') && activeBlobUrls[imgKey] !== newSrc) {
+          URL.revokeObjectURL(activeBlobUrls[imgKey]);
         }
 
-        async function sendLampCommand(action) {
-            if (!firebaseConnected) {
-                console.error('Firebase not connected');
-                alert('Error: Firebase not connected');
-                return;
-            }
-            
-            try {
-                const command = {
-                    action: action,
-                    timestamp: serverTimestamp(),
-                    source: 'webpage',
-                    id: Date.now() + '_' + Math.random().toString(36).substring(2, 8)
-                };
-                
-                await push(lampCommandsRef, command);
-            } catch (error) {
-                console.error('Lamp command error:', error);
-                alert(`Error: ${error.message}`);
-            }
+        activeBlobUrls[imgKey] = newSrc;
+
+        if (oldSrc && oldSrc.startsWith('blob:') && oldSrc !== newSrc && oldSrc !== activeBlobUrls[imgKey]) {
+          try {
+            URL.revokeObjectURL(oldSrc);
+          } catch (e) {}
         }
-
-        window.lampOn = async function() {
-            await sendLampCommand('on');
-        };
-
-        window.lampOff = async function() {
-            await sendLampCommand('off');
-        };
-    </script>
-
-    <script>
-        const IMAGES = [
-            {
-                driveId: "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i",
-                imgId: "main-image"
-            },
-            {
-                driveId: "17lGGBoe3Odciva8GFPOr6sTQtNCKDaD-",
-                imgId: "second-image"
-            }
-        ];
-
-        let normalRefreshInterval = null;
-        let fullscreenRefreshInterval = null;
-        let currentFullscreenImage = null;
-
-        function generateAllPossibleUrls(driveId) {
-            const timestamp = Date.now();
-            const randomParam = Math.random().toString(36).substring(7);
-            return [
-                `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
-                `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
-                `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`,
-            ];
+      } catch (error) {
+        if (newSrc && newSrc.startsWith('blob:')) {
+          URL.revokeObjectURL(newSrc);
         }
+      }
+    }
 
-        function getCORSProxies() {
-            return [
-                'https://api.allorigins.win/raw?url=',
-                'https://api.codetabs.com/v1/proxy?quest=',
-                'https://corsproxy.io/?',
-                'https://thingproxy.freeboard.io/fetch/',
-            ];
+    async function refreshImage(imageConfig) {
+      const imgElement = document.getElementById(imageConfig.imgId);
+      if (!imgElement) return;
+
+      const newUrl = await extremeFetchImage(imageConfig.driveId, true);
+      if (!newUrl) return;
+
+      await swapImageWithoutFlash(imgElement, newUrl, imageConfig.imgId);
+    }
+
+    async function loadInitialImages() {
+      for (const imageConfig of IMAGES) {
+        const imgElement = document.getElementById(imageConfig.imgId);
+        const initialUrl = await extremeFetchImage(imageConfig.driveId, false);
+
+        if (initialUrl && imgElement) {
+          await swapImageWithoutFlash(imgElement, initialUrl, imageConfig.imgId);
         }
+      }
+    }
 
-        async function extremeFetchImage(driveId, isRefresh = false) {
-            const urls = generateAllPossibleUrls(driveId);
-            
-            for (let i = 0; i < urls.length; i++) {
-                const url = urls[i];
-                try {
-                    let response = await fetch(url, { 
-                        mode: 'cors',
-                        credentials: 'omit',
-                        referrerPolicy: 'no-referrer',
-                        cache: 'no-store'
-                    });
-                    
-                    if (response.ok) {
-                        const blob = await response.blob();
-                        if (blob.size > 0 && blob.type.startsWith('image/')) {
-                            return URL.createObjectURL(blob);
-                        }
-                    }
-                } catch (e) {
-                    try {
-                        await fetch(url, { mode: 'no-cors', cache: 'no-store' });
-                        if (await testImageLoad(url)) {
-                            return url;
-                        }
-                    } catch (e2) {
-                        continue;
-                    }
-                }
-            }
-            
-            if (isRefresh) return null;
-            
-            const proxies = getCORSProxies();
-            for (const proxy of proxies) {
-                for (const url of urls.slice(0, 2)) {
-                    try {
-                        const proxyUrl = proxy + encodeURIComponent(url);
-                        const response = await fetch(proxyUrl);
-                        
-                        if (response.ok) {
-                            const blob = await response.blob();
-                            if (blob.size > 1000) {
-                                return URL.createObjectURL(blob);
-                            }
-                        }
-                    } catch (e) {
-                        continue;
-                    }
-                }
-            }
-            
-            return null;
+    function startAutoRefresh() {
+      setInterval(() => {
+        for (const imageConfig of IMAGES) {
+          refreshImage(imageConfig);
         }
-        
-        function testImageLoad(url) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve(true);
-                img.onerror = () => resolve(false);
-                img.src = url;
-                setTimeout(() => resolve(false), 5000);
-            });
-        }
+      }, 5000);
+    }
 
-        async function refreshImageByElement(imgElement, driveId) {
-            if (!imgElement) return;
+    async function init() {
+      await loadInitialImages();
+      startAutoRefresh();
+    }
 
-            imgElement.style.opacity = '0.5';
-            const newUrl = await extremeFetchImage(driveId, true);
-
-            if (newUrl) {
-                const oldSrc = imgElement.src;
-                if (oldSrc && oldSrc.startsWith('blob:')) {
-                    URL.revokeObjectURL(oldSrc);
-                }
-
-                imgElement.src = newUrl;
-
-                imgElement.onload = () => {
-                    imgElement.style.opacity = '1';
-                };
-
-                imgElement.onerror = () => {
-                    imgElement.style.opacity = '1';
-                    console.error('Image load error for', driveId);
-                };
-            } else {
-                imgElement.style.opacity = '1';
-                console.error('Failed to refresh image for', driveId);
-            }
-        }
-
-        async function refreshAllImages() {
-            for (const imageConfig of IMAGES) {
-                const imgElement = document.getElementById(imageConfig.imgId);
-                await refreshImageByElement(imgElement, imageConfig.driveId);
-            }
-        }
-
-        function startAutoRefresh() {
-            if (normalRefreshInterval) clearInterval(normalRefreshInterval);
-            normalRefreshInterval = setInterval(refreshAllImages, 5000);
-        }
-
-        function startFullscreenAutoRefresh() {
-            if (fullscreenRefreshInterval) clearInterval(fullscreenRefreshInterval);
-
-            fullscreenRefreshInterval = setInterval(async () => {
-                if (!currentFullscreenImage) return;
-                await refreshImageByElement(
-                    document.getElementById('fullscreen-image'),
-                    currentFullscreenImage.driveId
-                );
-            }, 5000);
-        }
-
-        async function loadInitialImages() {
-            for (const imageConfig of IMAGES) {
-                const imgElement = document.getElementById(imageConfig.imgId);
-                const imageUrl = await extremeFetchImage(imageConfig.driveId);
-
-                if (imageUrl) {
-                    imgElement.src = imageUrl;
-                } else {
-                    console.error('Failed to load initial image for', imageConfig.driveId);
-                }
-            }
-        }
-
-        function setupFullscreenModal() {
-            const modal = document.getElementById('fullscreen-modal');
-            const fullscreenImg = document.getElementById('fullscreen-image');
-            const closeButton = document.getElementById('close-modal');
-
-            function openFullscreen(imageConfig) {
-                const clickedImg = document.getElementById(imageConfig.imgId);
-                if (clickedImg.src) {
-                    currentFullscreenImage = imageConfig;
-                    fullscreenImg.src = clickedImg.src;
-                    modal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                    startFullscreenAutoRefresh();
-                }
-            }
-            
-            function closeFullscreen() {
-                modal.classList.remove('active');
-                document.body.style.overflow = '';
-                currentFullscreenImage = null;
-
-                if (fullscreenRefreshInterval) {
-                    clearInterval(fullscreenRefreshInterval);
-                    fullscreenRefreshInterval = null;
-                }
-            }
-
-            for (const imageConfig of IMAGES) {
-                const imgElement = document.getElementById(imageConfig.imgId);
-                imgElement.addEventListener('click', () => openFullscreen(imageConfig));
-            }
-            
-            closeButton.addEventListener('click', closeFullscreen);
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeFullscreen();
-            });
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closeFullscreen();
-                }
-            });
-        }
-
-        async function init() {
-            try {
-                await loadInitialImages();
-                startAutoRefresh();
-                setupFullscreenModal();
-            } catch (error) {
-                console.error('Initialization error:', error);
-            }
-        }
-
-        window.addEventListener('load', init);
-    </script>
+    window.addEventListener('load', init);
+  </script>
 </body>
 </html>
