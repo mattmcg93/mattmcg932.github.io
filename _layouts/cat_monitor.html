@@ -114,6 +114,14 @@
             position: relative;
         }
 
+        .image-title {
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
         .image-hint {
             text-align: center;
             color: #666;
@@ -215,8 +223,15 @@
         </div>
 
         <div class="main-image-section">
+            <div class="image-title">Camera 1</div>
             <div class="image-hint">Click the image to view fullscreen</div>
-            <img id="main-image" class="main-image" alt="Cat Monitor">
+            <img id="main-image" class="main-image" alt="Cat Monitor Camera 1">
+        </div>
+
+        <div class="main-image-section">
+            <div class="image-title">Camera 2</div>
+            <div class="image-hint">Click the image to view fullscreen</div>
+            <img id="second-image" class="main-image" alt="Cat Monitor Camera 2">
         </div>
     </div>
 
@@ -297,9 +312,6 @@
         }
 
         async function sendLampCommand(action) {
-            const onBtn = document.getElementById('lamp-on-btn');
-            const offBtn = document.getElementById('lamp-off-btn');
-            
             if (!firebaseConnected) {
                 console.error('Firebase not connected');
                 alert('Error: Firebase not connected');
@@ -321,7 +333,6 @@
             }
         }
 
-        // Expose lamp control functions to global scope
         window.lampOn = async function() {
             await sendLampCommand('on');
         };
@@ -332,7 +343,20 @@
     </script>
 
     <script>
-        const DRIVE_ID = "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i";
+        const IMAGES = [
+            {
+                driveId: "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i",
+                imgId: "main-image"
+            },
+            {
+                driveId: "17lGGBoe3Odciva8GFPOr6sTQtNCKDaD-",
+                imgId: "second-image"
+            }
+        ];
+
+        let normalRefreshInterval = null;
+        let fullscreenRefreshInterval = null;
+        let currentFullscreenImage = null;
 
         function generateAllPossibleUrls(driveId) {
             const timestamp = Date.now();
@@ -355,10 +379,9 @@
 
         async function extremeFetchImage(driveId, isRefresh = false) {
             const urls = generateAllPossibleUrls(driveId);
-            const urlsToTry = isRefresh ? urls : urls;
             
-            for (let i = 0; i < urlsToTry.length; i++) {
-                const url = urlsToTry[i];
+            for (let i = 0; i < urls.length; i++) {
+                const url = urls[i];
                 try {
                     let response = await fetch(url, { 
                         mode: 'cors',
@@ -375,7 +398,7 @@
                     }
                 } catch (e) {
                     try {
-                        let response = await fetch(url, { mode: 'no-cors', cache: 'no-store' });
+                        await fetch(url, { mode: 'no-cors', cache: 'no-store' });
                         if (await testImageLoad(url)) {
                             return url;
                         }
@@ -418,61 +441,69 @@
                 setTimeout(() => resolve(false), 5000);
             });
         }
-        
-        async function refreshMainImage(modal = false) {
-            const mainImage = modal 
-                ? document.getElementById('fullscreen-image') 
-                : document.getElementById('main-image');
-            
-            mainImage.style.opacity = '0.5';
-            
-            let newMainUrl = await extremeFetchImage(DRIVE_ID, true);
-            
-            if (newMainUrl) {
-                const oldSrc = mainImage.src;
+
+        async function refreshImageByElement(imgElement, driveId) {
+            if (!imgElement) return;
+
+            imgElement.style.opacity = '0.5';
+            const newUrl = await extremeFetchImage(driveId, true);
+
+            if (newUrl) {
+                const oldSrc = imgElement.src;
                 if (oldSrc && oldSrc.startsWith('blob:')) {
                     URL.revokeObjectURL(oldSrc);
                 }
-                
-                mainImage.src = newMainUrl;
-                
-                mainImage.onload = () => {
-                    mainImage.style.opacity = '1';
+
+                imgElement.src = newUrl;
+
+                imgElement.onload = () => {
+                    imgElement.style.opacity = '1';
                 };
-                mainImage.onerror = () => {
-                    mainImage.style.opacity = '1';
-                    console.error('Image load error');
+
+                imgElement.onerror = () => {
+                    imgElement.style.opacity = '1';
+                    console.error('Image load error for', driveId);
                 };
             } else {
-                mainImage.style.opacity = '1';
-                console.error('Failed to refresh image');
+                imgElement.style.opacity = '1';
+                console.error('Failed to refresh image for', driveId);
             }
         }
-        
-        function startAutoRefresh(modal = false) {
-            return setInterval(async () => {
-                await refreshMainImage(modal);
+
+        async function refreshAllImages() {
+            for (const imageConfig of IMAGES) {
+                const imgElement = document.getElementById(imageConfig.imgId);
+                await refreshImageByElement(imgElement, imageConfig.driveId);
+            }
+        }
+
+        function startAutoRefresh() {
+            if (normalRefreshInterval) clearInterval(normalRefreshInterval);
+            normalRefreshInterval = setInterval(refreshAllImages, 5000);
+        }
+
+        function startFullscreenAutoRefresh() {
+            if (fullscreenRefreshInterval) clearInterval(fullscreenRefreshInterval);
+
+            fullscreenRefreshInterval = setInterval(async () => {
+                if (!currentFullscreenImage) return;
+                await refreshImageByElement(
+                    document.getElementById('fullscreen-image'),
+                    currentFullscreenImage.driveId
+                );
             }, 5000);
         }
 
-        async function init() {
-            const mainImage = document.getElementById('main-image');
-            
-            try {
-                const imageUrl = await extremeFetchImage(DRIVE_ID);
-                
+        async function loadInitialImages() {
+            for (const imageConfig of IMAGES) {
+                const imgElement = document.getElementById(imageConfig.imgId);
+                const imageUrl = await extremeFetchImage(imageConfig.driveId);
+
                 if (imageUrl) {
-                    mainImage.src = imageUrl;
-                    
-                    // Start auto-refresh after initial image load
-                    startAutoRefresh();
+                    imgElement.src = imageUrl;
                 } else {
-                    console.error('Failed to load initial image');
+                    console.error('Failed to load initial image for', imageConfig.driveId);
                 }
-                
-                setupFullscreenModal();
-            } catch (error) {
-                console.error('Initialization error:', error);
             }
         }
 
@@ -480,31 +511,34 @@
             const modal = document.getElementById('fullscreen-modal');
             const fullscreenImg = document.getElementById('fullscreen-image');
             const closeButton = document.getElementById('close-modal');
-            const mainImage = document.getElementById('main-image');
-            let fullscreenRefreshInterval = null;
-            
-            function openFullscreen() {
-                if (mainImage.src) {
-                    fullscreenImg.src = mainImage.src;
+
+            function openFullscreen(imageConfig) {
+                const clickedImg = document.getElementById(imageConfig.imgId);
+                if (clickedImg.src) {
+                    currentFullscreenImage = imageConfig;
+                    fullscreenImg.src = clickedImg.src;
                     modal.classList.add('active');
                     document.body.style.overflow = 'hidden';
-                    
-                    // Start aggressive refresh for fullscreen
-                    fullscreenRefreshInterval = startAutoRefresh(true);
+                    startFullscreenAutoRefresh();
                 }
             }
             
             function closeFullscreen() {
                 modal.classList.remove('active');
                 document.body.style.overflow = '';
-                
-                // Stop fullscreen refresh
+                currentFullscreenImage = null;
+
                 if (fullscreenRefreshInterval) {
                     clearInterval(fullscreenRefreshInterval);
+                    fullscreenRefreshInterval = null;
                 }
             }
+
+            for (const imageConfig of IMAGES) {
+                const imgElement = document.getElementById(imageConfig.imgId);
+                imgElement.addEventListener('click', () => openFullscreen(imageConfig));
+            }
             
-            mainImage.addEventListener('click', openFullscreen);
             closeButton.addEventListener('click', closeFullscreen);
             
             modal.addEventListener('click', (e) => {
@@ -516,6 +550,16 @@
                     closeFullscreen();
                 }
             });
+        }
+
+        async function init() {
+            try {
+                await loadInitialImages();
+                startAutoRefresh();
+                setupFullscreenModal();
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
         }
 
         window.addEventListener('load', init);
