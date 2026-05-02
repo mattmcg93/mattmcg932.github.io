@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cat Monitor</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      color: white;
+    }
+
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .images-wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      background: #000;
+    }
+
+    .image-box {
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .camera-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .controls {
+      margin-top: auto;
+      width: 100%;
+      padding: 16px;
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lamp-status-text {
+      text-align: center;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    .lamp-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .lamp-button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 14px 22px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      min-width: 160px;
+    }
+
+    .lamp-button.off {
+      background: #dc3545;
+    }
+
+    .lamp-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .firebase-status {
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="images-wrap">
+      <div class="image-box">
+        <img id="main-image" class="camera-image" alt="Camera 1" />
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="lamp-status-text" id="lamp-status-description">
+        Lamp is currently: Unknown
+      </div>
+
+      <div class="lamp-controls">
+        <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display:none;">
+          Turn Lamp ON
+        </button>
+        <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()" style="display:none;">
+          Turn Lamp OFF
+        </button>
+      </div>
+
+      <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getDatabase, ref, push, onValue, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCO_RAFv35TbeamOtsUDT4tPZm2NcyVVSg",
+      authDomain: "westlandneopixel.firebaseapp.com",
+      databaseURL: "https://westlandneopixel-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "westlandneopixel",
+      storageBucket: "westlandneopixel.firebasestorage.app",
+      messagingSenderId: "367685507811",
+      appId: "1:367685507811:web:dcdbb08de7669dc862c3d6",
+      measurementId: "G-ZW7K5VTPPD"
+    };
+
+    let database, lampCommandsRef, lampStatusRef;
+    let firebaseConnected = false;
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      database = getDatabase(app);
+      lampCommandsRef = ref(database, 'lamp_commands');
+      lampStatusRef = ref(database, 'lamp_status');
+
+      onValue(ref(database, '.info/connected'), (snapshot) => {
+        firebaseConnected = snapshot.val() === true;
+        updateFirebaseStatus();
+      });
+
+      onValue(lampStatusRef, (snapshot) => {
+        updateLampStatusDisplay(snapshot.val());
+      });
+    } catch (error) {
+      console.error('Firebase initialization error:', error);
+      updateFirebaseStatus();
+    }
+
+    function updateLampStatusDisplay(status) {
+      const lampStatusDesc = document.getElementById('lamp-status-description');
+      const lampOnBtn = document.getElementById('lamp-on-btn');
+      const lampOffBtn = document.getElementById('lamp-off-btn');
+
+      if (status && status.state) {
+        const state = status.state.toUpperCase();
+        lampStatusDesc.textContent = `Lamp is currently: ${state}`;
+
+        lampOnBtn.style.display = state === 'OFF' ? 'inline-block' : 'none';
+        lampOffBtn.style.display = state === 'ON' ? 'inline-block' : 'none';
+      } else {
+        lampStatusDesc.textContent = 'Lamp is currently: Unknown';
+        lampOnBtn.style.display = 'inline-block';
+        lampOffBtn.style.display = 'inline-block';
+      }
+    }
+
+    function updateFirebaseStatus() {
+      const statusDiv = document.getElementById('firebase-status');
+      statusDiv.textContent = firebaseConnected ? 'Firebase Connected' : 'Firebase Disconnected';
+    }
+
+    async function sendLampCommand(action) {
+      if (!firebaseConnected) {
+        alert('Error: Firebase not connected');
+        return;
+      }
+
+      try {
+        await push(lampCommandsRef, {
+          action,
+          timestamp: serverTimestamp(),
+          source: 'webpage',
+          id: Date.now() + '_' + Math.random().toString(36).substring(2, 8)
+        });
+      } catch (error) {
+        console.error('Lamp command error:', error);
+        alert(`Error: ${error.message}`);
+      }
+    }
+
+    window.lampOn = async function () {
+      await sendLampCommand('on');
+    };
+
+    window.lampOff = async function () {
+      await sendLampCommand('off');
+    };
+  </script>
+
+  <script>
+    const IMAGES = [
+      {
+        driveId: "16F1b7hrrkVStjhec1W9KFKV-Bpgktbov",
+        imgId: "main-image"
+      }
+    ];
+
+    const activeBlobUrls = {};
+
+    function generateAllPossibleUrls(driveId) {
+      const timestamp = Date.now();
+      const randomParam = Math.random().toString(36).substring(2, 10);
+
+      return [
+        `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
+        `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
+        `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`
+      ];
+    }
+
+    function getCORSProxies() {
+      return [
+        'https://api.allorigins.win/raw?url=',
+        'https://api.codetabs.com/v1/proxy?quest=',
+        'https://corsproxy.io/?',
+        'https://thingproxy.freeboard.io/fetch/'
+      ];
+    }
+
+    async function extremeFetchImage(driveId, isRefresh = false) {
+      const urls = generateAllPossibleUrls(driveId);
+
+      for (const url of urls) {
+        try {
+          const response = await fetch(url, {
+            mode: 'cors',
+            credentials: 'omit',
+            referrerPolicy: 'no-referrer',
+            cache: 'no-store'
+          });
+
+          if (response.ok) {
+            const blob = await response.blob();
+            if (blob.size > 0 && blob.type.startsWith('image/')) {
+              return URL.createObjectURL(blob);
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (isRefresh) return null;
+
+      const proxies = getCORSProxies();
+      for (const proxy of proxies) {
+        for (const url of urls.slice(0, 2)) {
+          try {
+            const proxyUrl = proxy + encodeURIComponent(url);
+            const response = await fetch(proxyUrl, { cache: 'no-store' });
+
+            if (response.ok) {
+              const blob = await response.blob();
+              if (blob.size > 1000 && blob.type.startsWith('image/')) {
+                return URL.createObjectURL(blob);
+              }
+            }
+          } catch (e) {}
+        }
+      }
+
+      return null;
+    }
+
+    function preloadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    async function swapImageWithoutFlash(imgElement, newSrc, imgKey) {
+      try {
+        await preloadImage(newSrc);
+
+        const oldSrc = imgElement.src;
+        imgElement.src = newSrc;
+
+        if (activeBlobUrls[imgKey] && activeBlobUrls[imgKey].startsWith('blob:') && activeBlobUrls[imgKey] !== newSrc) {
+          URL.revokeObjectURL(activeBlobUrls[imgKey]);
+        }
+
+        activeBlobUrls[imgKey] = newSrc;
+
+        if (oldSrc && oldSrc.startsWith('blob:') && oldSrc !== newSrc && oldSrc !== activeBlobUrls[imgKey]) {
+          try {
+            URL.revokeObjectURL(oldSrc);
+          } catch (e) {}
+        }
+      } catch (error) {
+        if (newSrc && newSrc.startsWith('blob:')) {
+          URL.revokeObjectURL(newSrc);
+        }
+      }
+    }
+
+    async function refreshImage(imageConfig) {
+      const imgElement = document.getElementById(imageConfig.imgId);
+      if (!imgElement) return;
+
+      const newUrl = await extremeFetchImage(imageConfig.driveId, true);
+      if (!newUrl) return;
+
+      await swapImageWithoutFlash(imgElement, newUrl, imageConfig.imgId);
+    }
+
+    async function loadInitialImages() {
+      for (const imageConfig of IMAGES) {
+        const imgElement = document.getElementById(imageConfig.imgId);
+        const initialUrl = await extremeFetchImage(imageConfig.driveId, false);
+
+        if (initialUrl && imgElement) {
+          await swapImageWithoutFlash(imgElement, initialUrl, imageConfig.imgId);
+        }
+      }
+    }
+
+    function startAutoRefresh() {
+      setInterval(() => {
+        for (const imageConfig of IMAGES) {
+          refreshImage(imageConfig);
+        }
+      }, 5000);
+    }
+
+    async function init() {
+      await loadInitialImages();
+      startAutoRefresh();
+    }
+
+    window.addEventListener('load', init);
+  </script>
+</body>
+</html>
