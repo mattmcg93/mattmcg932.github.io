@@ -1,7 +1,7 @@
 ---
-layout: cat_monitor
-title: "cat_monitor"
-excerpt: "cat_monitor"
+layout: page1
+title: "page1"
+excerpt: "page1"
 image: /assets/images/Venus.PNG
 ---
 
