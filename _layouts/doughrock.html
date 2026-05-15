@@ -12,361 +12,115 @@
             min-height: 100vh;
             padding: 20px;
         }
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+        .header { text-align: center; color: white; margin-bottom: 30px; }
+        .header h1 { font-size: 2.5em; font-weight: bold; margin-bottom: 10px; }
         .status { color: white; }
         .main-container { max-width: 1400px; margin: 0 auto; }
-        
         .sensor-section {
             background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 20px; padding: 20px;
+            margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        
         .control-box {
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
             border: 2px solid rgba(102, 126, 234, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 15px 0;
+            border-radius: 15px; padding: 20px; margin: 15px 0;
             box-shadow: 0 8px 16px rgba(0,0,0,0.05);
         }
-        
         .control-box-title {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 15px;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 1.1em; font-weight: bold; color: #667eea;
+            margin-bottom: 15px; text-align: center;
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        
-        .lamp-status-text {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        
-        .lamp-helper-text {
-            font-size: 0.9em;
-            color: #666;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        
-        .lamp-controls {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
+        .lamp-status-text { font-size: 1.2em; font-weight: bold; color: #333; text-align: center; margin-bottom: 10px; }
+        .lamp-helper-text { font-size: 0.9em; color: #666; text-align: center; margin-bottom: 15px; }
+        .lamp-controls { display: flex; gap: 15px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
         .lamp-button {
             background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 1.2em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            min-width: 140px;
+            color: white; border: none; padding: 15px 30px;
+            border-radius: 10px; font-size: 1.2em; font-weight: bold;
+            cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); min-width: 140px;
         }
-
-        .lamp-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-
-        .lamp-button.off {
-            background: linear-gradient(135deg, #dc3545, #c82333);
-        }
-
-        .lamp-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .firebase-status {
-            text-align: center;
-            margin-top: 10px;
-            padding: 8px;
-            border-radius: 5px;
-            font-size: 0.85em;
-        }
-
-        .firebase-connected {
-            background: rgba(40, 167, 69, 0.1);
-            color: #155724;
-            border: 1px solid rgba(40, 167, 69, 0.2);
-        }
-
-        .firebase-disconnected {
-            background: rgba(220, 53, 69, 0.1);
-            color: #721c24;
-            border: 1px solid rgba(220, 53, 69, 0.2);
-        }
-        
+        .lamp-button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .lamp-button.off { background: linear-gradient(135deg, #dc3545, #c82333); }
+        .lamp-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .firebase-status { text-align: center; margin-top: 10px; padding: 8px; border-radius: 5px; font-size: 0.85em; }
+        .firebase-connected { background: rgba(40, 167, 69, 0.1); color: #155724; border: 1px solid rgba(40, 167, 69, 0.2); }
+        .firebase-disconnected { background: rgba(220, 53, 69, 0.1); color: #721c24; border: 1px solid rgba(220, 53, 69, 0.2); }
         .main-image-section {
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            position: relative;
+            background: rgba(255,255,255,0.95); border-radius: 20px; padding: 30px;
+            margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); position: relative;
         }
-
-        .image-container-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-
+        .image-container-wrapper { position: relative; display: inline-block; width: 100%; }
         .tap-instruction {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            font-size: 1.2em;
-            font-weight: bold;
-            padding: 8px 16px;
-            border-radius: 8px;
-            z-index: 10;
-            pointer-events: none;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7); color: white;
+            font-size: 1.2em; font-weight: bold; padding: 8px 16px;
+            border-radius: 8px; z-index: 10; pointer-events: none;
+            backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
         .main-image {
-            width: 100%;
-            height: auto;
-            border-radius: 15px;
-            min-height: 300px;
-            background: #f0f0f0;
-            object-fit: contain;
-            max-height: 70vh;
-            cursor: pointer;
-            display: block;
+            width: 100%; height: auto; border-radius: 15px; min-height: 300px;
+            background: #f0f0f0; object-fit: contain; max-height: 70vh; cursor: pointer; display: block;
         }
         .thumbnails-section {
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.95); border-radius: 20px;
+            padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        .thumbnails-section h2 {
-            font-size: 1.3em;
-            font-weight: 400;
-        }
-        #image-container {
-            display: grid;
-            gap: 15px;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        }
+        .thumbnails-section h2 { font-size: 1.3em; font-weight: 400; }
+        #image-container { display: grid; gap: 15px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
         .thumbnail-wrapper {
-            border: 3px solid transparent;
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            background: #f8f9fa;
-            aspect-ratio: 4 / 3;
+            border: 3px solid transparent; border-radius: 10px; overflow: hidden;
+            cursor: pointer; transition: all 0.3s; position: relative;
+            background: #f8f9fa; aspect-ratio: 4 / 3;
         }
         .thumbnail-wrapper:hover { transform: scale(1.05); }
         .thumbnail-wrapper.selected { border-color: #667eea; }
-        .thumbnail {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            background: #ddd;
-        }
-        .loading { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100%;
-            color: #666;
-            flex-direction: column;
-            gap: 10px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        .thumbnail { width: 100%; height: 100%; object-fit: cover; background: #ddd; }
+        .loading {
+            display: flex; align-items: center; justify-content: center; height: 100%;
+            color: #666; flex-direction: column; gap: 10px;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
         }
         .spinner {
-            width: 30px;
-            height: 30px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
+            width: 30px; height: 30px; border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea; border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .info { position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 3px; font-size: 12px; }
         .debug { margin-top: 20px; background: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
-
-        /* YouTube video styles */
-        #youtube-container {
-            display: grid;
-            gap: 20px;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        }
-
-        .youtube-video {
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .youtube-video:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-
-        .youtube-video iframe {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            border: none;
-        }
-
-        .youtube-video-title {
-            padding: 12px;
-            font-size: 0.95em;
-            color: #333;
-            font-weight: 500;
-            background: #f8f9fa;
-        }
-
-        @media (max-width: 768px) {
-            #youtube-container {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-        }
-
         .fullscreen-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.95);
+            z-index: 1000; justify-content: center; align-items: center;
         }
-
-        .fullscreen-modal.active {
-            display: flex;
-        }
-
-        .fullscreen-image {
-            max-width: 95vw;
-            max-height: 95vh;
-            object-fit: contain;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-
+        .fullscreen-modal.active { display: flex; }
+        .fullscreen-image { max-width: 95vw; max-height: 95vh; object-fit: contain; border-radius: 10px; transition: transform 0.3s ease; }
         .close-button {
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1001;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
+            position: absolute; top: 60px; right: 20px;
+            background: rgba(0, 0, 0, 0.7); color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 8px;
+            padding: 10px 20px; font-size: 14px; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1001; backdrop-filter: blur(5px); transition: all 0.3s ease;
         }
-
-        .close-button:hover {
-            background: rgba(0, 0, 0, 0.9);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
+        .close-button:hover { background: rgba(0, 0, 0, 0.9); border-color: rgba(255, 255, 255, 0.5); }
         .fullscreen-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.2);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            z-index: 1002;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            display: none;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.2); color: white; padding: 30px;
+            border-radius: 15px; text-align: center; z-index: 1002;
+            backdrop-filter: blur(10px); border: 2px solid rgba(255, 255, 255, 0.1); display: none;
         }
-
-        .fullscreen-overlay.rotated {
-            transform: translate(-50%, -50%) rotate(90deg);
-        }
-
-        .close-button.rotated {
-            transform: rotate(90deg);
-        }
-
-        .fullscreen-overlay-title {
-            font-size: 1.8em;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .fullscreen-countdown-number {
-            font-size: 3em;
-            font-weight: bold;
-            margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .fullscreen-overlay-message {
-            font-size: 1.2em;
-            margin-top: 20px;
-        }
-
+        .fullscreen-overlay.rotated { transform: translate(-50%, -50%) rotate(90deg); }
+        .close-button.rotated { transform: rotate(90deg); }
+        .fullscreen-overlay-title { font-size: 1.8em; font-weight: bold; margin-bottom: 20px; }
+        .fullscreen-countdown-number { font-size: 3em; font-weight: bold; margin: 20px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .fullscreen-overlay-message { font-size: 1.2em; margin-top: 20px; }
         @media (max-width: 768px) and (orientation: portrait) {
-            .fullscreen-image.rotated {
-                transform: rotate(90deg);
-                max-width: 95vh;
-                max-height: 95vw;
-            }
+            .fullscreen-image.rotated { transform: rotate(90deg); max-width: 95vh; max-height: 95vw; }
         }
-
         @media (max-width: 768px) {
             body { padding: 15px; }
             .header h1 { font-size: 2em; }
@@ -377,7 +131,6 @@
             .lamp-controls { flex-direction: column; gap: 10px; }
             .lamp-button { padding: 10px 20px; font-size: 0.9em; min-width: unset; }
         }
-
         @media (max-width: 480px) {
             body { padding: 10px; }
             .header h1 { font-size: 1.8em; }
@@ -404,7 +157,6 @@
                 <div class="control-box-title">Living Room Lamp Controls</div>
                 <div class="lamp-status-text" id="lamp-status-display">Lamp is currently: Unknown</div>
                 <div class="lamp-helper-text">Light should be visible in Living Room camera below</div>
-                
                 <div class="lamp-controls">
                     <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display: none;">
                         <span>Turn Lamp ON</span>
@@ -432,22 +184,11 @@
             <div id="image-container"></div>
             <div id="debug-log" class="debug"></div>
         </div>
-
-        <div class="thumbnails-section" style="margin-top: 30px;">
-            <h2>Watch Today's Timelapses</h2>
-            <div id="youtube-container" style="margin-top: 20px;">
-                <div class="loading" style="position: relative; height: 100px;">
-                    <div class="spinner"></div>
-                    <div>Loading latest videos...</div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="fullscreen-modal" id="fullscreen-modal">
         <button class="close-button" id="close-modal">EXIT FULLSCREEN</button>
         <img class="fullscreen-image" id="fullscreen-image" alt="Fullscreen View">
-        
         <div class="fullscreen-overlay" id="fullscreen-overlay">
             <div class="fullscreen-overlay-title" id="fullscreen-overlay-title">Currently turning Living Room lamp ON</div>
             <div class="fullscreen-countdown-number" id="fullscreen-countdown-number">30</div>
@@ -478,15 +219,14 @@
             database = getDatabase(app);
             lampCommandsRef = ref(database, 'lamp_commands');
             lampStatusRef = ref(database, 'lamp_status');
-            
+
             onValue(ref(database, '.info/connected'), (snapshot) => {
                 firebaseConnected = snapshot.val();
                 updateFirebaseStatus();
             });
 
             onValue(lampStatusRef, (snapshot) => {
-                const status = snapshot.val();
-                updateLampStatusDisplay(status);
+                updateLampStatusDisplay(snapshot.val());
             });
 
             log('Firebase initialized successfully');
@@ -499,19 +239,13 @@
             const lampStatusElement = document.getElementById('lamp-status-display');
             const lampOnBtn = document.getElementById('lamp-on-btn');
             const lampOffBtn = document.getElementById('lamp-off-btn');
-            
+
             if (status && status.state) {
                 const state = status.state.toUpperCase();
                 lampStatusElement.textContent = `Lamp is currently: ${state}`;
                 lampStatusElement.style.color = state === 'ON' ? '#28a745' : '#6c757d';
-                
-                if (state === 'ON') {
-                    lampOnBtn.style.display = 'none';
-                    lampOffBtn.style.display = 'block';
-                } else {
-                    lampOnBtn.style.display = 'block';
-                    lampOffBtn.style.display = 'none';
-                }
+                lampOnBtn.style.display = state === 'ON' ? 'none' : 'block';
+                lampOffBtn.style.display = state === 'ON' ? 'block' : 'none';
             } else {
                 lampStatusElement.textContent = 'Lamp is currently: Unknown';
                 lampStatusElement.style.color = '#6c757d';
@@ -534,36 +268,26 @@
         let countdownInterval = null;
         let overlayTimeoutInterval = null;
 
-        window.lampOn = async function() {
-            await sendLampCommand('on');
-        };
-
-        window.lampOff = async function() {
-            await sendLampCommand('off');
-        };
+        window.lampOn = async function() { await sendLampCommand('on'); };
+        window.lampOff = async function() { await sendLampCommand('off'); };
 
         function openFullscreenForLamp(action) {
             const fullscreenModal = document.getElementById('fullscreen-modal');
             const fullscreenImg = document.getElementById('fullscreen-image');
             const fullscreenOverlay = document.getElementById('fullscreen-overlay');
             const closeButton = document.getElementById('close-modal');
-            
+
             if (driveIds[0]) {
                 extremeFetchImage(driveIds[0]).then(imageUrl => {
                     if (imageUrl) fullscreenImg.src = imageUrl;
                 });
             }
-            
-            if (isMobilePortrait()) {
-                fullscreenImg.classList.add('rotated');
-                fullscreenOverlay.classList.add('rotated');
-                closeButton.classList.add('rotated');
-            } else {
-                fullscreenImg.classList.remove('rotated');
-                fullscreenOverlay.classList.remove('rotated');
-                closeButton.classList.remove('rotated');
-            }
-            
+
+            const portrait = isMobilePortrait();
+            fullscreenImg.classList.toggle('rotated', portrait);
+            fullscreenOverlay.classList.toggle('rotated', portrait);
+            closeButton.classList.toggle('rotated', portrait);
+
             fullscreenModal.classList.add('active');
             document.body.style.overflow = 'hidden';
             startFullscreenCountdown(action);
@@ -578,36 +302,23 @@
             const overlayTitle = document.getElementById('fullscreen-overlay-title');
             const countdownNumber = document.getElementById('fullscreen-countdown-number');
             const overlayMessage = overlay.querySelector('.fullscreen-overlay-message');
-            
-            if (action === 'on') {
-                overlayTitle.textContent = 'LET THERE BE LIGHT!';
-                overlayMessage.textContent = 'Turning on the Living Room lamp...';
-            } else {
-                overlayTitle.textContent = 'LIGHTS OUT!';
-                overlayMessage.textContent = 'Time to go dark...';
-            }
-            
+
+            overlayTitle.textContent = action === 'on' ? 'LET THERE BE LIGHT!' : 'LIGHTS OUT!';
+            overlayMessage.textContent = action === 'on' ? 'Turning on the Living Room lamp...' : 'Time to go dark...';
             overlay.style.display = 'block';
+
             let seconds = 30;
             countdownNumber.textContent = seconds;
-            
+
             countdownInterval = setInterval(() => {
                 seconds--;
                 countdownNumber.textContent = seconds;
-                
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
-                    if (action === 'on') {
-                        overlayTitle.textContent = 'Should be bright and shiny now!';
-                        overlayMessage.textContent = 'If still dark, try again';
-                    } else {
-                        overlayTitle.textContent = 'Should be nice and dark now!';
-                        overlayMessage.textContent = 'If still bright, try again';
-                    }
+                    overlayTitle.textContent = action === 'on' ? 'Should be bright and shiny now!' : 'Should be nice and dark now!';
+                    overlayMessage.textContent = action === 'on' ? 'If still dark, try again' : 'If still bright, try again';
                     countdownNumber.textContent = '';
-                    overlayTimeoutInterval = setTimeout(() => {
-                        overlay.style.display = 'none';
-                    }, 3000);
+                    overlayTimeoutInterval = setTimeout(() => { overlay.style.display = 'none'; }, 3000);
                 }
             }, 1000);
         }
@@ -615,44 +326,33 @@
         async function sendLampCommand(action) {
             const onBtn = document.getElementById('lamp-on-btn');
             const offBtn = document.getElementById('lamp-off-btn');
-            
-            if (!firebaseConnected) {
-                alert('Error: Firebase not connected');
-                return;
-            }
-            
+
+            if (!firebaseConnected) { alert('Error: Firebase not connected'); return; }
+
             try {
                 const command = {
-                    action: action,
-                    timestamp: serverTimestamp(),
-                    source: 'webpage',
+                    action: action, timestamp: serverTimestamp(), source: 'webpage',
                     id: Date.now() + '_' + Math.random().toString(36).substring(2, 8)
                 };
-                
+
                 await push(lampCommandsRef, command);
-                
-                if (action === 'on') {
-                    onBtn.innerHTML = 'Please wait...';
-                    onBtn.disabled = true;
-                } else {
-                    offBtn.innerHTML = 'Please wait...';
-                    offBtn.disabled = true;
-                }
-                
+
+                const activeBtn = action === 'on' ? onBtn : offBtn;
+                activeBtn.innerHTML = 'Please wait...';
+                activeBtn.disabled = true;
+
                 openFullscreenForLamp(action);
-                
+
                 setTimeout(() => {
-                    onBtn.disabled = false;
-                    offBtn.disabled = false;
+                    onBtn.disabled = false; offBtn.disabled = false;
                     onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
                     offBtn.innerHTML = '<span>Turn Lamp OFF</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
                 }, 30000);
-                
+
                 log(`Lamp ${action} command sent: ${command.id}`);
             } catch (error) {
                 alert(`Error: ${error.message}`);
-                onBtn.disabled = false;
-                offBtn.disabled = false;
+                onBtn.disabled = false; offBtn.disabled = false;
                 onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
                 offBtn.innerHTML = '<span>Turn Lamp OFF</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
             }
@@ -665,30 +365,22 @@
 
     <script>
         const driveIds = [
-            "1vrr26I23p4XUdAlN_2tnevs4VYE7PIoI",
-            "1jVn1wKSIoHepUjxdZRS6xlh4JC90q55c",
-            "19KHRWco6o_U3SB1Zsof58MvGyPbO6j__",
-            "10b5QfBtU1xx-qggz_UjoZn0sMfJmT9ZI",
-            "1c5CxW2NnicVSxcldDZ6cd3ZTIysa2zcL",
-            "15NHAZMdz2H9QrQ5h3VJiqcF_4K_rvC1C",
-            //"1WFZzwLUK9iqx9JUQD9MvoRl8K8ZOl2mr",
-            //"1toZRE71Yk7pG9_CMsgVo1Zc4K8OJdCes",
-            "1H6y1S9nA-Ehx2V4wBCf_9WWNeaWbbwyK"
-            
+            "1EIcCDzrtg8s3r0WgOQGwdxmzwvOy0rVC", // raspiZero2-living-room
+            "1iOihx6gc61Ezt6KzNlXlI-24HOi-Frsj", // raspi4-living-room
+            "1WuPIydtH_Q0mgdk9mPmOkb1OIZKJrKcK", // raspiZero2-micks-room
+            "1Gy3ABlqEt6XOjm4hjAkDDGU51yIrP36T", // raspi-zero-w-kitchen
+            "1H6y1S9nA-Ehx2V4wBCf_9WWNeaWbbwyK"  // Climate Dashboard
         ];
 
         const cameraNames = [
             "Living Room", "Front of House", "Side of House",
-            "Back of House", "Side of House Facing Sky", "Back Roof",
-            "Climate Dashboard"
+            "Back of House", "Climate Dashboard"
         ];
 
         const sensorIds = {
             humidity: "1Ajb8r6TB5aKkWDAr99iDAlo3TlqReT2O",
             temperature: "1GPWSQIFjLR25lmuP-ljgIFriLNBS-FyQ"
         };
-
-        const YOUTUBE_PLAYLIST_ID = "PLYjYqBhMDqYWl6SYlqmYEfZv_Z5UH9PJ4";
 
         let selectedIndex = 0;
         const debugLog = document.getElementById('debug-log');
@@ -707,61 +399,41 @@
                 `https://drive.google.com/uc?export=download&id=${fileId}&t=${timestamp}`,
                 `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=AIzaSyD2g8-C2jQBvByd0AUxU23OsU6jCObLRAw`,
             ];
-            
-            // Try direct fetch first
+
             for (const url of urls) {
                 try {
                     const response = await fetch(url, {
                         cache: 'no-store',
-                        headers: { 
-                            'Cache-Control': 'no-cache, no-store, must-revalidate',
-                            'Pragma': 'no-cache'
-                        }
+                        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
                     });
-                    
                     if (response.ok) {
                         const text = await response.text();
-                        if (text && text.trim()) {
-                            log(`✓ ${sensorType}: ${text.trim()}`);
-                            return text.trim();
-                        }
+                        if (text && text.trim()) { log(`checkmark ${sensorType}: ${text.trim()}`); return text.trim(); }
                     }
-                } catch (e) {
-                    log(`Direct ${sensorType} fetch failed: ${e.message.substring(0, 50)}`);
-                }
+                } catch (e) { log(`Direct ${sensorType} fetch failed: ${e.message.substring(0, 50)}`); }
             }
-            
-            // Try with CORS proxies
+
             const proxies = getCORSProxies();
             for (const proxy of proxies) {
                 for (const url of urls.slice(0, 2)) {
                     try {
                         const proxyUrl = proxy + encodeURIComponent(url);
-                        const response = await fetch(proxyUrl, {
-                            cache: 'no-store'
-                        });
-                        
+                        const response = await fetch(proxyUrl, { cache: 'no-store' });
                         if (response.ok) {
                             const text = await response.text();
-                            if (text && text.trim()) {
-                                log(`✓ ${sensorType} via proxy: ${text.trim()}`);
-                                return text.trim();
-                            }
+                            if (text && text.trim()) { log(`checkmark ${sensorType} via proxy: ${text.trim()}`); return text.trim(); }
                         }
-                    } catch (e) {
-                        log(`Proxy ${sensorType} failed: ${e.message.substring(0, 30)}`);
-                    }
+                    } catch (e) { log(`Proxy ${sensorType} failed: ${e.message.substring(0, 30)}`); }
                 }
             }
-            
-            log(`✗ Failed to fetch ${sensorType} data after all retries`);
+
+            log(`Failed to fetch ${sensorType} data after all retries`);
             return null;
         }
 
         async function updateSensorData() {
             log('Loading sensor data (with retries)...');
-            
-            // Try humidity with retries
+
             let humidityData = null;
             for (let attempt = 1; attempt <= 3; attempt++) {
                 log(`Humidity attempt ${attempt}/3...`);
@@ -769,19 +441,15 @@
                 if (humidityData) break;
                 if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 1000));
             }
-            
+
+            const humidityEl = document.getElementById('humidity-value');
             if (humidityData) {
-                const humidityValue = parseFloat(humidityData);
-                if (!isNaN(humidityValue)) {
-                    document.getElementById('humidity-value').textContent = `Humidity: ${humidityValue.toFixed(1)}%`;
-                } else {
-                    document.getElementById('humidity-value').textContent = `Humidity: ${humidityData}%`;
-                }
+                const val = parseFloat(humidityData);
+                humidityEl.textContent = `Humidity: ${isNaN(val) ? humidityData : val.toFixed(1)}%`;
             } else {
-                document.getElementById('humidity-value').textContent = 'Humidity: Failed to load';
+                humidityEl.textContent = 'Humidity: Failed to load';
             }
-            
-            // Try temperature with retries
+
             let temperatureData = null;
             for (let attempt = 1; attempt <= 3; attempt++) {
                 log(`Temperature attempt ${attempt}/3...`);
@@ -789,16 +457,13 @@
                 if (temperatureData) break;
                 if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 1000));
             }
-            
+
+            const tempEl = document.getElementById('temperature-value');
             if (temperatureData) {
-                const temperatureValue = parseFloat(temperatureData);
-                if (!isNaN(temperatureValue)) {
-                    document.getElementById('temperature-value').textContent = `Temperature: ${temperatureValue.toFixed(1)}°C`;
-                } else {
-                    document.getElementById('temperature-value').textContent = `Temperature: ${temperatureData}°C`;
-                }
+                const val = parseFloat(temperatureData);
+                tempEl.textContent = `Temperature: ${isNaN(val) ? temperatureData : val.toFixed(1)}C`;
             } else {
-                document.getElementById('temperature-value').textContent = 'Temperature: Failed to load';
+                tempEl.textContent = 'Temperature: Failed to load';
             }
         }
 
@@ -823,60 +488,43 @@
 
         async function extremeFetchImage(driveId, isRefresh = false) {
             const urls = generateAllPossibleUrls(driveId);
-            const urlsToTry = isRefresh ? urls : urls;
-            
-            for (let i = 0; i < urlsToTry.length; i++) {
-                const url = urlsToTry[i];
+
+            for (const url of urls) {
                 try {
-                    let response = await fetch(url, { 
-                        mode: 'cors',
-                        credentials: 'omit',
-                        referrerPolicy: 'no-referrer',
-                        cache: 'no-store'
+                    const response = await fetch(url, {
+                        mode: 'cors', credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store'
                     });
-                    
                     if (response.ok) {
                         const blob = await response.blob();
-                        if (blob.size > 0 && blob.type.startsWith('image/')) {
-                            return URL.createObjectURL(blob);
-                        }
+                        if (blob.size > 0 && blob.type.startsWith('image/')) return URL.createObjectURL(blob);
                     }
                 } catch (e) {
                     try {
-                        let response = await fetch(url, { mode: 'no-cors', cache: 'no-store' });
-                        if (await testImageLoad(url)) {
-                            return url;
-                        }
-                    } catch (e2) {
-                        continue;
-                    }
+                        await fetch(url, { mode: 'no-cors', cache: 'no-store' });
+                        if (await testImageLoad(url)) return url;
+                    } catch (e2) { continue; }
                 }
             }
-            
+
             if (isRefresh) return null;
-            
+
             const proxies = getCORSProxies();
             for (const proxy of proxies) {
                 for (const url of urls.slice(0, 2)) {
                     try {
                         const proxyUrl = proxy + encodeURIComponent(url);
                         const response = await fetch(proxyUrl);
-                        
                         if (response.ok) {
                             const blob = await response.blob();
-                            if (blob.size > 1000) {
-                                return URL.createObjectURL(blob);
-                            }
+                            if (blob.size > 1000) return URL.createObjectURL(blob);
                         }
-                    } catch (e) {
-                        continue;
-                    }
+                    } catch (e) { continue; }
                 }
             }
-            
+
             return null;
         }
-        
+
         function testImageLoad(url) {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -886,152 +534,101 @@
                 setTimeout(() => resolve(false), 5000);
             });
         }
-        
+
         async function forceClearCacheAndRefresh(driveId) {
             const timestamp = Date.now();
             const randomId = Math.random().toString(36).substring(2, 15);
-            
             const urls = [
                 `https://lh3.googleusercontent.com/d/${driveId}=w2000&v=${timestamp}&_cb=${randomId}`,
                 `https://drive.google.com/uc?id=${driveId}&export=download&v=${timestamp}&_nocache=${randomId}`,
             ];
-            
+
             for (const url of urls) {
                 try {
                     const response = await fetch(url, {
                         cache: 'no-store',
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate',
-                            'Pragma': 'no-cache',
-                            'Expires': '0'
-                        }
+                        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' }
                     });
-                    
                     if (response.ok) {
                         const blob = await response.blob();
-                        if (blob.size > 1000) {
-                            return URL.createObjectURL(blob);
-                        }
+                        if (blob.size > 1000) return URL.createObjectURL(blob);
                     }
-                } catch (e) {
-                    continue;
-                }
+                } catch (e) { continue; }
             }
-            
+
             return null;
         }
-        
+
         async function refreshMainImage() {
             const mainImage = document.getElementById('main-image');
             const fullscreenImg = document.getElementById('fullscreen-image');
             const mainTitle = document.getElementById('main-title');
-            
+
             log(`Refreshing ${cameraNames[selectedIndex]}...`);
             mainImage.style.opacity = '0.5';
-            
+
             let newMainUrl = await forceClearCacheAndRefresh(driveIds[selectedIndex]);
-            
-            if (!newMainUrl) {
-                newMainUrl = await extremeFetchImage(driveIds[selectedIndex], true);
-            }
-            
+            if (!newMainUrl) newMainUrl = await extremeFetchImage(driveIds[selectedIndex], true);
+
             if (newMainUrl) {
                 const oldSrc = mainImage.src;
-                if (oldSrc && oldSrc.startsWith('blob:')) {
-                    URL.revokeObjectURL(oldSrc);
-                }
-                
+                if (oldSrc && oldSrc.startsWith('blob:')) URL.revokeObjectURL(oldSrc);
                 mainImage.src = newMainUrl;
-                
                 if (document.getElementById('fullscreen-modal').classList.contains('active')) {
                     fullscreenImg.src = newMainUrl;
                 }
-                
                 mainImage.onload = () => {
                     mainImage.style.opacity = '1';
                     mainTitle.textContent = `${cameraNames[selectedIndex]} - Updated ${new Date().toLocaleTimeString()}`;
-                    log(`✓ Main image refreshed`);
+                    log(`Main image refreshed`);
                 };
-                mainImage.onerror = () => {
-                    mainImage.style.opacity = '1';
-                    log(`✗ Main image load error`);
-                };
+                mainImage.onerror = () => { mainImage.style.opacity = '1'; log(`Main image load error`); };
             } else {
                 mainImage.style.opacity = '1';
-                log(`✗ Main refresh failed`);
+                log(`Main refresh failed`);
             }
         }
-        
+
         function startAutoRefresh() {
-            log('Starting auto-refresh (images only, every 10 seconds)...');
-            
+            log('Starting auto-refresh (every 10 seconds)...');
             setInterval(async () => {
                 log('--- Refresh cycle starting ---');
-                
-                // Refresh main image first
                 await refreshMainImage();
-                
-                // Then refresh all thumbnails in parallel
+
                 const thumbnailWrappers = document.querySelectorAll('.thumbnail-wrapper');
                 const refreshPromises = [];
-                
+
                 for (let index = 0; index < thumbnailWrappers.length && index < driveIds.length; index++) {
                     const wrapper = thumbnailWrappers[index];
-                    let img = wrapper.querySelector('.thumbnail');
-                    
-                    if (!img) {
-                        log(`Thumbnail ${index + 1} - no img, skip`);
-                        continue;
-                    }
-                    
+                    const img = wrapper.querySelector('.thumbnail');
+                    if (!img) { log(`Thumbnail ${index + 1} - no img, skip`); continue; }
+
                     const loadingDiv = wrapper.querySelector('.loading');
                     if (loadingDiv && (loadingDiv.textContent.includes('failed') || loadingDiv.textContent.includes('Error'))) {
-                        log(`Thumbnail ${index + 1} - error state, skip`);
-                        continue;
+                        log(`Thumbnail ${index + 1} - error state, skip`); continue;
                     }
-                    
+
                     const refreshPromise = (async (idx, imgElement) => {
-                        // Try force refresh first
                         let newUrl = await forceClearCacheAndRefresh(driveIds[idx]);
-                        
-                        // If that fails, try extremeFetchImage with refresh mode
-                        if (!newUrl) {
-                            newUrl = await extremeFetchImage(driveIds[idx], true);
-                        }
-                        
-                        // If still no URL, just keep the current image
-                        if (!newUrl) {
-                            log(`Thumbnail ${idx + 1} - keeping current`);
-                            return;
-                        }
-                        
+                        if (!newUrl) newUrl = await extremeFetchImage(driveIds[idx], true);
+                        if (!newUrl) { log(`Thumbnail ${idx + 1} - keeping current`); return; }
+
                         imgElement.style.opacity = '0.7';
                         const oldSrc = imgElement.src;
-                        
-                        if (oldSrc && oldSrc.startsWith('blob:')) {
-                            URL.revokeObjectURL(oldSrc);
-                        }
-                        
+                        if (oldSrc && oldSrc.startsWith('blob:')) URL.revokeObjectURL(oldSrc);
                         imgElement.src = newUrl;
-                        
-                        imgElement.onload = () => {
-                            imgElement.style.opacity = '1';
-                            log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) ✓`);
-                        };
-                        imgElement.onerror = () => {
-                            imgElement.style.opacity = '1';
-                            log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) ✗`);
-                        };
+                        imgElement.onload = () => { imgElement.style.opacity = '1'; log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) ok`); };
+                        imgElement.onerror = () => { imgElement.style.opacity = '1'; log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) error`); };
                     })(index, img);
-                    
+
                     refreshPromises.push(refreshPromise);
                 }
-                
+
                 await Promise.all(refreshPromises);
                 log('--- Refresh cycle complete ---');
             }, 10000);
         }
-        
+
         async function createThumbnail(driveId, index) {
             const wrapper = document.createElement('div');
             wrapper.className = 'thumbnail-wrapper';
@@ -1042,9 +639,8 @@
                 </div>
                 <div class="info">${cameraNames[index]}</div>
             `;
-            
             wrapper.addEventListener('click', () => selectThumbnail(index));
-            
+
             extremeFetchImage(driveId).then(imageUrl => {
                 if (imageUrl) {
                     const img = document.createElement('img');
@@ -1055,210 +651,97 @@
                         wrapper.insertBefore(img, wrapper.firstChild);
                     };
                     img.onerror = () => {
-                        wrapper.innerHTML = `
-                            <div class="loading">Load failed</div>
-                            <div class="info">${cameraNames[index]} - Error</div>
-                        `;
+                        wrapper.innerHTML = `<div class="loading">Load failed</div><div class="info">${cameraNames[index]} - Error</div>`;
                     };
                 } else {
-                    wrapper.innerHTML = `
-                        <div class="loading">Failed</div>
-                        <div class="info">${cameraNames[index]} - Error</div>
-                    `;
+                    wrapper.innerHTML = `<div class="loading">Failed</div><div class="info">${cameraNames[index]} - Error</div>`;
                 }
             });
-            
+
             return wrapper;
         }
-        
+
         async function selectThumbnail(index) {
             selectedIndex = index;
             const mainImage = document.getElementById('main-image');
             const mainTitle = document.getElementById('main-title');
-            
+
             mainTitle.textContent = `Loading ${cameraNames[index]}...`;
             mainImage.style.opacity = '0.5';
-            
+
             const imageUrl = await extremeFetchImage(driveIds[index]);
             if (imageUrl) {
                 mainImage.src = imageUrl;
-                mainImage.onload = () => {
-                    mainImage.style.opacity = '1';
-                    mainTitle.textContent = `${cameraNames[index]} - Loaded`;
-                };
-                mainImage.onerror = () => {
-                    mainTitle.textContent = `${cameraNames[index]} - Failed`;
-                };
+                mainImage.onload = () => { mainImage.style.opacity = '1'; mainTitle.textContent = `${cameraNames[index]} - Loaded`; };
+                mainImage.onerror = () => { mainTitle.textContent = `${cameraNames[index]} - Failed`; };
             } else {
                 mainImage.style.opacity = '1';
                 mainTitle.textContent = `${cameraNames[index]} - Could not load`;
             }
-            
+
             document.querySelectorAll('.thumbnail-wrapper').forEach((w, i) => {
                 w.classList.toggle('selected', i === index);
             });
         }
-        
+
         function setupFullscreenModal() {
             const modal = document.getElementById('fullscreen-modal');
             const fullscreenImg = document.getElementById('fullscreen-image');
             const closeButton = document.getElementById('close-modal');
             const mainImage = document.getElementById('main-image');
-            
-            function isMobilePortrait() {
-                return window.innerWidth <= 768 && window.innerHeight > window.innerWidth;
-            }
-            
+
+            function isMobilePortrait() { return window.innerWidth <= 768 && window.innerHeight > window.innerWidth; }
+
             function openFullscreen() {
-                if (mainImage.src) {
-                    fullscreenImg.src = mainImage.src;
-                    
-                    if (isMobilePortrait()) {
-                        fullscreenImg.classList.add('rotated');
-                        closeButton.classList.add('rotated');
-                    } else {
-                        fullscreenImg.classList.remove('rotated');
-                        closeButton.classList.remove('rotated');
-                    }
-                    
-                    modal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
+                if (!mainImage.src) return;
+                fullscreenImg.src = mainImage.src;
+                const portrait = isMobilePortrait();
+                fullscreenImg.classList.toggle('rotated', portrait);
+                closeButton.classList.toggle('rotated', portrait);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
-            
+
             function closeFullscreen() {
                 modal.classList.remove('active');
                 fullscreenImg.classList.remove('rotated');
                 document.body.style.overflow = '';
             }
-            
+
             mainImage.addEventListener('click', openFullscreen);
             closeButton.addEventListener('click', closeFullscreen);
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeFullscreen();
-            });
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closeFullscreen();
-                }
-            });
-            
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeFullscreen(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeFullscreen(); });
             window.addEventListener('orientationchange', () => {
                 setTimeout(() => {
                     if (modal.classList.contains('active')) {
-                        if (isMobilePortrait()) {
-                            fullscreenImg.classList.add('rotated');
-                            closeButton.classList.add('rotated');
-                        } else {
-                            fullscreenImg.classList.remove('rotated');
-                            closeButton.classList.remove('rotated');
-                        }
+                        const portrait = isMobilePortrait();
+                        fullscreenImg.classList.toggle('rotated', portrait);
+                        closeButton.classList.toggle('rotated', portrait);
                     }
                 }, 100);
             });
         }
 
-        async function loadYouTubeVideos() {
-            const container = document.getElementById('youtube-container');
-            
-            try {
-                log('Loading YouTube playlist embed...');
-                
-                container.innerHTML = `
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                        <div class="youtube-video">
-                            <iframe 
-                                src="https://www.youtube.com/embed?listType=playlist&list=${YOUTUBE_PLAYLIST_ID}&index=2" 
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen
-                                loading="lazy"
-                                style="width: 100%; aspect-ratio: 16/9; border-radius: 10px 10px 0 0;">
-                            </iframe>
-                            <div class="youtube-video-title">Front of House 24 Hour Timelapse</div>
-                        </div>
-                        <div class="youtube-video">
-                            <iframe 
-                                src="https://www.youtube.com/embed?listType=playlist&list=${YOUTUBE_PLAYLIST_ID}&index=3" 
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen
-                                loading="lazy"
-                                style="width: 100%; aspect-ratio: 16/9; border-radius: 10px 10px 0 0;">
-                            </iframe>
-                            <div class="youtube-video-title">Side of House 24 Hour Timelapse</div>
-                        </div>
-                        <div class="youtube-video">
-                            <iframe 
-                                src="https://www.youtube.com/embed?listType=playlist&list=${YOUTUBE_PLAYLIST_ID}&index=4" 
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen
-                                loading="lazy"
-                                style="width: 100%; aspect-ratio: 16/9; border-radius: 10px 10px 0 0;">
-                            </iframe>
-                            <div class="youtube-video-title">Back of House 24 Hour Timelapse</div>
-                        </div>
-                        <div class="youtube-video">
-                            <iframe 
-                                src="https://www.youtube.com/embed?listType=playlist&list=${YOUTUBE_PLAYLIST_ID}&index=1" 
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen
-                                loading="lazy"
-                                style="width: 100%; aspect-ratio: 16/9; border-radius: 10px 10px 0 0;">
-                            </iframe>
-                            <div class="youtube-video-title">Kitchen 24 Hour Timelapse</div>
-                        </div>
-                    </div>
-                `;
-                
-                log(`✓ Loaded YouTube playlist embeds`);
-                
-            } catch (error) {
-                log(`✗ Failed to load YouTube: ${error.message}`);
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 20px;">
-                        <p style="color: #666;">Unable to load videos.</p>
-                    </div>
-                `;
-            }
-        }
-
         async function init() {
-            log('🚀 Starting Doughrock...');
+            log('Starting Doughrock...');
             const container = document.getElementById('image-container');
-            
-            // 1. Load main image FIRST
+
             log('Step 1: Loading main image...');
             await selectThumbnail(0);
-            
-            // 2. Load thumbnails
+
             log('Step 2: Loading thumbnails...');
             for (let i = 0; i < driveIds.length; i++) {
                 const thumbnail = await createThumbnail(driveIds[i], i);
                 container.appendChild(thumbnail);
             }
-            
-            // 3. Start auto-refresh (images only)
+
             startAutoRefresh();
             setupFullscreenModal();
-            
-            log('✓ Core initialization complete!');
-            
-            // 4. Load YouTube videos in background (non-blocking)
-            log('Step 3: Loading YouTube videos in background...');
-            loadYouTubeVideos().catch(err => {
-                log(`YouTube loading failed: ${err.message}`);
-            });
-            
-            // 5. Load sensor data LAST (non-blocking)
-            log('Step 4: Loading sensors in background...');
-            updateSensorData().catch(err => {
-                log(`Sensor loading failed: ${err.message}`);
-            });
+            log('Core initialization complete!');
+
+            log('Step 3: Loading sensors in background...');
+            updateSensorData().catch(err => { log(`Sensor loading failed: ${err.message}`); });
         }
 
         window.addEventListener('load', init);
