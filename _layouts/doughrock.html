@@ -12,45 +12,48 @@
             min-height: 100vh;
             padding: 20px;
         }
-        .header { text-align: center; color: white; margin-bottom: 30px; }
-        .header h1 { font-size: 2.5em; font-weight: bold; margin-bottom: 10px; }
-        .status { color: white; }
+        .header { text-align: center; color: white; margin-bottom: 12px; }
+        .header h1 { font-size: 2em; font-weight: bold; margin-bottom: 4px; }
+        .status { color: white; font-size: 0.9em; }
+        .header-stats { color: white; font-weight: bold; margin-top: 6px; font-size: 1.1em; }
         .main-container { max-width: 1400px; margin: 0 auto; }
         .sensor-section {
             background: rgba(255,255,255,0.95);
-            border-radius: 20px; padding: 20px;
-            margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 16px; padding: 12px 16px;
+            margin-bottom: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         .control-box {
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
             border: 2px solid rgba(102, 126, 234, 0.3);
-            border-radius: 15px; padding: 20px; margin: 15px 0;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            border-radius: 12px; padding: 10px 16px; margin: 8px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .control-box-inner {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: space-between;
         }
         .control-box-title {
-            font-size: 1.1em; font-weight: bold; color: #667eea;
-            margin-bottom: 15px; text-align: center;
-            text-transform: uppercase; letter-spacing: 1px;
+            font-size: 0.8em; font-weight: bold; color: #667eea;
+            margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;
         }
-        .lamp-status-text { font-size: 1.2em; font-weight: bold; color: #333; text-align: center; margin-bottom: 10px; }
-        .lamp-helper-text { font-size: 0.9em; color: #666; text-align: center; margin-bottom: 15px; }
-        .lamp-controls { display: flex; gap: 15px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
+        .lamp-status-text { font-size: 1em; font-weight: bold; color: #333; margin: 0; }
+        .lamp-helper-text { font-size: 0.8em; color: #666; margin: 2px 0 0; }
+        .lamp-controls { display: flex; gap: 10px; flex-wrap: wrap; }
         .lamp-button {
             background: linear-gradient(135deg, #28a745, #20c997);
-            color: white; border: none; padding: 15px 30px;
-            border-radius: 10px; font-size: 1.2em; font-weight: bold;
+            color: white; border: none; padding: 8px 18px;
+            border-radius: 8px; font-size: 0.95em; font-weight: bold;
             cursor: pointer; transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); min-width: 140px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
-        .lamp-button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .lamp-button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(0,0,0,0.15); }
         .lamp-button.off { background: linear-gradient(135deg, #dc3545, #c82333); }
         .lamp-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .firebase-status { text-align: center; margin-top: 10px; padding: 8px; border-radius: 5px; font-size: 0.85em; }
+        .firebase-status { text-align: center; margin-top: 6px; padding: 5px; border-radius: 5px; font-size: 0.8em; }
         .firebase-connected { background: rgba(40, 167, 69, 0.1); color: #155724; border: 1px solid rgba(40, 167, 69, 0.2); }
         .firebase-disconnected { background: rgba(220, 53, 69, 0.1); color: #721c24; border: 1px solid rgba(220, 53, 69, 0.2); }
         .main-image-section {
-            background: rgba(255,255,255,0.95); border-radius: 20px; padding: 30px;
-            margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); position: relative;
+            background: rgba(255,255,255,0.95); border-radius: 16px; padding: 16px;
+            margin-bottom: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative;
         }
         .image-container-wrapper { position: relative; display: inline-block; width: 100%; }
         .tap-instruction {
@@ -65,8 +68,8 @@
             background: #f0f0f0; object-fit: contain; max-height: 70vh; cursor: pointer; display: block;
         }
         .thumbnails-section {
-            background: rgba(255,255,255,0.95); border-radius: 20px;
-            padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.95); border-radius: 16px;
+            padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         .thumbnails-section h2 { font-size: 1.3em; font-weight: 400; }
         #image-container { display: grid; gap: 15px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
@@ -145,27 +148,28 @@
     <div class="main-container">
         <div class="header">
             <h1>Doughrock Live Stream</h1>
-            <div class="status">Welcome to Doughrock.</div>
-            <div style="color: white; font-weight: bold; margin-top: 15px; font-size: 1.3em;">
-                <span id="humidity-value">Humidity: Loading...</span> | 
+            <div class="status">Welcome to Doughrock. &nbsp;|&nbsp;
+                <span id="humidity-value">Humidity: Loading...</span> &nbsp;|&nbsp;
                 <span id="temperature-value">Temperature: Loading...</span>
             </div>
         </div>
 
         <div class="sensor-section">
             <div class="control-box">
-                <div class="control-box-title">Living Room Lamp Controls</div>
-                <div class="lamp-status-text" id="lamp-status-display">Lamp is currently: Unknown</div>
-                <div class="lamp-helper-text">Light should be visible in Living Room camera below</div>
-                <div class="lamp-controls">
-                    <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display: none;">
-                        <span>Turn Lamp ON</span>
-                        <div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>
-                    </button>
-                    <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()" style="display: none;">
-                        <span>Turn Lamp OFF</span>
-                        <div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>
-                    </button>
+                <div class="control-box-inner">
+                    <div>
+                        <div class="control-box-title">Living Room Lamp Controls</div>
+                        <div class="lamp-status-text" id="lamp-status-display">Lamp is currently: Unknown</div>
+                        <div class="lamp-helper-text">Check Living Room camera after pressing</div>
+                    </div>
+                    <div class="lamp-controls">
+                        <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display: none;">
+                            Turn Lamp ON
+                        </button>
+                        <button class="lamp-button off" id="lamp-off-btn" onclick="lampOff()" style="display: none;">
+                            Turn Lamp OFF
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
@@ -345,16 +349,16 @@
 
                 setTimeout(() => {
                     onBtn.disabled = false; offBtn.disabled = false;
-                    onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
-                    offBtn.innerHTML = '<span>Turn Lamp OFF</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
+                    onBtn.innerHTML = 'Turn Lamp ON';
+                    offBtn.innerHTML = 'Turn Lamp OFF';
                 }, 30000);
 
                 log(`Lamp ${action} command sent: ${command.id}`);
             } catch (error) {
                 alert(`Error: ${error.message}`);
                 onBtn.disabled = false; offBtn.disabled = false;
-                onBtn.innerHTML = '<span>Turn Lamp ON</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
-                offBtn.innerHTML = '<span>Turn Lamp OFF</span><div style="font-size: 0.8em; margin-top: 5px;">Once pressed, check Living Room camera below</div>';
+                onBtn.innerHTML = 'Turn Lamp ON';
+                offBtn.innerHTML = 'Turn Lamp OFF';
             }
         }
 
