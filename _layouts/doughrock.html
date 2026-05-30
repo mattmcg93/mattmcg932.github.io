@@ -51,6 +51,84 @@
         .firebase-status { text-align: center; margin-top: 6px; padding: 5px; border-radius: 5px; font-size: 0.8em; }
         .firebase-connected { background: rgba(40, 167, 69, 0.1); color: #155724; border: 1px solid rgba(40, 167, 69, 0.2); }
         .firebase-disconnected { background: rgba(220, 53, 69, 0.1); color: #721c24; border: 1px solid rgba(220, 53, 69, 0.2); }
+
+        /* ── Timelapse Section ── */
+        .timelapse-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px; padding: 16px;
+            margin-bottom: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .timelapse-section h2 {
+            font-size: 1.3em; font-weight: 400; margin-bottom: 12px;
+        }
+        .timelapse-grid {
+            display: grid;
+            gap: 12px;
+            /* Desktop / landscape: 4 columns */
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .timelapse-cell {
+            border-radius: 10px;
+            overflow: hidden;
+            background: #1a1a2e;
+            position: relative;
+            aspect-ratio: 4 / 3;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .timelapse-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .timelapse-cell .tl-label {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.75));
+            color: white;
+            font-size: 0.75em;
+            font-weight: 600;
+            padding: 16px 8px 6px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+        .timelapse-cell .tl-loading {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.6); font-size: 0.8em; gap: 8px;
+        }
+        .tl-spinner {
+            width: 28px; height: 28px;
+            border: 3px solid rgba(255,255,255,0.15);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .timelapse-cell .tl-error {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.4); font-size: 0.75em; text-align: center; padding: 8px;
+        }
+        .timelapse-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: linear-gradient(135deg, rgba(102,126,234,0.15), rgba(118,75,162,0.15));
+            border: 1px solid rgba(102,126,234,0.3);
+            color: #667eea; font-size: 0.75em; font-weight: 700;
+            padding: 3px 10px; border-radius: 20px; margin-bottom: 12px;
+            letter-spacing: 0.5px; text-transform: uppercase;
+        }
+        .timelapse-badge::before { content: '⏱'; }
+
+        /* Portrait / mobile: 2 columns */
+        @media (max-width: 768px) and (orientation: portrait),
+               (max-width: 600px) {
+            .timelapse-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ── Rest of original styles ── */
         .main-image-section {
             background: rgba(255,255,255,0.95); border-radius: 16px; padding: 16px;
             margin-bottom: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative;
@@ -173,6 +251,13 @@
                 </div>
             </div>
             <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
+        </div>
+
+        <!-- ── Daily Timelapse Section ── -->
+        <div class="timelapse-section">
+            <div class="timelapse-badge">Daily Timelapses</div>
+            <h2>Today's Timelapses</h2>
+            <div class="timelapse-grid" id="timelapse-grid"></div>
         </div>
 
         <div class="main-image-section">
@@ -366,7 +451,7 @@
         window.firebaseConnected = () => firebaseConnected;
         window.updateLampStatusDisplay = updateLampStatusDisplay;
     </script>
-https://drive.google.com/file/d/1KCY2hTLZ1DCeaaUZHmC8m9RfDvQdiOtO/view?usp=sharing
+
     <script>
         const driveIds = [
             "1Izw2_V4hRku40rTV5BCvR9NevfCRqNDf", // raspi-zero-w-shed
@@ -386,6 +471,18 @@ https://drive.google.com/file/d/1KCY2hTLZ1DCeaaUZHmC8m9RfDvQdiOtO/view?usp=shari
             "Kitchen", "Front of House", "Router Usage", "Climate Dashboard"
         ];
 
+        // ── Timelapse GIF data ──
+        const timelapseGifs = [
+            { id: "1pZEzNY2Aoa4ukYUFjSWtR7KK-OpBJ47i", name: "Shed" },
+            { id: "1KhHh5IZn5TLCIoRQXUi8N05XZgjaAErK", name: "Shed Tiny" },
+            { id: "1WogrpWiSc6t0ExsUrxa136t04xk-x81P", name: "Shed Inside" },
+            { id: "1WxMwt0YTlW9k8QNep4bb_2YAhBZt9B-f", name: "Living Room" },
+            { id: "1V4GDb4xCsEewPcD2B06mcJZncfr5BJuP", name: "Back of House" },
+            { id: "1BUzgK8I-9RcN6_0LzEf68TJs8Apki2H0", name: "Side of House" },
+            { id: "1UD-LLgZWbgnMaxjrR85NIADO7XF16UDd", name: "Kitchen" },
+            { id: "1XVuUi7r7fgCMK8DRF40owJXTTysNkSvd", name: "Front of House" },
+        ];
+
         const sensorIds = {
             humidity: "1Ajb8r6TB5aKkWDAr99iDAlo3TlqReT2O",
             temperature: "1GPWSQIFjLR25lmuP-ljgIFriLNBS-FyQ"
@@ -398,6 +495,102 @@ https://drive.google.com/file/d/1KCY2hTLZ1DCeaaUZHmC8m9RfDvQdiOtO/view?usp=shari
             console.log(message);
             debugLog.innerHTML += message + '<br>';
             debugLog.scrollTop = debugLog.scrollHeight;
+        }
+
+        // ── Timelapse loader ──
+        // GIFs on Google Drive need the same fetch tricks as images.
+        // We try direct lh3 URLs first (they work for publicly shared files),
+        // then fall back to the uc?export=download URL.
+        function buildGifUrls(driveId) {
+            const t = Date.now();
+            return [
+                `https://lh3.googleusercontent.com/d/${driveId}=w800&t=${t}`,
+                `https://drive.google.com/uc?id=${driveId}&export=download&t=${t}`,
+                `https://lh3.googleusercontent.com/d/${driveId}?t=${t}`,
+            ];
+        }
+
+        async function fetchGif(driveId) {
+            const urls = buildGifUrls(driveId);
+
+            // Try direct fetch first
+            for (const url of urls) {
+                try {
+                    const res = await fetch(url, { mode: 'cors', credentials: 'omit', cache: 'no-store' });
+                    if (res.ok) {
+                        const blob = await res.blob();
+                        if (blob.size > 1000) return URL.createObjectURL(blob);
+                    }
+                } catch (_) {}
+            }
+
+            // CORS proxy fallback
+            const proxies = getCORSProxies();
+            for (const proxy of proxies) {
+                for (const url of urls.slice(0, 2)) {
+                    try {
+                        const res = await fetch(proxy + encodeURIComponent(url));
+                        if (res.ok) {
+                            const blob = await res.blob();
+                            if (blob.size > 1000) return URL.createObjectURL(blob);
+                        }
+                    } catch (_) {}
+                }
+            }
+
+            // Last resort: just return a direct URL and let the <img> try
+            return urls[0];
+        }
+
+        async function buildTimelapseGrid() {
+            const grid = document.getElementById('timelapse-grid');
+
+            // Create placeholder cells immediately
+            const cells = timelapseGifs.map(({ name }) => {
+                const cell = document.createElement('div');
+                cell.className = 'timelapse-cell';
+                cell.innerHTML = `
+                    <div class="tl-loading">
+                        <div class="tl-spinner"></div>
+                        <span>Loading ${name}…</span>
+                    </div>
+                    <div class="tl-label">${name}</div>
+                `;
+                grid.appendChild(cell);
+                return cell;
+            });
+
+            // Load GIFs concurrently
+            await Promise.all(timelapseGifs.map(async ({ id, name }, i) => {
+                try {
+                    const src = await fetchGif(id);
+                    const img = document.createElement('img');
+                    img.alt = name;
+
+                    img.onload = () => {
+                        // Remove loading indicator once image is ready
+                        const loadingDiv = cells[i].querySelector('.tl-loading');
+                        if (loadingDiv) loadingDiv.remove();
+                        log(`Timelapse GIF loaded: ${name}`);
+                    };
+                    img.onerror = () => {
+                        const loadingDiv = cells[i].querySelector('.tl-loading');
+                        if (loadingDiv) loadingDiv.remove();
+                        const err = document.createElement('div');
+                        err.className = 'tl-error';
+                        err.textContent = `${name} – failed to load`;
+                        cells[i].insertBefore(err, cells[i].querySelector('.tl-label'));
+                        log(`Timelapse GIF error: ${name}`);
+                    };
+
+                    img.src = src;
+                    cells[i].insertBefore(img, cells[i].querySelector('.tl-label'));
+                } catch (e) {
+                    const loadingDiv = cells[i].querySelector('.tl-loading');
+                    if (loadingDiv) loadingDiv.remove();
+                    log(`Timelapse fetch error for ${name}: ${e.message}`);
+                }
+            }));
         }
 
         async function fetchSensorData(fileId, sensorType) {
@@ -739,7 +932,10 @@ https://drive.google.com/file/d/1KCY2hTLZ1DCeaaUZHmC8m9RfDvQdiOtO/view?usp=shari
             log('Step 1: Loading main image...');
             await selectThumbnail(0);
 
-            log('Step 2: Loading thumbnails...');
+            log('Step 2: Loading timelapse GIFs...');
+            buildTimelapseGrid(); // fire and forget – loads concurrently
+
+            log('Step 3: Loading thumbnails...');
             for (let i = 0; i < driveIds.length; i++) {
                 const thumbnail = await createThumbnail(driveIds[i], i);
                 container.appendChild(thumbnail);
@@ -749,7 +945,7 @@ https://drive.google.com/file/d/1KCY2hTLZ1DCeaaUZHmC8m9RfDvQdiOtO/view?usp=shari
             setupFullscreenModal();
             log('Core initialization complete!');
 
-            log('Step 3: Loading sensors in background...');
+            log('Step 4: Loading sensors in background...');
             updateSensorData().catch(err => { log(`Sensor loading failed: ${err.message}`); });
         }
 
