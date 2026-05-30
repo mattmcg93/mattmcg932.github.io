@@ -263,6 +263,10 @@
             <div class="timelapse-grid" id="timelapse-grid"></div>
         </div>
 
+        <div style="text-align:center;margin-bottom:10px;">
+            <h2 style="color:white;font-size:1.8em;font-weight:700;letter-spacing:0.5px;text-shadow:0 2px 8px rgba(0,0,0,0.2);">Doughrock Live Views</h2>
+        </div>
+
         <div class="main-image-section">
             <div class="image-container-wrapper">
                 <div class="tap-instruction">Tap to make full screen</div>
@@ -581,7 +585,7 @@
 
             // Set dynamic heading
             const heading = document.getElementById('timelapse-heading');
-            if (heading) heading.innerHTML = getTimelapseHeading();
+            if (heading) heading.innerHTML = getTimelapseHeading() + ' <span style="font-size:0.55em;font-weight:400;color:#999;font-style:italic;">— Click to view timelapse fullscreen</span>';
 
             // Create placeholder cells immediately
             const cells = timelapseGifs.map(({ name }) => {
