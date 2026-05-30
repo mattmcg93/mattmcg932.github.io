@@ -554,6 +554,8 @@
             return `Today's Timelapses <span style="font-size:0.65em;font-weight:400;color:#666;">(9am ${fmt(yesterday)} to 9am ${fmt(now)})</span>`;
         }
 
+        window.timelapseFullscreenActive = false;
+
         function openTimelapseFullscreen(src, name) {
             const modal = document.getElementById('fullscreen-modal');
             const fullscreenImg = document.getElementById('fullscreen-image');
@@ -569,6 +571,7 @@
             fullscreenImg.classList.toggle('rotated', portrait);
             closeButton.classList.toggle('rotated', portrait);
 
+            window.timelapseFullscreenActive = true;
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -814,7 +817,7 @@
                 const oldSrc = mainImage.src;
                 if (oldSrc && oldSrc.startsWith('blob:')) URL.revokeObjectURL(oldSrc);
                 mainImage.src = newMainUrl;
-                if (document.getElementById('fullscreen-modal').classList.contains('active')) {
+                if (document.getElementById('fullscreen-modal').classList.contains('active') && !window.timelapseFullscreenActive) {
                     fullscreenImg.src = newMainUrl;
                 }
                 mainImage.onload = () => {
@@ -946,6 +949,7 @@
                 modal.classList.remove('active');
                 fullscreenImg.classList.remove('rotated');
                 document.body.style.overflow = '';
+                window.timelapseFullscreenActive = false;
             }
 
             mainImage.addEventListener('click', openFullscreen);
