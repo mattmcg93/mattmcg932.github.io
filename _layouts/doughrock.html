@@ -555,7 +555,7 @@
             const yesterday = new Date(now);
             yesterday.setDate(yesterday.getDate() - 1);
             const fmt = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-            return `Today's Timelapses <span style="font-size:0.65em;font-weight:400;color:#666;">(9am ${fmt(yesterday)} to 9am ${fmt(now)})</span>`;
+            return `Today's Timelapses <span style="font-size:0.75em;font-weight:400;color:#555;">(9am ${fmt(yesterday)} to 9am ${fmt(now)})</span>`;
         }
 
         window.timelapseFullscreenActive = false;
@@ -585,7 +585,7 @@
 
             // Set dynamic heading
             const heading = document.getElementById('timelapse-heading');
-            if (heading) heading.innerHTML = getTimelapseHeading() + ' <span style="font-size:0.55em;font-weight:400;color:#999;font-style:italic;">— Click to view timelapse fullscreen</span>';
+            if (heading) heading.innerHTML = getTimelapseHeading() + ' <span style="font-size:0.7em;font-weight:400;color:#888;font-style:italic;">— Click to view timelapse fullscreen</span>';
 
             // Create placeholder cells immediately
             const cells = timelapseGifs.map(({ name }) => {
