@@ -230,7 +230,7 @@
     <div class="main-container">
         <div class="header">
             <h1>Doughrock: AI Wildlife Trap Network</h1>
-            <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, and remote heater control over Firebase3. 
+            <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, and remote heater control over Firebase4. 
                 
             </div>
         </div>
@@ -368,6 +368,7 @@
         window.lampOff = async function() { await sendLampCommand('off'); };
 
         function openFullscreenForLamp(action) {
+            window.heaterFullscreenActive = true;
             const fullscreenModal = document.getElementById('fullscreen-modal');
             const fullscreenImg = document.getElementById('fullscreen-image');
             const fullscreenOverlay = document.getElementById('fullscreen-overlay');
@@ -821,7 +822,11 @@
                 const oldSrc = mainImage.src;
                 if (oldSrc && oldSrc.startsWith('blob:')) URL.revokeObjectURL(oldSrc);
                 mainImage.src = newMainUrl;
-                if (document.getElementById('fullscreen-modal').classList.contains('active') && !window.timelapseFullscreenActive) {
+                if (
+                    document.getElementById('fullscreen-modal').classList.contains('active') &&
+                    !window.timelapseFullscreenActive &&
+                    !window.heaterFullscreenActive
+                ) {
                     fullscreenImg.src = newMainUrl;
                 }
                 mainImage.onload = () => {
@@ -954,6 +959,7 @@
                 fullscreenImg.classList.remove('rotated', 'timelapse');  // ← clean up
                 document.body.style.overflow = '';
                 window.timelapseFullscreenActive = false;
+                window.heaterFullscreenActive = false;
             }
 
             mainImage.addEventListener('click', openFullscreen);
