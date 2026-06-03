@@ -287,7 +287,7 @@
         <img class="fullscreen-image" id="fullscreen-image" alt="Fullscreen View">
         <div class="fullscreen-overlay" id="fullscreen-overlay">
             <div class="fullscreen-overlay-title" id="fullscreen-overlay-title">Currently turning Living Room lamp ON</div>
-            <div class="fullscreen-countdown-number" id="fullscreen-countdown-number">30</div>
+            <div class="fullscreen-countdown-number" id="fullscreen-countdown-number">5</div>
             <div class="fullscreen-overlay-message">Please wait...</div>
         </div>
     </div>
@@ -400,11 +400,11 @@
             const countdownNumber = document.getElementById('fullscreen-countdown-number');
             const overlayMessage = overlay.querySelector('.fullscreen-overlay-message');
 
-            overlayTitle.textContent = action === 'on' ? 'HEATER ON! Keep checking Climate Dashboard for change.' : 'HEATER OFF! Keep checking Climate Dashboard for change.';
+            overlayTitle.textContent = action === 'on' ? 'HEATER ON! Check Climate Dashboard for change in next 15 minutes.' : 'HEATER OFF! Check Climate Dashboard for change in next 15 minutes.';
             overlayMessage.textContent = action === 'on' ? 'Turning on the Living Room Heater...' : 'Time to go cold...';
             overlay.style.display = 'block';
 
-            let seconds = 30;
+            let seconds = 5;
             countdownNumber.textContent = seconds;
 
             countdownInterval = setInterval(() => {
