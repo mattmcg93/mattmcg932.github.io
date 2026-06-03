@@ -16,6 +16,43 @@
         .header h1 { font-size: 2em; font-weight: bold; margin-bottom: 4px; }
         .status { color: white; font-size: 0.9em; }
         .header-stats { color: white; font-weight: bold; margin-top: 6px; font-size: 1.1em; }
+
+        /* ── Mini sections under header ── */
+        .mini-section {
+            margin-top: 10px;
+            color: white;
+            text-align: center;
+        }
+        
+        .mini-title {
+            font-size: 0.95em;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+        
+        .mini-image {
+            width: 100%;
+            max-width: 520px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        }
+        
+        .aurora-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        
+        .aurora-row img {
+            width: 32%;
+            min-width: 120px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        }
+        
         .main-container { max-width: 1400px; margin: 0 auto; }
         .sensor-section {
             background: rgba(255,255,255,0.95);
@@ -231,6 +268,28 @@
         <div class="header">
             <h1>Doughrock: AI Wildlife Trap Network</h1>
             <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, and remote heater control over Firebase. 
+                <!-- Notable wildlife detections -->
+                <div class="mini-section">
+                    <div class="mini-title">Notable wildlife detections</div>
+                    <img
+                        class="mini-image"
+                        src="https://drive.google.com/uc?export=view&id=1BSSQgdirLj48rlsBAK0QsCIIOsBpFVVP"
+                        alt="Wildlife detection"
+                    >
+                </div>
+                
+                <!-- Aurora section -->
+                <div class="mini-section">
+                    <div class="mini-title">
+                        The Raspberry Pi cameras were initially set up to spot wildlife, but after some remote SSH tinkering they were able to capture aurora at night
+                    </div>
+                
+                    <div class="aurora-row">
+                        <img src="https://drive.google.com/uc?export=view&id=1ioEPh7hv97IjQiycki1qFt2_hLC8Zh-V" alt="Aurora 1">
+                        <img src="https://drive.google.com/uc?export=view&id=1gCrGAic6GWDf4StjXJBd1lhBk-LrdFPb" alt="Aurora 2">
+                        <img src="https://drive.google.com/uc?export=view&id=1BdcbiBegvrgH5IGVbDlSvUOuGpsJsapa" alt="Aurora 3">
+                    </div>
+                </div>
                 
             </div>
         </div>
