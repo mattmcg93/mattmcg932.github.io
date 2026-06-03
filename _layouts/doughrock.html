@@ -271,11 +271,7 @@
                 <!-- Notable wildlife detections -->
                 <div class="mini-section">
                     <div class="mini-title">Notable wildlife detections</div>
-                    <img
-                        class="mini-image"
-                        src="https://drive.google.com/uc?export=view&id=1BSSQgdirLj48rlsBAK0QsCIIOsBpFVVP"
-                        alt="Wildlife detection"
-                    >
+                    <img class="mini-image" id="wildlife-img" alt="Wildlife detection">
                 </div>
                 
                 <!-- Aurora section -->
@@ -285,9 +281,9 @@
                     </div>
                 
                     <div class="aurora-row">
-                        <img src="https://drive.google.com/uc?export=view&id=1ioEPh7hv97IjQiycki1qFt2_hLC8Zh-V" alt="Aurora 1">
-                        <img src="https://drive.google.com/uc?export=view&id=1gCrGAic6GWDf4StjXJBd1lhBk-LrdFPb" alt="Aurora 2">
-                        <img src="https://drive.google.com/uc?export=view&id=1BdcbiBegvrgH5IGVbDlSvUOuGpsJsapa" alt="Aurora 3">
+                        <img id="aurora1" alt="Aurora 1">
+                        <img id="aurora2" alt="Aurora 2">
+                        <img id="aurora3" alt="Aurora 3">
                     </div>
                 </div>
                 
@@ -1054,10 +1050,35 @@
 
             startAutoRefresh();
             setupFullscreenModal();
+            loadMiniSectionImages();
             log('Core initialization complete!');
 
             log('Step 4: Loading sensors in background...');
             updateSensorData().catch(err => { log(`Sensor loading failed: ${err.message}`); });
+        }
+
+        async function loadMiniSectionImages() {
+            const wildlifeId = "1BSSQgdirLj48rlsBAK0QsCIIOsBpFVVP";
+        
+            const auroraIds = [
+                "1ioEPh7hv97IjQiycki1qFt2_hLC8Zh-V",
+                "1gCrGAic6GWDf4StjXJBd1lhBk-LrdFPb",
+                "1BdcbiBegvrgH5IGVbDlSvUOuGpsJsapa"
+            ];
+        
+            const wildlifeImg = document.getElementById("wildlife-img");
+            if (wildlifeImg) {
+                const url = await extremeFetchImage(wildlifeId);
+                if (url) wildlifeImg.src = url;
+            }
+        
+            for (let i = 0; i < auroraIds.length; i++) {
+                const el = document.getElementById(`aurora${i + 1}`);
+                if (el) {
+                    const url = await extremeFetchImage(auroraIds[i]);
+                    if (url) el.src = url;
+                }
+            }
         }
 
         window.addEventListener('load', init);
