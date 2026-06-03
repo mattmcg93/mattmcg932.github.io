@@ -230,7 +230,7 @@
     <div class="main-container">
         <div class="header">
             <h1>Doughrock: AI Wildlife Trap Network</h1>
-            <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, and remote heater control over Firebase2. 
+            <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, and remote heater control over Firebase3. 
                 
             </div>
         </div>
@@ -373,7 +373,7 @@
             const fullscreenOverlay = document.getElementById('fullscreen-overlay');
             const closeButton = document.getElementById('close-modal');
 
-            if (driveIds[0]) {
+            if (driveIds[9]) {
                 extremeFetchImage(driveIds[9]).then(imageUrl => {
                     if (imageUrl) fullscreenImg.src = imageUrl;
                 });
@@ -399,7 +399,7 @@
             const countdownNumber = document.getElementById('fullscreen-countdown-number');
             const overlayMessage = overlay.querySelector('.fullscreen-overlay-message');
 
-            overlayTitle.textContent = action === 'on' ? 'HEATER ON! Keep checking Climate Dashboard for change.' : 'HEATER ON! Keep checking Climate Dashboard for change.';
+            overlayTitle.textContent = action === 'on' ? 'HEATER ON! Keep checking Climate Dashboard for change.' : 'HEATER OFF! Keep checking Climate Dashboard for change.';
             overlayMessage.textContent = action === 'on' ? 'Turning on the Living Room Heater...' : 'Time to go cold...';
             overlay.style.display = 'block';
 
