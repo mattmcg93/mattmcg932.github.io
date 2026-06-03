@@ -4,7 +4,10 @@
 </body>
 <footer class="page-footer">
   <div class="footer-copyright" style="padding-left: 30px">
-    <i class="material-icons" style="padding-right:5px">copyright</i><p>2024 Copyright {{ site.name }} | All rights reserved</p>
+    <i class="material-icons" style="padding-right:5px">copyright</i><p><span id="footer-year">2024</span> Copyright {{ site.name }} | All rights reserved</p>
   </div>
 </footer>
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+</script>
 </html>
