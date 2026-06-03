@@ -1,7 +1,7 @@
 title: Dr Matthew McGuigan
 name: Dr Matthew McGuigan
 email: matthew.g.mcguigan@gmail.com
-description: I am a Research Fellow in Computer Science at the University of Exeter.
+description: PhD-level Machine Learning and Computer Vision researcher and engineer. Research Fellow in Computer Science at the University of Exeter.
 
 baseurl: "/blog"
 url: ""
@@ -10,8 +10,8 @@ parallax_image_one: assets/images/startup3.jpg # These are the images used for t
 parallax_image_two: assets/images/startup3.jpg
 
 project_one: My Research
-project_one_description: My research involves the estimation of an object’s shape and the contactless detection of fingerprints from photographs using machine learning and artificial intelligence approaches.
-project_one_url: http://emps.exeter.ac.uk/computer-science/staff/mm757 
+project_one_description: My research involves the contactless extraction of fingerprints from photographs of curved surfaces using machine learning and computer vision; geospatial AI for road detection from satellite imagery; and the commercialisation of patented imaging IP. Patent granted in the US (US 12,315,289 B2) and awarded in Europe (EP 4377877).
+project_one_url: https://experts.exeter.ac.uk/28198-matthew-mcguigan
 project_one_icon: location_on
 
 project_two: Connect with me on LinkedIn
@@ -20,7 +20,7 @@ project_two_url: https://www.linkedin.com/in/dr-matthew-mcguigan-33239286/
 project_two_icon: restaurant
 
 project_three: Solar Eclipse TV Interview
-project_three_description: I was contacted for an interview and asked to explain how to image the 2015 solar eclipse. I also discussed some astrophotograpy which I had posted online. 
+project_three_description: I was contacted for an interview and asked to explain how to image the 2015 solar eclipse. I also discussed some astrophotography which I had posted online.
 project_three_url: https://www.youtube.com/watch?v=VR57efH0Kfs&t=8s
 project_three_icon: photo_camera
 
