@@ -239,9 +239,9 @@
             <div class="control-box">
                 <div class="control-box-inner">
                     <div>
-                        <div class="control-box-title">Living Room Lamp Controls</div>
-                        <div class="lamp-status-text" id="lamp-status-display">Lamp is currently: Unknown</div>
-                        <div class="lamp-helper-text">Check Living Room camera after pressing</div>
+                        <div class="control-box-title">Heater Controls</div>
+                        <div class="lamp-status-text" id="lamp-status-display">Heater is currently: Unknown</div>
+                        <div class="lamp-helper-text">Check Climate Dashboard below after pressing</div>
                     </div>
                     <div class="lamp-controls">
                         <button class="lamp-button" id="lamp-on-btn" onclick="lampOn()" style="display: none;">
@@ -399,8 +399,8 @@
             const countdownNumber = document.getElementById('fullscreen-countdown-number');
             const overlayMessage = overlay.querySelector('.fullscreen-overlay-message');
 
-            overlayTitle.textContent = action === 'on' ? 'LET THERE BE LIGHT!' : 'LIGHTS OUT!';
-            overlayMessage.textContent = action === 'on' ? 'Turning on the Living Room lamp...' : 'Time to go dark...';
+            overlayTitle.textContent = action === 'on' ? 'HEATER ON! Keep checking Climate Dashboard for change.' : 'HEATER ON! Keep checking Climate Dashboard for change.';
+            overlayMessage.textContent = action === 'on' ? 'Turning on the Living Room Heater...' : 'Time to go cold...';
             overlay.style.display = 'block';
 
             let seconds = 30;
@@ -411,8 +411,8 @@
                 countdownNumber.textContent = seconds;
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
-                    overlayTitle.textContent = action === 'on' ? 'Should be bright and shiny now!' : 'Should be nice and dark now!';
-                    overlayMessage.textContent = action === 'on' ? 'If still dark, try again' : 'If still bright, try again';
+                    overlayTitle.textContent = action === 'on' ? 'Should be nice and warm now!' : 'Should be cooling down now!';
+                    overlayMessage.textContent = action === 'on' ? 'Keep an eye on Climate Dashboard to see temperature change' : 'And humidity!';
                     countdownNumber.textContent = '';
                     overlayTimeoutInterval = setTimeout(() => { overlay.style.display = 'none'; }, 3000);
                 }
