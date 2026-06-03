@@ -338,7 +338,7 @@
 
             if (status && status.state) {
                 const state = status.state.toUpperCase();
-                lampStatusElement.textContent = `Lamp is currently: ${state}`;
+                lampStatusElement.textContent = `Heater is currently: ${state}`;
                 lampStatusElement.style.color = state === 'ON' ? '#28a745' : '#6c757d';
                 lampOnBtn.style.display = state === 'ON' ? 'none' : 'block';
                 lampOffBtn.style.display = state === 'ON' ? 'block' : 'none';
