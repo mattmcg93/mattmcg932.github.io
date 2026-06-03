@@ -230,7 +230,7 @@
     <div class="main-container">
         <div class="header">
             <h1>Doughrock: AI Wildlife Trap Network</h1>
-            <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, and remote heater control over Firebase. 
+            <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, and remote heater control over Firebase2. 
                 
             </div>
         </div>
@@ -373,8 +373,8 @@
             const fullscreenOverlay = document.getElementById('fullscreen-overlay');
             const closeButton = document.getElementById('close-modal');
 
-            if (driveIds[3]) {
-                extremeFetchImage(driveIds[0]).then(imageUrl => {
+            if (driveIds[0]) {
+                extremeFetchImage(driveIds[9]).then(imageUrl => {
                     if (imageUrl) fullscreenImg.src = imageUrl;
                 });
             }
@@ -412,7 +412,7 @@
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
                     overlayTitle.textContent = action === 'on' ? 'Should be nice and warm now!' : 'Should be cooling down now!';
-                    overlayMessage.textContent = action === 'on' ? 'Keep an eye on Climate Dashboard to see temperature change' : 'And humidity!';
+                    overlayMessage.textContent = action === 'on' ? 'Keep an eye on Climate Dashboard to see temperature change' : 'And humidity should change!';
                     countdownNumber.textContent = '';
                     overlayTimeoutInterval = setTimeout(() => { overlay.style.display = 'none'; }, 3000);
                 }
