@@ -67,10 +67,24 @@
     <h3 style="text-align:center;">Personal Projects</h3>
     <ul class="browser-default" style="margin-top:20px;">
       <li style="margin-bottom:10px;">
-        <strong>BuckyFinder</strong> — a community-driven mobile app I designed, built and shipped solo to both stores
+        <strong>BuckyFinder</strong> — a community-driven mobile app I designed, built and shipped solo to both stores,
+        with 900+ crowd-sourced stockist locations across the UK and worldwide, user ratings, comments, and photo
+        submissions
         (<a href="https://buckyfinder.com/" target="_blank" rel="noopener">buckyfinder.com</a>,
         <a href="https://apps.apple.com/gb/app/buckyfinder/id6758728927" target="_blank" rel="noopener">iOS</a>,
         <a href="https://play.google.com/store/apps/details?id=com.buckyfinder.app" target="_blank" rel="noopener">Android</a>).
+        <ul class="browser-default" style="margin-top:8px;">
+          <li style="margin-bottom:8px;">
+            <strong>ScottishGPT</strong> — a self-hosted LLM assistant built into BuckyFinder and accessible at
+            <a href="https://buckyfinder.com/scottishgpt" target="_blank" rel="noopener">buckyfinder.com/scottishgpt</a>.
+            Runs a quantised 500M-parameter open-source model (Qwen2-0.5B, Q2_K GGUF) entirely on CPU on a 2009-era
+            machine with no GPU, compiled from source to work without AVX instructions. Features a geospatial stockist
+            search backed by the live location database using the haversine formula, a hardcoded intent and knowledge
+            layer for reliable domain-specific answers, and a post-processing dialect pipeline that scotifies every
+            response. The honest architecture is an intent classifier with an LLM fallback — deterministic logic where
+            accuracy matters, the model where generality helps.
+          </li>
+        </ul>
       </li>
       <li style="margin-bottom:10px;">
         <strong>Doughrock AI wildlife trap network</strong> — Raspberry Pi based computer-vision traps with real-time
