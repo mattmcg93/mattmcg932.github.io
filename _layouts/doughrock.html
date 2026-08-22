@@ -267,7 +267,7 @@
     <div class="main-container">
         <div class="header">
             <h1>Doughrock: AI Wildlife Trap Network</h1>
-            <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, and remote heater control over Firebase. 
+            <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, dehumidifier and remote heater control over Firebase. 
                 <!-- Notable wildlife detections -->
                 <div class="mini-section">
                     <div class="mini-title">Notable guest appearances (with some dodgy misclassifications)</div>
@@ -517,6 +517,7 @@
 
     <script>
         const driveIds = [
+            "13EYpY0GbRWhC_XdlGaq-EWauQGN9-huw", // Solar Powered Cam
             "1Izw2_V4hRku40rTV5BCvR9NevfCRqNDf", // raspi-zero-w-shed
             "1ilYEtwGyuR7JlTn9P64T1mUvq71WgudU", // raspi-zero-w-shed-tiny
             "1KCY2hTLZ1DCeaaUZHmC8m9RfDvQdiOtO", // raspi-zero-w-shed-inside
@@ -530,12 +531,13 @@
         ];
 
         const cameraNames = [
-            "raspi-zero-w-shed", "raspi-zero-w-shed-tiny", "raspi-zero-w-shed-inside", "Living Room", "Back of House", "Side of House",
+            "Solar Powered Cam", "raspi-zero-w-shed", "raspi-zero-w-shed-tiny", "raspi-zero-w-shed-inside", "Living Room", "Back of House", "Side of House",
             "Kitchen", "Front of House", "Router Usage", "Climate Dashboard"
         ];
 
         // ── Timelapse GIF data ──
         const timelapseGifs = [
+            { id: "1OhJ0KSujtuDkbf7nc5y84BPJcGa437tq", name: "Solar Powered Cam" },
             { id: "1pZEzNY2Aoa4ukYUFjSWtR7KK-OpBJ47i", name: "Shed" },
             { id: "1KhHh5IZn5TLCIoRQXUi8N05XZgjaAErK", name: "Shed Tiny" },
             { id: "1WogrpWiSc6t0ExsUrxa136t04xk-x81P", name: "Shed Inside" },
