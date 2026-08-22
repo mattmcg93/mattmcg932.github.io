@@ -267,7 +267,7 @@
     <div class="main-container">
         <div class="header">
             <h1>Doughrock: AI Wildlife Trap Network</h1>
-            <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, dehumidifier and remote heater control over Firebase. 
+            <div class="status">A network of Raspberry Pi based computer-vision wildlife traps with real-time object detection, environmental sensing, and remote heater control over Firebase. 
                 <!-- Notable wildlife detections -->
                 <div class="mini-section">
                     <div class="mini-title">Notable guest appearances (with some dodgy misclassifications)</div>
@@ -618,6 +618,17 @@
 
         window.timelapseFullscreenActive = false;
 
+        // On mobile portrait screens, rotate only landscape source images.
+        // Portrait images stay upright, and desktop never rotates fullscreen images.
+        function applyFullscreenRotation(fullscreenImg, closeButton) {
+            const isMobilePortraitViewport = window.innerWidth <= 768 && window.innerHeight > window.innerWidth;
+            const imageIsLandscape = fullscreenImg.naturalWidth > fullscreenImg.naturalHeight;
+            const shouldRotate = isMobilePortraitViewport && imageIsLandscape;
+
+            fullscreenImg.classList.toggle('rotated', shouldRotate);
+            closeButton.classList.toggle('rotated', shouldRotate);
+        }
+
         function openTimelapseFullscreen(src, name) {
             const modal = document.getElementById('fullscreen-modal');
             const fullscreenImg = document.getElementById('fullscreen-image');
@@ -628,10 +639,10 @@
         
             fullscreenImg.src = src;
             fullscreenImg.classList.add('timelapse');  // ← fills the screen
-        
-            const portrait = window.innerWidth <= 768 && window.innerHeight > window.innerWidth;
-            fullscreenImg.classList.toggle('rotated', portrait);
-            closeButton.classList.toggle('rotated', portrait);
+
+            const updateRotation = () => applyFullscreenRotation(fullscreenImg, closeButton);
+            if (fullscreenImg.complete && fullscreenImg.naturalWidth) updateRotation();
+            else fullscreenImg.addEventListener('load', updateRotation, { once: true });
         
             window.timelapseFullscreenActive = true;
             modal.classList.add('active');
@@ -999,14 +1010,14 @@
             const closeButton = document.getElementById('close-modal');
             const mainImage = document.getElementById('main-image');
 
-            function isMobilePortrait() { return window.innerWidth <= 768 && window.innerHeight > window.innerWidth; }
-
             function openFullscreen() {
                 if (!mainImage.src) return;
                 fullscreenImg.src = mainImage.src;
-                const portrait = isMobilePortrait();
-                fullscreenImg.classList.toggle('rotated', portrait);
-                closeButton.classList.toggle('rotated', portrait);
+
+                const updateRotation = () => applyFullscreenRotation(fullscreenImg, closeButton);
+                if (fullscreenImg.complete && fullscreenImg.naturalWidth) updateRotation();
+                else fullscreenImg.addEventListener('load', updateRotation, { once: true });
+
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
@@ -1026,9 +1037,7 @@
             window.addEventListener('orientationchange', () => {
                 setTimeout(() => {
                     if (modal.classList.contains('active')) {
-                        const portrait = isMobilePortrait();
-                        fullscreenImg.classList.toggle('rotated', portrait);
-                        closeButton.classList.toggle('rotated', portrait);
+                        applyFullscreenRotation(fullscreenImg, closeButton);
                     }
                 }, 100);
             });
