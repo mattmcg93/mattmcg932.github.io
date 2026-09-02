@@ -12,7 +12,7 @@
   }
   * { box-sizing: border-box; }
   html, body { margin:0; height:100%; overflow:hidden; background:#111; font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif; }
-  body { display:grid; place-items:center; }
+  body { position:fixed; inset:0; }
   #wrap {
     --portrait-turn:0deg;
     --screen-flip:0deg;
@@ -20,11 +20,15 @@
     height:100vh;
     width:100dvw;
     height:100dvh;
-    position:relative;
+    position:fixed;
+    left:50vw;
+    top:50vh;
+    left:50dvw;
+    top:50dvh;
     overflow:hidden;
     background:linear-gradient(var(--sky1), var(--sky2));
     box-shadow:0 28px 90px #0009;
-    transform:rotate(calc(var(--portrait-turn) + var(--screen-flip)));
+    transform:translate(-50%,-50%) rotate(calc(var(--portrait-turn) + var(--screen-flip)));
     transform-origin:center;
     transition:transform .28s ease;
   }
@@ -352,7 +356,7 @@
       facing: 1, spawnX: x, spawnY: y, walkTime: 0,
       growth: 0, big: false, mount: null, flutterTime: 0,
       starTime: 0, starVX: 0, starVY: 0, fireCooldown: 0,
-      celebrating: false
+      celebrating: false, stompGrace: 0
     };
   }
 
@@ -509,7 +513,7 @@
     p.vx = 0; p.vy = 0; p.invuln = 1.5; p.facing = 1; p.walkTime = 0;
     p.coyote = .11; p.jumpBuffer = 0; p.grounded = true;
     p.starTime = 0; p.starVX = 0; p.starVY = 0; p.fireCooldown = 0;
-    p.celebrating = false;
+    p.celebrating = false; p.stompGrace = 0;
   }
 
   function respawnPlayers() {
@@ -737,6 +741,7 @@
   function stepEntityPhysics(p, input, dt) {
     p.invuln = Math.max(0, p.invuln - dt);
     p.fireCooldown = Math.max(0, p.fireCooldown - dt);
+    p.stompGrace = Math.max(0, (p.stompGrace || 0) - dt);
 
     if (p.starTime > 0) {
       p.starTime = Math.max(0, p.starTime - dt);
@@ -1176,16 +1181,33 @@
           stompSound(); burst(e.x + e.w / 2, e.y + 16, 'dust', 12);
           continue;
         }
-        if (p.invuln > 0) continue;
         const prevBottom = (p.prevY != null ? p.prevY : p.y) + p.h;
+        const currentBottom = p.y + p.h;
+        const downwardTravel = currentBottom - prevBottom;
         const canStomp = e.variant !== 'spiky';
-        if (canStomp && p.vy > 180 && prevBottom <= e.y + 24) {
+        // Treat the whole upper part of the enemy as a landing zone. This works
+        // for small hops, fast falls and large mushroom-grown characters.
+        const topBand = Math.min(e.h * .68, Math.max(44, downwardTravel + 24));
+        const cameFromAbove = downwardTravel >= -.5
+          && prevBottom <= e.y + topBand
+          && currentBottom >= e.y - 8
+          && currentBottom <= e.y + topBand;
+        if (canStomp && cameFromAbove) {
           e.alive = false;
           e.squish = .35;
+          p.y = e.y - p.h - 1;
           p.vy = -560;
+          p.grounded = false;
+          p.coyote = 0;
+          p.stompGrace = .14;
+          if (p.mount) syncMountedYoshi(p);
           stompSound();
           shake = .13;
           burst(e.x + e.w / 2, e.y + 16, 'dust', 12);
+        } else if (p.stompGrace > 0 || p.invuln > 0) {
+          // Closely packed enemies should not damage the player on the same bounce.
+          // Ordinary post-hit invulnerability still permits valid stomps above.
+          continue;
         } else {
           hurtSound();
           loseLifeFor(p);
