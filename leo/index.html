@@ -16,9 +16,10 @@
   #wrap {
     --portrait-turn:0deg;
     --screen-flip:0deg;
-    width:min(100vw,calc(100vh * 16 / 9),1600px);
-    height:auto;
-    aspect-ratio:16/9;
+    width:100vw;
+    height:100vh;
+    width:100dvw;
+    height:100dvh;
     position:relative;
     overflow:hidden;
     background:linear-gradient(var(--sky1), var(--sky2));
@@ -29,7 +30,10 @@
   }
   body.portrait-device #wrap {
     --portrait-turn:90deg;
-    width:min(100vh,calc(100vw * 16 / 9),1600px);
+    width:100vh;
+    height:100vw;
+    width:100dvh;
+    height:100dvw;
   }
   body.screen-flipped #wrap { --screen-flip:180deg; }
   canvas { width:100%; height:100%; display:block; }
@@ -328,6 +332,7 @@
   const touchState = { left: false, right: false, jumpHeld: false, fireHeld: false };
 
   let started = false, levelClear = false, gameWon = false, gameOver = false;
+  let finishSequenceId = 0;
   let clock = 150, last = 0, cameraX = 0, coinCount = 0, lives = 3, shake = 0;
   let levelIndex = 0, timeUpCooldown = 0;
 
@@ -346,7 +351,8 @@
       grounded: false, coyote: 0, jumpBuffer: 0, invuln: 1.2,
       facing: 1, spawnX: x, spawnY: y, walkTime: 0,
       growth: 0, big: false, mount: null, flutterTime: 0,
-      starTime: 0, starVX: 0, starVY: 0, fireCooldown: 0
+      starTime: 0, starVX: 0, starVY: 0, fireCooldown: 0,
+      celebrating: false
     };
   }
 
@@ -369,6 +375,7 @@
     p.x -= (p.w - oldW) / 2;    // keep horizontally centered as the hitbox widens/narrows
     p.growth = level;
     p.big = level > 0; // kept for anything that just wants a simple "is powered up" flag
+    if (p.mount) syncMountedYoshi(p);
   }
 
   function makeEnemy(x, dir, variant, theme) {
@@ -383,9 +390,24 @@
   function makeMushroom(x, y, kind) {
     return { x, y: (y != null ? y : FLOOR - 34), w: 40, h: 34, vx: 65 * (Math.random() < .5 ? 1 : -1), vy: 0, collected: false, bob: Math.random() * 10, kind: kind || 'mushroom' };
   }
+  const YOSHI_BASE_W = 92, YOSHI_BASE_H = 64;
   function makeYoshi(x) {
-    return { x, y: FLOOR - 64, w: 92, h: 64, vx: 75 * (Math.random() < .5 ? 1 : -1), vy: 0, alive: true,
+    return { x, y: FLOOR - YOSHI_BASE_H, w: YOSHI_BASE_W, h: YOSHI_BASE_H,
+      baseW: YOSHI_BASE_W, baseH: YOSHI_BASE_H,
+      color: Math.random() < .5 ? 'red' : 'green',
+      vx: 75 * (Math.random() < .5 ? 1 : -1), vy: 0, alive: true,
       grounded: true, walkTime: Math.random() * 10, ridden: false, tongueTimer: 0, tongueCooldown: 0 };
+  }
+
+  function syncMountedYoshi(p) {
+    const y = p.mount;
+    if (!y) return;
+    // Grow the mount with its rider while keeping both sets of feet aligned.
+    const scale = p.h / p.baseH;
+    y.w = Math.round(y.baseW * scale);
+    y.h = Math.round(y.baseH * scale);
+    y.x = p.x + p.w / 2 - y.w / 2;
+    y.y = p.y + p.h - y.h;
   }
   function makeMysteryBox(x, y, contains) {
     return { x, y, w: 46, h: 40, type: 'mystery', contains, used: false, bounce: 0 };
@@ -474,13 +496,20 @@
   }
 
   function resetPlayerAtSpawn(p) {
+    if (p.mount) {
+      p.mount.ridden = false;
+      p.mount.w = p.mount.baseW;
+      p.mount.h = p.mount.baseH;
+    }
+    p.mount = null;
     // Reset size before positioning: shrinking after setting y could push a giant player below the floor.
     setGrowth(p, 0);
     p.x = p.spawnX;
     p.y = FLOOR - p.h;
     p.vx = 0; p.vy = 0; p.invuln = 1.5; p.facing = 1; p.walkTime = 0;
-    p.coyote = .11; p.jumpBuffer = 0; p.grounded = true; p.mount = null;
+    p.coyote = .11; p.jumpBuffer = 0; p.grounded = true;
     p.starTime = 0; p.starVX = 0; p.starVY = 0; p.fireCooldown = 0;
+    p.celebrating = false;
   }
 
   function respawnPlayers() {
@@ -490,6 +519,9 @@
   }
 
   function clearFlowFlags() {
+    finishSequenceId++;
+    player.celebrating = false;
+    if (player2) player2.celebrating = false;
     started = true; levelClear = false; gameWon = false; gameOver = false;
   }
 
@@ -503,6 +535,7 @@
   }
 
   function restartCurrentLevel() {
+    finishSequenceId++;
     lives = 3;
     loadLevel(levelIndex);
     respawnPlayers();
@@ -512,6 +545,7 @@
   }
 
   function advanceLevel() {
+    finishSequenceId++;
     loadLevel(levelIndex + 1);
     respawnPlayers();
     levelClear = false;
@@ -631,6 +665,7 @@
     p.mount = y;
     y.ridden = true;
     y.vx = 0; y.vy = 0;
+    syncMountedYoshi(p);
     p.invuln = Math.max(p.invuln, .3);
     yoshiSound();
     showToast('🦕 Yoshi! Hold jump in the air to flutter-glide.');
@@ -639,8 +674,11 @@
   function dismountYoshi(p, fled) {
     const y = p.mount;
     if (!y) return;
-    y.x = p.x - 6;
-    y.y = p.y + p.h - y.h;
+    const feetY = p.y + p.h;
+    y.w = y.baseW;
+    y.h = y.baseH;
+    y.x = p.x + p.w / 2 - y.w / 2;
+    y.y = feetY - y.h;
     y.vy = 0;
     y.ridden = false;
     y.vx = 75 * (p.facing || 1) * (fled ? -1 : 1);
@@ -654,9 +692,10 @@
     y.tongueTimer = .22;
     y.tongueCooldown = .6;
     beep(700, .05, 'square', .025); setTimeout(() => beep(500, .05, 'square', .02), 40);
-    const reach = 74;
+    const yoshiScale = y.w / y.baseW;
+    const reach = 74 * yoshiScale;
     const tx0 = p.facing > 0 ? p.x + p.w : p.x - reach;
-    const tongueBox = { x: tx0, y: p.y + p.h * .32, w: reach, h: 22 };
+    const tongueBox = { x: tx0, y: y.y + y.h * .25, w: reach, h: 22 * yoshiScale };
     for (const e of enemies) {
       if (e.alive && rects(tongueBox, e)) {
         e.alive = false; e.squish = .3;
@@ -767,7 +806,7 @@
     if (Math.abs(p.vx) > 20) p.walkTime += dt * Math.abs(p.vx) * .012;
 
     // keep a mounted yoshi glued under its rider (matches whatever surface the rider is on)
-    if (p.mount) { p.mount.x = p.x - 8; p.mount.y = p.y + p.h - p.mount.h; }
+    if (p.mount) syncMountedYoshi(p);
 
     p.prevY = prevY;
     if (p.y > 1000) loseLifeFor(p);
@@ -926,6 +965,55 @@
       burst(box.x + box.w / 2, box.y - 10, 'coin', 10);
       showToast(fromAbove ? '🪙 Mystery box stomped!' : '🪙 Coin!');
     }
+  }
+
+  function beginFinishSequence(plist) {
+    if (levelClear || gameWon || gameOver) return;
+    levelClear = true;
+    const token = ++finishSequenceId;
+    const clearedIndex = levelIndex;
+
+    for (const p of plist) {
+      p.celebrating = true;
+      p.vx = 0;
+      p.vy = 0;
+      p.isFluttering = false;
+      if (p.mount) syncMountedYoshi(p);
+      burst(p.x + p.w / 2, p.y + p.h * .25, 'coin', 18);
+    }
+
+    beep(660, .1, 'square', .03);
+    setTimeout(() => beep(880, .12, 'square', .03), 100);
+    if (clearedIndex === LEVELS.length - 1) {
+      setTimeout(() => beep(1100, .22, 'square', .03), 220);
+    }
+
+    // Leave the playfield visible long enough for the flag celebration to play.
+    setTimeout(() => {
+      if (token !== finishSequenceId || !levelClear) return;
+      for (const p of plist) p.celebrating = false;
+      overlay.classList.remove('hidden');
+
+      if (clearedIndex < LEVELS.length - 1) {
+        overlay.querySelector('.card').innerHTML = `
+          <h1>WORLD ${clearedIndex+1} <span class="leo">CLEAR!</span></h1>
+          <p>${LEVELS[clearedIndex].name} — done. Coins so far: <b>${coinCount}</b></p>
+          <button id="againBtn">NEXT LEVEL →</button>`;
+        document.getElementById('againBtn').onclick = () => advanceLevel();
+      } else {
+        levelClear = false;
+        gameWon = true;
+        overlay.querySelector('.card').innerHTML = `
+          <h1>YOU <span class="leo">WIN!</span></h1>
+          <p>The Weaver is down and the castle is clear! Final coins: <b>${coinCount}</b> · Time left: <b>${Math.ceil(clock)}</b></p>
+          <p class="small">LEO cleared all 10 worlds!</p>
+          <button id="againBtn">PLAY AGAIN</button>`;
+        document.getElementById('againBtn').onclick = () => {
+          beginGame();
+          overlay.classList.add('hidden');
+        };
+      }
+    }, 1450);
   }
 
   function update(dt) {
@@ -1124,34 +1212,7 @@
     // level goal
     let reachedGoal = false;
     for (const p of plist) if (p.x > goalX) reachedGoal = true;
-    if (reachedGoal) {
-      if (levelIndex < LEVELS.length - 1) {
-        levelClear = true;
-        beep(660, .1, 'square', .03);
-        setTimeout(() => beep(880, .12, 'square', .03), 100);
-        overlay.classList.remove('hidden');
-        overlay.querySelector('.card').innerHTML = `
-          <h1>WORLD ${levelIndex+1} <span class="leo">CLEAR!</span></h1>
-          <p>${LEVELS[levelIndex].name} — done. Coins so far: <b>${coinCount}</b></p>
-          <button id="againBtn">NEXT LEVEL →</button>`;
-        document.getElementById('againBtn').onclick = () => advanceLevel();
-      } else {
-        gameWon = true;
-        beep(660, .1, 'square', .03);
-        setTimeout(() => beep(880, .12, 'square', .03), 100);
-        setTimeout(() => beep(1100, .22, 'square', .03), 220);
-        overlay.classList.remove('hidden');
-        overlay.querySelector('.card').innerHTML = `
-          <h1>YOU <span class="leo">WIN!</span></h1>
-          <p>The Weaver is down and the castle is clear! Final coins: <b>${coinCount}</b> · Time left: <b>${Math.ceil(clock)}</b></p>
-          <p class="small">LEO cleared all 10 worlds!</p>
-          <button id="againBtn">PLAY AGAIN</button>`;
-        document.getElementById('againBtn').onclick = () => {
-          beginGame();
-          overlay.classList.add('hidden');
-        };
-      }
-    }
+    if (reachedGoal) beginFinishSequence(plist);
 
     const avgX = plist.reduce((s, p) => s + p.x, 0) / plist.length;
     cameraX += ((avgX - W * .34) - cameraX) * Math.min(1, 5.5 * dt);
@@ -1370,16 +1431,6 @@
     const sh = img.height * cropH;
     ctx.drawImage(img, sx, sy, sw, sh, -dw / 2, -dh / 2, dw, dh);
     ctx.restore();
-
-    ctx.save();
-    ctx.translate(dx + dw / 2, dy + dh / 2);
-    ctx.rotate(rotation);
-    ctx.strokeStyle = '#ffffffbb';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, dw / 2, dh / 2, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.restore();
   }
 
   function drawEnemy(e) {
@@ -1443,7 +1494,7 @@
       }
     }
 
-    drawHeadPhoto(enemyHead, 8, -4, e.w - 16, 58, 0, 0, 1, .82, Math.sin(e.walkTime * 2) * 0.02);
+    drawHeadPhoto(enemyHead, 4, -8, e.w - 8, 66, 0, 0, 1, .82, Math.sin(e.walkTime * 2) * 0.02);
 
     // Each world's Goombahs carry a small environment-specific costume.
     if (e.theme === 'lava') {
@@ -1472,6 +1523,11 @@
 
   function drawYoshiShape(x, y, w, h, walkTime, opts = {}) {
     const facing = opts.facing || 1;
+    const redYoshi = opts.color === 'red';
+    const bodyLight = redYoshi ? '#f0645b' : '#59d06b';
+    const bodyDark = redYoshi ? '#a9252b' : '#2f8f3e';
+    const spikeColor = redYoshi ? '#ffd65a' : '#c23a2c';
+    const saddleColor = redYoshi ? '#2869c7' : '#d3492b';
     const bounce = opts.ridden ? 0 : Math.sin(walkTime * 1.6) * 2;
     const legA = Math.sin(walkTime * 7) * 8;
     const legB = -Math.sin(walkTime * 7) * 8;
@@ -1485,12 +1541,12 @@
     ctx.translate(-w / 2, -h / 2);
 
     // legs
-    ctx.fillStyle = '#2f8f3e';
+    ctx.fillStyle = bodyDark;
     roundRect(14 + legA*.3, h - 18, 18, 18, 7); ctx.fill();
     roundRect(w - 32 + legB*.3, h - 18, 18, 18, 7); ctx.fill();
 
     // tail
-    ctx.fillStyle = '#3fae52';
+    ctx.fillStyle = bodyLight;
     ctx.beginPath();
     ctx.moveTo(4, h*.4);
     ctx.quadraticCurveTo(-14, h*.3, -6, h*.1);
@@ -1500,7 +1556,7 @@
     // flutter wings (small, only while gliding)
     if (opts.fluttering) {
       const flap = Math.sin(walkTime * 30) * 14;
-      ctx.fillStyle = '#bff5d0cc';
+      ctx.fillStyle = redYoshi ? '#ffd2cacc' : '#bff5d0cc';
       ctx.beginPath();
       ctx.ellipse(w*.32, h*.22, 20, 10 + Math.abs(flap)*.3, -.5, 0, Math.PI*2);
       ctx.fill();
@@ -1511,8 +1567,8 @@
 
     // body
     const bg = ctx.createLinearGradient(0, 0, 0, h);
-    bg.addColorStop(0, '#59d06b');
-    bg.addColorStop(1, '#2f8f3e');
+    bg.addColorStop(0, bodyLight);
+    bg.addColorStop(1, bodyDark);
     ctx.fillStyle = bg;
     roundRect(10, h*.18, w - 20, h*.62, 22);
     ctx.fill();
@@ -1522,19 +1578,19 @@
     roundRect(18, h*.42, w - 36, h*.38, 16); ctx.fill();
 
     // saddle
-    ctx.fillStyle = '#d3492b';
+    ctx.fillStyle = saddleColor;
     roundRect(w*.28, h*.06, w*.44, 16, 8); ctx.fill();
 
     // tongue (shoots out the snout when attacking)
     if (opts.tongue > 0) {
-      const reach = 74 * opts.tongue;
+      const reach = 74 * (w / YOSHI_BASE_W) * opts.tongue;
       ctx.fillStyle = '#ff6f8f';
       roundRect(w*.9, h*.30, reach, 9, 4); ctx.fill();
       ctx.beginPath(); ctx.ellipse(w*.9 + reach, h*.345, 7, 6, 0, 0, Math.PI*2); ctx.fill();
     }
 
     // snout / head bump
-    ctx.fillStyle = '#59d06b';
+    ctx.fillStyle = bodyLight;
     ctx.beginPath(); ctx.ellipse(w*.86, h*.28, 17, 13, 0, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = '#eef6c8';
     ctx.beginPath(); ctx.ellipse(w*.9, h*.34, 8, 6, 0, 0, Math.PI*2); ctx.fill();
@@ -1546,7 +1602,7 @@
     ctx.beginPath(); ctx.arc(w*.8, h*.14, 3.2, 0, Math.PI*2); ctx.fill();
 
     // spikes on back
-    ctx.fillStyle = '#c23a2c';
+    ctx.fillStyle = spikeColor;
     for (let i=0;i<3;i++) { ctx.beginPath(); ctx.moveTo(w*.32+i*14, h*.18); ctx.lineTo(w*.32+i*14+6, h*.05); ctx.lineTo(w*.32+i*14+12, h*.18); ctx.closePath(); ctx.fill(); }
 
     ctx.restore();
@@ -1555,7 +1611,10 @@
   function drawYoshiEntity(y) {
     if (!y.alive) return;
     const facing = y.vx >= 0 ? 1 : -1;
-    drawYoshiShape(y.x, y.y, y.w, y.h, y.walkTime, { ridden: y.ridden, facing, tongue: y.tongueTimer > 0 ? y.tongueTimer / .22 : 0 });
+    drawYoshiShape(y.x, y.y, y.w, y.h, y.walkTime, {
+      ridden: y.ridden, facing, color: y.color,
+      tongue: y.tongueTimer > 0 ? y.tongueTimer / .22 : 0
+    });
   }
 
   const SCHEME_P1 = { hoodie: ['#18a05f', '#0b6b41'], pants: '#2f63c8', accent: '#0f3a8a' };
@@ -1575,20 +1634,23 @@
       };
     }
 
+    const celebrating = !!p.celebrating;
+    const celebrationTime = performance_now_safe() / 115;
     const moving = Math.abs(p.vx) > 20;
     const walk = p.walkTime;
-    const legA = moving ? Math.sin(walk * 8) * 10 : 0;
-    const legB = moving ? -Math.sin(walk * 8) * 10 : 0;
-    const armA = moving ? -Math.sin(walk * 8) * 12 : 3;
-    const armB = moving ? Math.sin(walk * 8) * 12 : -3;
-    const torsoBob = moving && p.grounded ? Math.abs(Math.sin(walk * 8)) * 2 : 0;
-    const headTilt = !p.grounded ? -.08 * p.facing : Math.sin(walk * 4) * 0.03 * (moving ? 1 : 0);
+    const legA = celebrating ? Math.sin(celebrationTime * 1.7) * 18 : moving ? Math.sin(walk * 8) * 10 : 0;
+    const legB = celebrating ? -Math.sin(celebrationTime * 1.7) * 18 : moving ? -Math.sin(walk * 8) * 10 : 0;
+    const armA = celebrating ? -150 + Math.sin(celebrationTime) * 16 : moving ? -Math.sin(walk * 8) * 12 : 3;
+    const armB = celebrating ? 150 - Math.sin(celebrationTime) * 16 : moving ? Math.sin(walk * 8) * 12 : -3;
+    const torsoBob = celebrating ? 7 + Math.abs(Math.sin(celebrationTime * 1.7)) * 10 : moving && p.grounded ? Math.abs(Math.sin(walk * 8)) * 2 : 0;
+    const headTilt = celebrating ? Math.sin(celebrationTime) * .14 : !p.grounded ? -.08 * p.facing : Math.sin(walk * 4) * 0.03 * (moving ? 1 : 0);
 
     const scaleFactor = p.h / p.baseH;
 
     ctx.save();
     // anchor scale from the bottom-center of the *actual* (possibly grown) hitbox
     ctx.translate(p.x + p.w / 2, p.y + p.h - torsoBob * scaleFactor);
+    if (celebrating) ctx.rotate(Math.sin(celebrationTime * 1.7) * .09);
     ctx.scale(scaleFactor, scaleFactor);
     ctx.scale(p.facing, 1);
     ctx.translate(-BASE_W / 2, -BASE_H);
@@ -1653,11 +1715,13 @@
   }
 
   function drawPlayerWithMount(p, headImg, scheme) {
+    // Rider first, mount second: Yoshi now sits visually in front of the character.
+    drawPlayerEntity(p, headImg, scheme);
     if (p.mount) drawYoshiShape(p.mount.x, p.mount.y, p.mount.w, p.mount.h, p.mount.walkTime, {
       ridden: true, facing: p.facing, fluttering: !!p.isFluttering,
+      color: p.mount.color,
       tongue: p.mount.tongueTimer > 0 ? p.mount.tongueTimer / .22 : 0
     });
-    drawPlayerEntity(p, headImg, scheme);
   }
 
   function drawBossHp(cx, y, hp, max) {
