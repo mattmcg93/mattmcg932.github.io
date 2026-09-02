@@ -906,6 +906,28 @@
     }
   }
 
+  function openMysteryBox(box, p, fromAbove) {
+    if (box.used) return;
+    box.used = true;
+    box.bounce = 1;
+    if (fromAbove) {
+      p.vy = -260;
+      p.grounded = false;
+    } else {
+      p.vy = 60;
+    }
+    if (box.contains === 'mushroom') {
+      mushrooms.push(makeMushroom(box.x + box.w / 2 - 20, box.y - 34));
+      powerSound();
+      showToast(fromAbove ? '🍄 Mystery box stomped!' : '🍄 A mushroom popped out!');
+    } else {
+      coinCount++;
+      coinSound();
+      burst(box.x + box.w / 2, box.y - 10, 'coin', 10);
+      showToast(fromAbove ? '🪙 Mystery box stomped!' : '🪙 Coin!');
+    }
+  }
+
   function update(dt) {
     if (!started || levelClear || gameWon || gameOver) return;
 
@@ -984,7 +1006,7 @@
       }
     }
 
-    // mystery boxes — bump one from below to pop out a coin or a mushroom
+    // Mystery boxes open from an underside bump or a landing from above.
     for (const box of platforms) {
       if (box.type !== 'mystery') continue;
       box.bounce = Math.max(0, box.bounce - dt * 4);
@@ -993,20 +1015,12 @@
         const prevTop = p.prevY != null ? p.prevY : p.y;
         const hittingUnderside = p.vy < 0 && prevTop >= box.y + box.h - 10 && p.y <= box.y + box.h
           && p.x + p.w > box.x + 6 && p.x < box.x + box.w - 6;
-        if (hittingUnderside) {
-          box.used = true;
-          box.bounce = 1;
-          p.vy = 60;
-          if (box.contains === 'mushroom') {
-            mushrooms.push(makeMushroom(box.x + box.w / 2 - 20, box.y - 34));
-            powerSound();
-            showToast('🍄 A mushroom popped out!');
-          } else {
-            coinCount++;
-            coinSound();
-            burst(box.x + box.w / 2, box.y - 10, 'coin', 10);
-            showToast('🪙 Coin!');
-          }
+        const prevBottom = prevTop + p.h;
+        const landedOnTop = p.grounded && Math.abs((p.y + p.h) - box.y) <= 2
+          && prevBottom <= box.y + 10
+          && p.x + p.w > box.x + 6 && p.x < box.x + box.w - 6;
+        if (hittingUnderside || landedOnTop) {
+          openMysteryBox(box, p, landedOnTop);
           break;
         }
       }
