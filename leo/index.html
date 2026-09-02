@@ -11,6 +11,7 @@
     --panel:rgba(17,24,39,.78);
   }
   * { box-sizing: border-box; }
+  .hidden { display:none !important; }
   html, body { margin:0; height:100%; overflow:hidden; background:#111; font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif; }
   body { display:grid; place-items:center; }
   #wrap {
@@ -21,6 +22,7 @@
     overflow:hidden;
     background:linear-gradient(var(--sky1), var(--sky2));
     box-shadow:0 28px 90px #0009;
+    transition:transform .3s ease;
   }
   canvas { width:100%; height:100%; display:block; }
   .hud {
@@ -105,15 +107,26 @@
   .touchJump { width:92px; height:92px; font-size:34px; background:#ffc72b55; border-color:#ffe08e99; }
   .touchSmall { width:58px; height:58px; font-size:24px; }
 
-  .fsBtn { pointer-events:auto; cursor:pointer; color:#fff; font-weight:900; font-size:15px; line-height:1; }
-  .fsBtn:hover { filter:brightness(1.2); }
-  .card { position:relative; }
-  .fsCorner {
-    position:absolute; top:14px; right:14px; width:40px; height:40px; border-radius:50%;
-    background:#ffffff18; border:1px solid #ffffff30; color:#fff; font-size:19px;
-    display:grid; place-items:center; cursor:pointer; box-shadow:0 6px 16px #0004;
+  .fsBtn {
+    pointer-events:auto; cursor:pointer; color:#0b1221; font-weight:900; font-size:14px; line-height:1;
+    background:linear-gradient(#ffe883,#ffc72b) !important; border:1px solid #00000022 !important;
+    box-shadow:0 4px 0 #bd8b0a, 0 8px 16px #0005 !important; letter-spacing:.02em;
   }
-  .fsCorner:hover { background:#ffffff30; }
+  .fsBtn:hover { filter:brightness(1.08); transform:translateY(-1px); }
+  .fsBtn:active { transform:translateY(1px); box-shadow:0 2px 0 #bd8b0a, 0 4px 10px #0005 !important; }
+  .flipBtn { background:linear-gradient(#8fd8ff,#3fa8e8) !important; box-shadow:0 4px 0 #1f6a9c, 0 8px 16px #0005 !important; }
+
+  .card { position:relative; }
+  .cornerBtns { position:absolute; top:14px; right:14px; display:flex; gap:8px; z-index:2; }
+  .fsCorner {
+    width:52px; height:52px; border-radius:16px;
+    background:linear-gradient(#ffe883,#ffc72b); border:2px solid #ffffffaa; color:#17130a; font-size:24px;
+    display:grid; place-items:center; cursor:pointer; box-shadow:0 4px 0 #bd8b0a, 0 8px 18px #0005;
+    font-weight:900;
+  }
+  .fsCorner.flipCorner { background:linear-gradient(#8fd8ff,#3fa8e8); box-shadow:0 4px 0 #1f6a9c, 0 8px 18px #0005; }
+  .fsCorner:hover { transform:translateY(-1px); }
+  .fsCorner:active { transform:translateY(1px); }
 </style>
 </head>
 <body>
@@ -130,7 +143,8 @@
     <div class="group">
       <div class="chip">TIME <span id="time">150</span></div>
       <div class="chip">LEVEL <span id="levelNum">1</span>/5 · <span id="levelName">Grassy Start</span></div>
-      <button id="fsBtnHud" class="chip fsBtn" title="Toggle fullscreen">⛶</button>
+      <button id="fsBtnHud" class="chip fsBtn" title="Toggle fullscreen">⛶ FULL</button>
+      <button id="flipBtnHud" class="chip fsBtn flipBtn hidden" title="Flip screen 180°">⟲ FLIP</button>
     </div>
   </div>
 
@@ -138,7 +152,10 @@
 
   <div id="overlay">
     <div class="card">
-      <button id="fsBtnOverlay" class="fsCorner" title="Toggle fullscreen">⛶</button>
+      <div class="cornerBtns">
+        <button id="flipBtnOverlay" class="fsCorner flipCorner hidden" title="Flip screen 180° (for fixed-orientation devices)">⟲</button>
+        <button id="fsBtnOverlay" class="fsCorner" title="Toggle fullscreen">⛶</button>
+      </div>
       <h1><span class="leo">LEO</span>-MARIO</h1>
       <p>5 worlds, 🍄 power-ups, a flying 🦕 Yoshi with a tongue attack, 🐢 Bowser in World 3, and a web-slinging final boss.</p>
 
@@ -148,6 +165,7 @@
         <button id="modeTouch" class="modeBtn">📱 1P MOBILE</button>
       </div>
       <p class="small" id="modeHint">🎮 Xbox controller OR ⌨️ keyboard both drive LEO.</p>
+      <p class="small">📱 Mobile mode auto-rotates to widescreen on phones/tablets. Use ⟲ FLIP if you're on a fixed-orientation device (like a Switch) and it comes up backwards. Switch controllers are auto-detected too.</p>
 
       <p>
         <span class="kbd">A</span>/<span class="kbd">D</span> or <span class="kbd">←</span>/<span class="kbd">→</span> move ·
@@ -186,6 +204,8 @@
   const touchControlsEl = document.getElementById('touchControls');
   const fsBtnHud = document.getElementById('fsBtnHud');
   const fsBtnOverlay = document.getElementById('fsBtnOverlay');
+  const flipBtnHud = document.getElementById('flipBtnHud');
+  const flipBtnOverlay = document.getElementById('flipBtnOverlay');
   const toast = document.getElementById('toast');
 
   const coinsEl = document.getElementById('coins');
@@ -437,6 +457,8 @@
     player2 = twoPlayer ? makePlayer(90, 560) : null;
     p2chip.style.display = twoPlayer ? 'flex' : 'none';
     touchControlsEl.classList.toggle('hidden', !touchMode);
+    if (flipBtnHud) flipBtnHud.classList.toggle('hidden', !touchMode);
+    applyOrientation();
     loadLevel(0);
     respawnPlayers();
     updateHud();
@@ -1884,12 +1906,27 @@
   }
 
   // ---- Gamepad support (Xbox controller, wired or wireless) — always drives P1 ----
+  // Also detects Nintendo Switch controllers (Pro Controller, Joy-Cons, Switch 2 controllers).
+  // Browsers report these through the same standard Gamepad API mapping, where button
+  // indices correspond to physical position rather than the printed label — so button 0
+  // is always "the bottom face button" (Xbox A / Switch B) regardless of brand, and our
+  // existing index-based bindings below already work correctly without special-casing.
   let gpIndex = null;
   const gpPrev = { a: false, up: false, start: false, b: false, x: false };
 
+  function describeGamepad(gp) {
+    const id = (gp.id || '').toLowerCase();
+    const isSwitch = /switch|joy-?con|nintendo|057e/.test(id);
+    if (!isSwitch) return '🎮 Controller connected (P1)';
+    if (gp.mapping !== 'standard') {
+      return '🎮 Switch controller detected (P1) — buttons may need remapping if they feel off';
+    }
+    return '🎮 Switch controller detected (P1)';
+  }
+
   addEventListener('gamepadconnected', e => {
     gpIndex = e.gamepad.index;
-    showToast('🎮 Controller connected (P1)');
+    showToast(describeGamepad(e.gamepad));
   });
   addEventListener('gamepaddisconnected', e => {
     if (gpIndex === e.gamepad.index) gpIndex = null;
@@ -1984,6 +2021,7 @@
     mode1Btn.classList.toggle('active', mode === 'solo');
     mode2Btn.classList.toggle('active', mode === 'duo');
     modeTouchBtn.classList.toggle('active', mode === 'touch');
+    if (flipBtnOverlay) flipBtnOverlay.classList.toggle('hidden', mode !== 'touch');
     if (mode === 'duo') {
       modeHint.textContent = '🎮 P1 (LEO) = Xbox controller only · ⌨️ P2 (DAD) = keyboard only.';
     } else if (mode === 'touch') {
@@ -1991,10 +2029,63 @@
     } else {
       modeHint.textContent = '🎮 Xbox controller OR ⌨️ keyboard both drive LEO.';
     }
+    applyOrientation();
   }
   mode1Btn.onclick = () => setMode('solo');
   mode2Btn.onclick = () => setMode('duo');
   modeTouchBtn.onclick = () => setMode('touch');
+
+  // ---- Orientation handling: auto-rotate to widescreen on mobile in touch mode,
+  // plus a manual 180° flip for fixed-orientation devices (e.g. a Switch) where
+  // the auto-detected direction doesn't match how the device is actually held.
+  const isMobileUA = /Android|iPhone|iPad|iPod|Mobile|Silk/i.test(navigator.userAgent || '') ||
+    (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform || ''));
+  let flipped = false;
+
+  function wantsAutoLandscape() {
+    if (!touchMode || !isMobileUA) return false;
+    try { return window.matchMedia('(orientation: portrait)').matches; } catch (e) { return false; }
+  }
+
+  function applyOrientation() {
+    const wrap = document.getElementById('wrap');
+    if (!wrap || !wrap.style) return;
+    const base = wantsAutoLandscape() ? 90 : 0;
+    const total = (base + (flipped ? 180 : 0)) % 360;
+    const swapped = total === 90 || total === 270;
+    if (swapped) {
+      wrap.style.width = 'min(100vh, 1600px)';
+      wrap.style.height = 'min(100vw, 900px)';
+      wrap.style.position = 'fixed';
+      wrap.style.top = '50%';
+      wrap.style.left = '50%';
+      wrap.style.transform = `translate(-50%, -50%) rotate(${total}deg)`;
+    } else {
+      wrap.style.width = 'min(100vw, 1600px)';
+      wrap.style.height = 'min(100vh, 900px)';
+      wrap.style.position = 'relative';
+      wrap.style.top = '';
+      wrap.style.left = '';
+      wrap.style.transform = total === 180 ? 'rotate(180deg)' : '';
+    }
+  }
+
+  function toggleFlip() {
+    flipped = !flipped;
+    applyOrientation();
+  }
+  if (flipBtnHud) flipBtnHud.onclick = toggleFlip;
+  if (flipBtnOverlay) flipBtnOverlay.onclick = toggleFlip;
+
+  if (window.matchMedia) {
+    try {
+      const mq = window.matchMedia('(orientation: portrait)');
+      if (mq.addEventListener) mq.addEventListener('change', applyOrientation);
+      else if (mq.addListener) mq.addListener(applyOrientation);
+    } catch (e) { /* ignore on environments without matchMedia listeners */ }
+  }
+  addEventListener('resize', applyOrientation);
+  addEventListener('orientationchange', applyOrientation);
 
   function isFullscreenActive() {
     return !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
@@ -2004,6 +2095,11 @@
     if (!isFullscreenActive()) {
       const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
       if (req) req.call(el);
+      // best-effort native orientation lock (mainly Android Chrome); the CSS
+      // rotation above is what actually guarantees widescreen everywhere else
+      if (touchMode && typeof screen !== 'undefined' && screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {});
+      }
     } else {
       const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
       if (exit) exit.call(document);
