@@ -426,6 +426,7 @@
   let started = false, levelClear = false, gameWon = false, gameOver = false;
   let selectedOutfit = 'celtic';
   let finishSequenceId = 0;
+  const RESCUE_CELEBRATION_DURATION = 4;
   let rescueNpc = null, rescuePrompt = false, rescueCelebrationTimer = 0;
   let clock = 150, last = 0, cameraX = 0, coinCount = 0, lives = 3, shake = 0;
   let levelIndex = 0, timeUpCooldown = 0;
@@ -1516,7 +1517,7 @@
   function finishRescueBattle() {
     if (!boss || boss.type !== 'rescue' || boss.defeated) return;
     boss.defeated = true;
-    rescueCelebrationTimer = 2.25;
+    rescueCelebrationTimer = RESCUE_CELEBRATION_DURATION;
     if (rescueNpc) { rescueNpc.state = 'celebrating'; rescueNpc.vx = 0; }
     for (const p of activePlayers()) { p.celebrating = true; p.vx = 0; p.vy = 0; }
     burst(boss.x + boss.w / 2, boss.y + 25, 'coin', 28);
@@ -2300,6 +2301,93 @@
     ctx.save();ctx.fillStyle='#101827dd';roundRect(b.x+b.w/2-60,b.y-42,120,27,12);ctx.fill();
     ctx.fillStyle='#ffda4b';for(let i=0;i<b.hp;i++){ctx.beginPath();ctx.arc(b.x+b.w/2-14+i*28,b.y-28,8,0,Math.PI*2);ctx.fill();}
     ctx.fillStyle='#fff';ctx.font='800 13px system-ui';ctx.textAlign='center';ctx.fillText(b.name,b.x+b.w/2,b.y-50);ctx.restore();
+  }
+
+  function drawCelebrationDancer(x, floorY, headImg, outfitKey, phase, rescued) {
+    const hop = Math.abs(Math.sin(phase * 1.35)) * 38;
+    const sway = Math.sin(phase * .68) * .11;
+    const armSwing = Math.sin(phase * 1.35) * .85;
+    const legSwing = Math.sin(phase * 1.35 + Math.PI / 2) * .38;
+    ctx.save();
+    ctx.translate(x, floorY - hop);
+    ctx.rotate(sway);
+
+    ctx.fillStyle='#0006';ctx.beginPath();ctx.ellipse(0,hop+8,72,16,0,0,Math.PI*2);ctx.fill();
+
+    ctx.save();ctx.translate(-29,-77);ctx.rotate(legSwing);
+    ctx.fillStyle=rescued?'#26364d':outfitKey==='spider'?'#155db1':outfitKey==='suit'?'#111':'#fff';
+    roundRect(-15,0,30,76,12);ctx.fill();ctx.fillStyle='#3b281e';roundRect(-23,61,47,20,9);ctx.fill();ctx.restore();
+    ctx.save();ctx.translate(29,-77);ctx.rotate(-legSwing);
+    ctx.fillStyle=rescued?'#26364d':outfitKey==='spider'?'#155db1':outfitKey==='suit'?'#111':'#fff';
+    roundRect(-15,0,30,76,12);ctx.fill();ctx.fillStyle='#3b281e';roundRect(-23,61,47,20,9);ctx.fill();ctx.restore();
+
+    for (const side of [-1,1]) {
+      ctx.save();ctx.translate(side*52,-151);ctx.rotate(side * (rescued ? -1.35 : -1.05) + side * armSwing);
+      ctx.fillStyle='#e8b994';roundRect(-11,0,22,82,10);ctx.fill();
+      ctx.fillStyle='#f2c5a3';ctx.beginPath();ctx.arc(0,82,14,0,Math.PI*2);ctx.fill();ctx.restore();
+    }
+
+    if (rescued) {
+      const body=ctx.createLinearGradient(0,-176,0,-78);body.addColorStop(0,'#8467f2');body.addColorStop(1,'#28a9b9');
+      ctx.fillStyle=body;roundRect(-50,-184,100,112,25);ctx.fill();
+      ctx.fillStyle='#ffe45e';ctx.beginPath();ctx.arc(0,-132,18,0,Math.PI*2);ctx.fill();
+    } else if (outfitKey === 'celtic') {
+      ctx.save();roundRect(-50,-184,100,112,25);ctx.clip();ctx.fillStyle='#fff';ctx.fillRect(-50,-184,100,112);
+      ctx.fillStyle='#078f4f';for(let y=-177;y<-72;y+=24)ctx.fillRect(-50,y,100,12);ctx.restore();
+    } else if (outfitKey === 'suit') {
+      ctx.fillStyle='#090909';roundRect(-50,-184,100,112,25);ctx.fill();
+      ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(-23,-181);ctx.lineTo(0,-104);ctx.lineTo(23,-181);ctx.closePath();ctx.fill();
+      ctx.fillStyle='#111';ctx.beginPath();ctx.moveTo(0,-162);ctx.lineTo(-11,-144);ctx.lineTo(0,-112);ctx.lineTo(11,-144);ctx.closePath();ctx.fill();
+    } else {
+      ctx.fillStyle='#d92738';roundRect(-50,-184,100,112,25);ctx.fill();
+      ctx.fillStyle='#155db1';ctx.fillRect(-50,-124,19,52);ctx.fillRect(31,-124,19,52);
+      ctx.strokeStyle='#18213a';ctx.lineWidth=3;for(let y=-170;y<-82;y+=20){ctx.beginPath();ctx.moveTo(-45,y);ctx.lineTo(45,y);ctx.stroke();}
+    }
+
+    if (rescued) drawTransparentPortrait(headImg,-70,-301,140,130,Math.sin(phase)*.06);
+    else drawHeadPhoto(headImg,-68,-303,136,136,.22,.08,.56,.58,Math.sin(phase)*.06);
+
+    if (!rescued && outfitKey === 'suit') {
+      ctx.fillStyle='#090909';roundRect(-63,-309,126,17,5);ctx.fill();roundRect(-39,-351,78,48,8);ctx.fill();
+    } else if (!rescued && outfitKey === 'spider') {
+      ctx.fillStyle='#dc2b3add';ctx.beginPath();ctx.ellipse(0,-297,69,32,0,Math.PI,0);ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawRescueCelebrationCloseup() {
+    if (!rescueNpc || rescueCelebrationTimer <= 0) return;
+    const elapsed = RESCUE_CELEBRATION_DURATION - rescueCelebrationTimer;
+    const fade = Math.min(1, elapsed * 3, rescueCelebrationTimer * 3);
+    const now = performance_now_safe();
+    ctx.save();
+    ctx.globalAlpha = fade;
+    const bg = ctx.createRadialGradient(W/2,H*.55,80,W/2,H*.55,H*.8);
+    bg.addColorStop(0,'#6548c9f2');bg.addColorStop(.55,'#172a63f4');bg.addColorStop(1,'#071020fa');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+    ctx.fillStyle='#ffffff1a';ctx.beginPath();ctx.ellipse(W*.35,H*.62,245,350,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(W*.65,H*.62,245,350,0,0,Math.PI*2);ctx.fill();
+
+    const colours=['#ffe45b','#ff5d7d','#55e4ff','#78ed72','#ffffff'];
+    for(let i=0;i<70;i++){
+      const x=(i*197 + now*.16*(1+i%3))%(W+80)-40;
+      const y=(i*113 + now*.24*(1+i%4))%(H+100)-50;
+      ctx.save();ctx.translate(x,y);ctx.rotate(now*.003+i);ctx.fillStyle=colours[i%colours.length];ctx.fillRect(-7,-3,14,7);ctx.restore();
+    }
+
+    ctx.textAlign='center';ctx.shadowColor='#000';ctx.shadowBlur=16;
+    ctx.fillStyle='#ffe45b';ctx.font='1000 78px system-ui';ctx.fillText('THEY DID IT!',W/2,105);
+    ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='900 27px system-ui';ctx.fillText(`Leo saved ${rescueNpc.face.name}!`,W/2,148);
+
+    const phase=elapsed*7.4;
+    drawCelebrationDancer(W*.35,H*.88,playerHead,selectedOutfit,phase,false);
+    drawCelebrationDancer(W*.65,H*.88,rescueNpc.face.image,'rescue',phase+Math.PI,true);
+
+    ctx.fillStyle='#10182ddd';roundRect(W*.35-86,H*.89,172,38,18);ctx.fill();
+    roundRect(W*.65-112,H*.89,224,38,18);ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='900 20px system-ui';ctx.fillText('LEO',W*.35,H*.89+26);ctx.fillText(rescueNpc.face.name.toUpperCase(),W*.65,H*.89+26);
+    ctx.restore();
   }
 
   function drawFishEnemy(e) {
@@ -3132,6 +3220,8 @@
     vg.addColorStop(1, '#00213a22');
     ctx.fillStyle = vg;
     ctx.fillRect(0, 0, W, H);
+
+    drawRescueCelebrationCloseup();
 
     ctx.restore();
   }
