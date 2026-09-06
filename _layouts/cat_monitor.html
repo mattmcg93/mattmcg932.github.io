@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cat Monitor</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -63,27 +64,49 @@
     }
   </style>
 </head>
+
 <body>
   <div class="page">
 
+    <!-- LIVE VIEW -->
     <div class="section-label">Live View</div>
+
     <div class="images-wrap">
       <div class="image-box">
-        <img id="main-image" class="camera-image" alt="Live Camera" />
+        <img
+          id="main-image"
+          class="camera-image"
+          alt="Live Camera"
+        />
       </div>
     </div>
 
-    <div class="section-label" id="timelapse-label">Daily Timelapse</div>
+    <!-- DAILY TIMELAPSE -->
+    <div
+      class="section-label"
+      id="timelapse-label"
+    >
+      Daily Timelapse
+    </div>
+
     <div class="images-wrap">
       <div class="image-box">
-        <img id="timelapse-image" class="camera-image" alt="Daily Timelapse" />
+        <img
+          id="timelapse-image"
+          class="camera-image"
+          alt="Daily Timelapse"
+        />
       </div>
     </div>
 
   </div>
 
+
   <script>
-    // Set timelapse label with dates
+    // --------------------------------------------------
+    // TIMELAPSE LABEL
+    // --------------------------------------------------
+
     function setTimelapseLabel() {
       const now = new Date();
 
@@ -93,11 +116,15 @@
       const yesterday = new Date(today);
       yesterday.setDate(yesterday.getDate() - 1);
 
-      const fmt = (d) => d.toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-      });
+      const fmt = (d) =>
+        d.toLocaleDateString(
+          'en-GB',
+          {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+          }
+        );
 
       document.getElementById('timelapse-label').textContent =
         `Daily Timelapse — 9am ${fmt(yesterday)} to 9am ${fmt(today)}`;
@@ -106,27 +133,68 @@
     setTimelapseLabel();
   </script>
 
+
   <script>
-    const LIVE_DRIVE_ID = "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i";
-    const TIMELAPSE_DRIVE_ID = "10VCEPnwHztf655SuBe3VmxzXE5P4YeO6";
+    // --------------------------------------------------
+    // GOOGLE DRIVE IMAGE IDS
+    // --------------------------------------------------
+
+    const LIVE_DRIVE_ID =
+      "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i";
+
+    const TIMELAPSE_DRIVE_ID =
+      "10VCEPnwHztf655SuBe3VmxzXE5P4YeO6";
+
+
+    // --------------------------------------------------
+    // IMAGE CONFIG
+    // --------------------------------------------------
+
+    const LIVE_IMAGE = {
+      driveId: LIVE_DRIVE_ID,
+      imgId: "main-image"
+    };
+
+    const TIMELAPSE_IMAGE = {
+      driveId: TIMELAPSE_DRIVE_ID,
+      imgId: "timelapse-image"
+    };
 
     const IMAGES = [
-      { driveId: LIVE_DRIVE_ID,      imgId: "main-image",      refresh: true  },
-      { driveId: TIMELAPSE_DRIVE_ID, imgId: "timelapse-image", refresh: false }
+      LIVE_IMAGE,
+      TIMELAPSE_IMAGE
     ];
 
+
+    // Keep track of current blob URLs
     const activeBlobUrls = {};
+
+
+    // --------------------------------------------------
+    // GENERATE CACHE-BUSTED GOOGLE DRIVE URLS
+    // --------------------------------------------------
 
     function generateAllPossibleUrls(driveId) {
       const timestamp = Date.now();
-      const randomParam = Math.random().toString(36).substring(2, 10);
+
+      const randomParam =
+        Math.random()
+          .toString(36)
+          .substring(2, 10);
 
       return [
         `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
+
         `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
+
         `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`
       ];
     }
+
+
+    // --------------------------------------------------
+    // FALLBACK CORS PROXIES
+    // --------------------------------------------------
 
     function getCORSProxies() {
       return [
@@ -137,109 +205,229 @@
       ];
     }
 
-    async function extremeFetchImage(driveId, isRefresh = false) {
-      const urls = generateAllPossibleUrls(driveId);
 
+    // --------------------------------------------------
+    // FETCH IMAGE
+    // --------------------------------------------------
+
+    async function extremeFetchImage(
+      driveId,
+      isRefresh = false
+    ) {
+      const urls =
+        generateAllPossibleUrls(driveId);
+
+
+      // Try Google URLs directly first
       for (const url of urls) {
         try {
-          const response = await fetch(url, {
-            mode: 'cors',
-            credentials: 'omit',
-            referrerPolicy: 'no-referrer',
-            cache: 'no-store'
-          });
+          const response =
+            await fetch(
+              url,
+              {
+                mode: 'cors',
+                credentials: 'omit',
+                referrerPolicy: 'no-referrer',
+                cache: 'no-store'
+              }
+            );
 
           if (response.ok) {
-            const blob = await response.blob();
+            const blob =
+              await response.blob();
 
-            if (blob.size > 0 && blob.type.startsWith('image/')) {
+            if (
+              blob.size > 0 &&
+              blob.type.startsWith('image/')
+            ) {
               return URL.createObjectURL(blob);
             }
           }
-        } catch (e) {}
+
+        } catch (e) {
+          // Try next URL
+        }
       }
 
-      if (isRefresh) return null;
 
-      const proxies = getCORSProxies();
+      /*
+        During automatic refresh we don't
+        use proxies. This prevents a slow
+        proxy request every 10 seconds.
+      */
+
+      if (isRefresh) {
+        return null;
+      }
+
+
+      // Initial load fallback through proxies
+      const proxies =
+        getCORSProxies();
 
       for (const proxy of proxies) {
+
         for (const url of urls.slice(0, 2)) {
+
           try {
-            const proxyUrl = proxy + encodeURIComponent(url);
-            const response = await fetch(proxyUrl, {
-              cache: 'no-store'
-            });
+            const proxyUrl =
+              proxy + encodeURIComponent(url);
+
+            const response =
+              await fetch(
+                proxyUrl,
+                {
+                  cache: 'no-store'
+                }
+              );
 
             if (response.ok) {
-              const blob = await response.blob();
 
-              if (blob.size > 1000 && blob.type.startsWith('image/')) {
+              const blob =
+                await response.blob();
+
+              if (
+                blob.size > 1000 &&
+                blob.type.startsWith('image/')
+              ) {
                 return URL.createObjectURL(blob);
               }
             }
-          } catch (e) {}
+
+          } catch (e) {
+            // Try next proxy
+          }
         }
       }
 
       return null;
     }
 
-    function preloadImage(src) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
 
-        img.onload = () => resolve();
-        img.onerror = reject;
-        img.src = src;
-      });
+    // --------------------------------------------------
+    // PRELOAD IMAGE
+    // --------------------------------------------------
+
+    function preloadImage(src) {
+
+      return new Promise(
+        (resolve, reject) => {
+
+          const img =
+            new Image();
+
+          img.onload =
+            () => resolve();
+
+          img.onerror =
+            reject;
+
+          img.src =
+            src;
+        }
+      );
     }
 
-    async function swapImageWithoutFlash(imgElement, newSrc, imgKey) {
+
+    // --------------------------------------------------
+    // SWAP IMAGE WITHOUT FLASHING
+    // --------------------------------------------------
+
+    async function swapImageWithoutFlash(
+      imgElement,
+      newSrc,
+      imgKey
+    ) {
+
       try {
+
+        // Make sure new image fully loads first
         await preloadImage(newSrc);
 
-        const oldSrc = imgElement.src;
-        imgElement.src = newSrc;
+        const oldSrc =
+          imgElement.src;
 
+
+        // Replace displayed image
+        imgElement.src =
+          newSrc;
+
+
+        // Revoke previous stored blob
         if (
           activeBlobUrls[imgKey] &&
           activeBlobUrls[imgKey].startsWith('blob:') &&
           activeBlobUrls[imgKey] !== newSrc
         ) {
-          URL.revokeObjectURL(activeBlobUrls[imgKey]);
+
+          URL.revokeObjectURL(
+            activeBlobUrls[imgKey]
+          );
         }
 
-        activeBlobUrls[imgKey] = newSrc;
 
+        activeBlobUrls[imgKey] =
+          newSrc;
+
+
+        // Clean up any other old blob
         if (
           oldSrc &&
           oldSrc.startsWith('blob:') &&
           oldSrc !== newSrc &&
           oldSrc !== activeBlobUrls[imgKey]
         ) {
+
           try {
             URL.revokeObjectURL(oldSrc);
           } catch (e) {}
         }
+
       } catch (error) {
-        if (newSrc && newSrc.startsWith('blob:')) {
+
+        // New image failed to preload.
+        // Keep old image visible.
+
+        if (
+          newSrc &&
+          newSrc.startsWith('blob:')
+        ) {
           URL.revokeObjectURL(newSrc);
         }
       }
     }
 
-    async function refreshImage(imageConfig) {
-      const imgElement = document.getElementById(imageConfig.imgId);
 
-      if (!imgElement) return;
+    // --------------------------------------------------
+    // REFRESH ONE IMAGE
+    // --------------------------------------------------
 
-      const newUrl = await extremeFetchImage(
-        imageConfig.driveId,
-        true
-      );
+    async function refreshImage(
+      imageConfig
+    ) {
 
-      if (!newUrl) return;
+      const imgElement =
+        document.getElementById(
+          imageConfig.imgId
+        );
+
+      if (!imgElement) {
+        return;
+      }
+
+
+      const newUrl =
+        await extremeFetchImage(
+          imageConfig.driveId,
+          true
+        );
+
+
+      // If fetch failed, leave current image alone
+      if (!newUrl) {
+        return;
+      }
+
 
       await swapImageWithoutFlash(
         imgElement,
@@ -248,16 +436,33 @@
       );
     }
 
+
+    // --------------------------------------------------
+    // INITIAL LOAD
+    // --------------------------------------------------
+
     async function loadInitialImages() {
+
       for (const imageConfig of IMAGES) {
-        const imgElement = document.getElementById(imageConfig.imgId);
 
-        const initialUrl = await extremeFetchImage(
-          imageConfig.driveId,
-          false
-        );
+        const imgElement =
+          document.getElementById(
+            imageConfig.imgId
+          );
 
-        if (initialUrl && imgElement) {
+
+        const initialUrl =
+          await extremeFetchImage(
+            imageConfig.driveId,
+            false
+          );
+
+
+        if (
+          initialUrl &&
+          imgElement
+        ) {
+
           await swapImageWithoutFlash(
             imgElement,
             initialUrl,
@@ -267,22 +472,59 @@
       }
     }
 
+
+    // --------------------------------------------------
+    // AUTO REFRESH
+    // --------------------------------------------------
+
     function startAutoRefresh() {
-      setInterval(() => {
-        for (const imageConfig of IMAGES) {
-          if (imageConfig.refresh) {
-            refreshImage(imageConfig);
-          }
-        }
-      }, 5000);
+
+      /*
+        TOP LIVE IMAGE
+        Refresh every 10 seconds
+      */
+
+      setInterval(
+        () => {
+          refreshImage(LIVE_IMAGE);
+        },
+        10000
+      );
+
+
+      /*
+        BOTTOM TIMELAPSE IMAGE
+        Refresh every 60 seconds
+      */
+
+      setInterval(
+        () => {
+          refreshImage(TIMELAPSE_IMAGE);
+        },
+        60000
+      );
     }
 
+
+    // --------------------------------------------------
+    // START
+    // --------------------------------------------------
+
     async function init() {
+
+      // Load both images immediately
       await loadInitialImages();
+
+      // Then begin their separate refresh timers
       startAutoRefresh();
     }
 
-    window.addEventListener('load', init);
+
+    window.addEventListener(
+      'load',
+      init
+    );
   </script>
+
 </body>
 </html>
