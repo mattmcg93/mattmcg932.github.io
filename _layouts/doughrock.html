@@ -145,6 +145,26 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
+        .tl-load-button {
+            appearance: none;
+            border: 1px solid rgba(255,255,255,0.35);
+            background: rgba(102,126,234,0.9);
+            color: white;
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+        }
+        .tl-load-button:hover {
+            background: rgba(118,75,162,0.95);
+            transform: translateY(-1px);
+        }
+        .tl-loading span {
+            text-align: center;
+            padding: 8px;
+        }
         .timelapse-cell .tl-error {
             position: absolute; inset: 0;
             display: flex; align-items: center; justify-content: center;
@@ -675,62 +695,111 @@
             document.body.style.overflow = 'hidden';
         }
 
-        async function buildTimelapseGrid() {
+        function isSlowConnection() {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
+            if (!connection) return false;
+            if (connection.saveData) return true;
+            if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') return true;
+            if (typeof connection.downlink === 'number' && connection.downlink > 0 && connection.downlink < 1.5) return true;
+
+            return false;
+        }
+
+        async function loadOneTimelapse(cell, id, name) {
+            if (cell.dataset.loading === 'true' || cell.dataset.loaded === 'true') return;
+
+            cell.dataset.loading = 'true';
+            const loadingDiv = cell.querySelector('.tl-loading');
+
+            if (loadingDiv) {
+                loadingDiv.innerHTML = `
+                    <div class="tl-spinner"></div>
+                    <span>Loading ${name}…</span>
+                `;
+            }
+
+            try {
+                const src = await fetchGif(id);
+                const img = document.createElement('img');
+                img.alt = name;
+
+                img.onload = () => {
+                    cell.dataset.loading = 'false';
+                    cell.dataset.loaded = 'true';
+                    const loading = cell.querySelector('.tl-loading');
+                    if (loading) loading.remove();
+                    log(`Timelapse GIF loaded: ${name}`);
+                };
+
+                img.onerror = () => {
+                    cell.dataset.loading = 'false';
+                    const loading = cell.querySelector('.tl-loading');
+                    if (loading) {
+                        loading.innerHTML = `<button class="tl-load-button">Retry GIF</button>`;
+                    }
+                    log(`Timelapse GIF error: ${name}`);
+                };
+
+                img.src = src;
+                cell.insertBefore(img, cell.querySelector('.tl-label'));
+
+                cell.onclick = () => {
+                    if (cell.dataset.loaded === 'true') openTimelapseFullscreen(src, name);
+                };
+            } catch (e) {
+                cell.dataset.loading = 'false';
+                if (loadingDiv) {
+                    loadingDiv.innerHTML = `<button class="tl-load-button">Retry GIF</button>`;
+                }
+                log(`Timelapse fetch error for ${name}: ${e.message}`);
+            }
+        }
+
+        function buildTimelapseGrid() {
             const grid = document.getElementById('timelapse-grid');
-
-            // Set dynamic heading
             const heading = document.getElementById('timelapse-heading');
-            if (heading) heading.innerHTML = getTimelapseHeading() + ' <span style="font-size:0.7em;font-weight:400;color:#888;font-style:italic;">— Click to view timelapse fullscreen</span>';
+            const slow = isSlowConnection();
 
-            // Create placeholder cells immediately
-            const cells = timelapseGifs.map(({ name }) => {
+            if (heading) {
+                heading.innerHTML = getTimelapseHeading() + (
+                    slow
+                        ? ` <span style="font-size:0.7em;font-weight:400;color:#888;font-style:italic;">— Slow connection detected. Tap a GIF to load it.</span>`
+                        : ` <span style="font-size:0.7em;font-weight:400;color:#888;font-style:italic;">— Live cameras loading first…</span>`
+                );
+            }
+
+            grid.innerHTML = '';
+
+            const cells = timelapseGifs.map(({ id, name }) => {
                 const cell = document.createElement('div');
                 cell.className = 'timelapse-cell';
-                cell.title = `Click to enlarge – ${name}`;
+                cell.dataset.loaded = 'false';
+                cell.dataset.loading = 'false';
+                cell.title = slow ? `Click to load – ${name}` : `Waiting for live views – ${name}`;
+
                 cell.innerHTML = `
                     <div class="tl-loading">
-                        <div class="tl-spinner"></div>
-                        <span>Loading ${name}…</span>
+                        ${slow
+                            ? `<button class="tl-load-button">▶ Load ${name} GIF</button>`
+                            : `<span>Waiting for live views…</span>`
+                        }
                     </div>
                     <div class="tl-label">${name}</div>
                 `;
+
                 grid.appendChild(cell);
-                return cell;
+
+                if (slow) {
+                    cell.addEventListener('click', () => {
+                        if (cell.dataset.loaded !== 'true') loadOneTimelapse(cell, id, name);
+                    });
+                }
+
+                return { cell, id, name };
             });
 
-            // Load GIFs concurrently
-            await Promise.all(timelapseGifs.map(async ({ id, name }, i) => {
-                try {
-                    const src = await fetchGif(id);
-                    const img = document.createElement('img');
-                    img.alt = name;
-
-                    img.onload = () => {
-                        const loadingDiv = cells[i].querySelector('.tl-loading');
-                        if (loadingDiv) loadingDiv.remove();
-                        log(`Timelapse GIF loaded: ${name}`);
-                    };
-                    img.onerror = () => {
-                        const loadingDiv = cells[i].querySelector('.tl-loading');
-                        if (loadingDiv) loadingDiv.remove();
-                        const err = document.createElement('div');
-                        err.className = 'tl-error';
-                        err.textContent = `${name} – failed to load`;
-                        cells[i].insertBefore(err, cells[i].querySelector('.tl-label'));
-                        log(`Timelapse GIF error: ${name}`);
-                    };
-
-                    img.src = src;
-                    cells[i].insertBefore(img, cells[i].querySelector('.tl-label'));
-
-                    // Click → fullscreen
-                    cells[i].addEventListener('click', () => openTimelapseFullscreen(src, name));
-                } catch (e) {
-                    const loadingDiv = cells[i].querySelector('.tl-loading');
-                    if (loadingDiv) loadingDiv.remove();
-                    log(`Timelapse fetch error for ${name}: ${e.message}`);
-                }
-            }));
+            return { cells, slow };
         }
 
         async function fetchSensorData(fileId, sensorType) {
@@ -1073,24 +1142,46 @@
             log('Starting Doughrock...');
             const container = document.getElementById('image-container');
 
-            log('Step 1: Loading main image...');
+            // Build timelapse placeholders immediately, but do not download GIFs yet.
+            const timelapseState = buildTimelapseGrid();
+
+            log('Step 1: Loading main live image...');
             await selectThumbnail(0);
 
-            log('Step 2: Loading timelapse GIFs...');
-            buildTimelapseGrid(); // fire and forget – loads concurrently
-
-            log('Step 3: Loading thumbnails...');
-            for (let i = 0; i < driveIds.length; i++) {
-                const thumbnail = await createThumbnail(driveIds[i], i);
+            log('Step 2: Starting live camera thumbnails...');
+            const thumbnailPromises = driveIds.map(async (driveId, i) => {
+                const thumbnail = await createThumbnail(driveId, i);
                 container.appendChild(thumbnail);
-            }
+            });
+            await Promise.all(thumbnailPromises);
 
             startAutoRefresh();
             setupFullscreenModal();
             loadMiniSectionImages();
-            log('Core initialization complete!');
 
-            log('Step 4: Loading sensors in background...');
+            if (timelapseState.slow) {
+                log('Slow connection detected — GIFs are click-to-load.');
+            } else {
+                log('Live views prioritised. Starting GIFs shortly...');
+
+                setTimeout(() => {
+                    const heading = document.getElementById('timelapse-heading');
+                    if (heading) {
+                        heading.innerHTML = getTimelapseHeading() +
+                            ` <span style="font-size:0.7em;font-weight:400;color:#888;font-style:italic;">— Click GIF for fullscreen</span>`;
+                    }
+
+                    (async () => {
+                        for (const item of timelapseState.cells) {
+                            await loadOneTimelapse(item.cell, item.id, item.name);
+                            await new Promise(resolve => setTimeout(resolve, 300));
+                        }
+                    })();
+                }, 3000);
+            }
+
+            log('Core initialization complete!');
+            log('Loading sensors in background...');
             updateSensorData().catch(err => { log(`Sensor loading failed: ${err.message}`); });
         }
 
