@@ -116,6 +116,20 @@
       object-fit: contain;
       border-radius: 6px;
     }
+
+    @media (max-width: 700px) {
+      .sightings-grid {
+        gap: 3px;
+        padding: 3px;
+      }
+
+      .sighting-rank {
+        right: 3px;
+        bottom: 3px;
+        padding: 2px 4px;
+        font-size: 8px;
+      }
+    }
   </style>
 </head>
 
@@ -126,72 +140,78 @@
     <div class="section-label">Live View</div>
     <div class="images-wrap">
       <div class="image-box">
-        <img id="main-image" class="camera-image" alt="Live Camera" />
+        <img
+          id="main-image"
+          class="camera-image"
+          alt="Live Camera"
+        />
       </div>
     </div>
 
     <!-- RECENT CAT SIGHTINGS -->
-    <div class="section-label">Recent Cat Sightings — newest to oldest</div>
+    <div class="section-label">
+      Recent Cat Sightings — newest to oldest
+    </div>
+
     <div class="sightings-grid">
       <div class="sighting-tile">
-        <img id="cat-sighting-1" class="sighting-image" alt="Latest cat sighting" />
+        <img
+          id="cat-sighting-1"
+          class="sighting-image"
+          alt="Latest cat sighting"
+        />
         <div class="sighting-rank">Latest</div>
       </div>
+
       <div class="sighting-tile">
-        <img id="cat-sighting-2" class="sighting-image" alt="Cat sighting 2" />
+        <img
+          id="cat-sighting-2"
+          class="sighting-image"
+          alt="Cat sighting 2"
+        />
         <div class="sighting-rank">2</div>
       </div>
+
       <div class="sighting-tile">
-        <img id="cat-sighting-3" class="sighting-image" alt="Cat sighting 3" />
+        <img
+          id="cat-sighting-3"
+          class="sighting-image"
+          alt="Cat sighting 3"
+        />
         <div class="sighting-rank">3</div>
       </div>
+
       <div class="sighting-tile">
-        <img id="cat-sighting-4" class="sighting-image" alt="Cat sighting 4" />
+        <img
+          id="cat-sighting-4"
+          class="sighting-image"
+          alt="Cat sighting 4"
+        />
         <div class="sighting-rank">4</div>
       </div>
+
       <div class="sighting-tile">
-        <img id="cat-sighting-5" class="sighting-image" alt="Oldest of recent cat sightings" />
+        <img
+          id="cat-sighting-5"
+          class="sighting-image"
+          alt="Oldest recent cat sighting"
+        />
         <div class="sighting-rank">5</div>
       </div>
     </div>
 
-    <!-- CAT HEATMAP -->
+    <!-- CAT ACTIVITY / HEATMAP -->
     <div class="section-label">Cat Activity</div>
-    <div class="heatmap-box">
-      <img id="heatmap-image" class="heatmap-image" alt="Cat sightings heatmap" />
-    </div>
 
-    <!-- DAILY TIMELAPSE -->
-    <div class="section-label" id="timelapse-label">Daily Timelapse</div>
-    <div class="images-wrap">
-      <div class="image-box">
-        <img id="timelapse-image" class="camera-image" alt="Daily Timelapse" />
-      </div>
+    <div class="heatmap-box">
+      <img
+        id="heatmap-image"
+        class="heatmap-image"
+        alt="Cat Activity Heatmap"
+      />
     </div>
 
   </div>
-
-  <script>
-    function setTimelapseLabel() {
-      const now = new Date();
-      const today = new Date(now);
-      today.setHours(9, 0, 0, 0);
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
-
-      const fmt = (d) =>
-        d.toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric'
-        });
-
-      document.getElementById('timelapse-label').textContent =
-        `Daily Timelapse — 9am ${fmt(yesterday)} to 9am ${fmt(today)}`;
-    }
-
-    setTimelapseLabel();
-  </script>
 
   <script>
     // --------------------------------------------------
@@ -201,11 +221,14 @@
     const LIVE_DRIVE_ID =
       "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i";
 
-    const TIMELAPSE_DRIVE_ID =
+    /*
+      This was previously called TIMELAPSE_DRIVE_ID.
+      That Drive file is now the Cat Activity heatmap.
+      MGM_cat_heatmap.py writes PNG image data into it.
+    */
+    const HEATMAP_DRIVE_ID =
       "10VCEPnwHztf655SuBe3VmxzXE5P4YeO6";
 
-    // Run MGM_create_cat_sighting_files.py once, then replace these placeholders
-    // with the exact IDs it prints, in the same 1 -> 5 order.
     const CAT_SIGHTING_DRIVE_IDS = [
       "1vX3Xpp61fxR7p9b74AUs_ORi-9WzmIIh",
       "1BeOogvsuiLzAdfirIhfWODZEDrrlt--M",
@@ -214,9 +237,6 @@
       "1aAwCe-0vN4pnw-3rx_7Uj9A0Ugm5BuiU"
     ];
 
-    const HEATMAP_DRIVE_ID =
-      "PUT_HEATMAP_DRIVE_ID_HERE";
-
     // --------------------------------------------------
     // IMAGE CONFIG
     // --------------------------------------------------
@@ -224,11 +244,6 @@
     const LIVE_IMAGE = {
       driveId: LIVE_DRIVE_ID,
       imgId: "main-image"
-    };
-
-    const TIMELAPSE_IMAGE = {
-      driveId: TIMELAPSE_DRIVE_ID,
-      imgId: "timelapse-image"
     };
 
     const HEATMAP_IMAGE = {
@@ -245,26 +260,23 @@
     const IMAGES = [
       LIVE_IMAGE,
       ...CAT_SIGHTING_IMAGES,
-      HEATMAP_IMAGE,
-      TIMELAPSE_IMAGE
+      HEATMAP_IMAGE
     ];
 
+    // Keep track of current blob URLs.
     const activeBlobUrls = {};
 
-    function isConfiguredDriveId(driveId) {
-      return Boolean(
-        driveId &&
-        !driveId.startsWith("PUT_")
-      );
-    }
-
     // --------------------------------------------------
-    // GENERATE CACHE-BUSTED GOOGLE DRIVE URLS
+    // DRIVE URLS
     // --------------------------------------------------
 
     function generateAllPossibleUrls(driveId) {
       const timestamp = Date.now();
-      const randomParam = Math.random().toString(36).substring(2, 10);
+
+      const randomParam =
+        Math.random()
+          .toString(36)
+          .substring(2, 10);
 
       return [
         `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
@@ -290,25 +302,35 @@
     // FETCH IMAGE
     // --------------------------------------------------
 
-    async function extremeFetchImage(driveId, isRefresh = false) {
-      if (!isConfiguredDriveId(driveId)) {
-        return null;
-      }
+    async function extremeFetchImage(
+      driveId,
+      isRefresh = false
+    ) {
+      const urls =
+        generateAllPossibleUrls(driveId);
 
-      const urls = generateAllPossibleUrls(driveId);
-
+      // Try Google URLs directly first.
       for (const url of urls) {
         try {
-          const response = await fetch(url, {
-            mode: 'cors',
-            credentials: 'omit',
-            referrerPolicy: 'no-referrer',
-            cache: 'no-store'
-          });
+          const response =
+            await fetch(
+              url,
+              {
+                mode: 'cors',
+                credentials: 'omit',
+                referrerPolicy: 'no-referrer',
+                cache: 'no-store'
+              }
+            );
 
           if (response.ok) {
-            const blob = await response.blob();
-            if (blob.size > 0 && blob.type.startsWith('image/')) {
+            const blob =
+              await response.blob();
+
+            if (
+              blob.size > 0 &&
+              blob.type.startsWith('image/')
+            ) {
               return URL.createObjectURL(blob);
             }
           }
@@ -317,21 +339,41 @@
         }
       }
 
-      // Avoid slow public proxies on automatic refreshes.
+      /*
+        During automatic refresh we don't use
+        proxies. This prevents a slow proxy request
+        every refresh cycle.
+      */
       if (isRefresh) {
         return null;
       }
 
-      const proxies = getCORSProxies();
+      // Initial load fallback through proxies.
+      const proxies =
+        getCORSProxies();
+
       for (const proxy of proxies) {
         for (const url of urls.slice(0, 2)) {
           try {
-            const proxyUrl = proxy + encodeURIComponent(url);
-            const response = await fetch(proxyUrl, { cache: 'no-store' });
+            const proxyUrl =
+              proxy + encodeURIComponent(url);
+
+            const response =
+              await fetch(
+                proxyUrl,
+                {
+                  cache: 'no-store'
+                }
+              );
 
             if (response.ok) {
-              const blob = await response.blob();
-              if (blob.size > 1000 && blob.type.startsWith('image/')) {
+              const blob =
+                await response.blob();
+
+              if (
+                blob.size > 1000 &&
+                blob.type.startsWith('image/')
+              ) {
                 return URL.createObjectURL(blob);
               }
             }
@@ -344,30 +386,58 @@
       return null;
     }
 
+    // --------------------------------------------------
+    // PRELOAD IMAGE
+    // --------------------------------------------------
+
     function preloadImage(src) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve();
-        img.onerror = reject;
-        img.src = src;
-      });
+      return new Promise(
+        (resolve, reject) => {
+          const img =
+            new Image();
+
+          img.onload =
+            () => resolve();
+
+          img.onerror =
+            reject;
+
+          img.src =
+            src;
+        }
+      );
     }
 
-    async function swapImageWithoutFlash(imgElement, newSrc, imgKey) {
+    // --------------------------------------------------
+    // SWAP IMAGE WITHOUT FLASHING
+    // --------------------------------------------------
+
+    async function swapImageWithoutFlash(
+      imgElement,
+      newSrc,
+      imgKey
+    ) {
       try {
         await preloadImage(newSrc);
-        const oldSrc = imgElement.src;
-        imgElement.src = newSrc;
+
+        const oldSrc =
+          imgElement.src;
+
+        imgElement.src =
+          newSrc;
 
         if (
           activeBlobUrls[imgKey] &&
           activeBlobUrls[imgKey].startsWith('blob:') &&
           activeBlobUrls[imgKey] !== newSrc
         ) {
-          URL.revokeObjectURL(activeBlobUrls[imgKey]);
+          URL.revokeObjectURL(
+            activeBlobUrls[imgKey]
+          );
         }
 
-        activeBlobUrls[imgKey] = newSrc;
+        activeBlobUrls[imgKey] =
+          newSrc;
 
         if (
           oldSrc &&
@@ -380,40 +450,70 @@
           } catch (e) {}
         }
       } catch (error) {
-        if (newSrc && newSrc.startsWith('blob:')) {
+        if (
+          newSrc &&
+          newSrc.startsWith('blob:')
+        ) {
           URL.revokeObjectURL(newSrc);
         }
       }
     }
 
-    async function refreshImage(imageConfig) {
-      if (!isConfiguredDriveId(imageConfig.driveId)) {
-        return;
-      }
+    // --------------------------------------------------
+    // REFRESH ONE IMAGE
+    // --------------------------------------------------
 
-      const imgElement = document.getElementById(imageConfig.imgId);
+    async function refreshImage(
+      imageConfig
+    ) {
+      const imgElement =
+        document.getElementById(
+          imageConfig.imgId
+        );
+
       if (!imgElement) {
         return;
       }
 
-      const newUrl = await extremeFetchImage(imageConfig.driveId, true);
+      const newUrl =
+        await extremeFetchImage(
+          imageConfig.driveId,
+          true
+        );
+
+      // If fetch failed, leave current image visible.
       if (!newUrl) {
         return;
       }
 
-      await swapImageWithoutFlash(imgElement, newUrl, imageConfig.imgId);
+      await swapImageWithoutFlash(
+        imgElement,
+        newUrl,
+        imageConfig.imgId
+      );
     }
+
+    // --------------------------------------------------
+    // INITIAL LOAD
+    // --------------------------------------------------
 
     async function loadInitialImages() {
       for (const imageConfig of IMAGES) {
-        if (!isConfiguredDriveId(imageConfig.driveId)) {
-          continue;
-        }
+        const imgElement =
+          document.getElementById(
+            imageConfig.imgId
+          );
 
-        const imgElement = document.getElementById(imageConfig.imgId);
-        const initialUrl = await extremeFetchImage(imageConfig.driveId, false);
+        const initialUrl =
+          await extremeFetchImage(
+            imageConfig.driveId,
+            false
+          );
 
-        if (initialUrl && imgElement) {
+        if (
+          initialUrl &&
+          imgElement
+        ) {
           await swapImageWithoutFlash(
             imgElement,
             initialUrl,
@@ -423,26 +523,52 @@
       }
     }
 
+    // --------------------------------------------------
+    // AUTO REFRESH
+    // --------------------------------------------------
+
     function startAutoRefresh() {
-      // Live camera: 10 seconds.
-      setInterval(() => refreshImage(LIVE_IMAGE), 10000);
+      // Live camera: every 10 seconds.
+      setInterval(
+        () => {
+          refreshImage(LIVE_IMAGE);
+        },
+        10000
+      );
 
-      // Five recent sightings: 30 seconds.
-      setInterval(() => {
-        CAT_SIGHTING_IMAGES.forEach(refreshImage);
-      }, 30000);
+      // Recent cat sightings: every 30 seconds.
+      setInterval(
+        () => {
+          CAT_SIGHTING_IMAGES.forEach(
+            refreshImage
+          );
+        },
+        30000
+      );
 
-      // Heatmap and timelapse: 60 seconds.
-      setInterval(() => refreshImage(HEATMAP_IMAGE), 60000);
-      setInterval(() => refreshImage(TIMELAPSE_IMAGE), 60000);
+      // Cat Activity heatmap: every 60 seconds.
+      setInterval(
+        () => {
+          refreshImage(HEATMAP_IMAGE);
+        },
+        60000
+      );
     }
+
+    // --------------------------------------------------
+    // START
+    // --------------------------------------------------
 
     async function init() {
       await loadInitialImages();
       startAutoRefresh();
     }
 
-    window.addEventListener('load', init);
+    window.addEventListener(
+      'load',
+      init
+    );
   </script>
+
 </body>
 </html>
