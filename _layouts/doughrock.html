@@ -3,23 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doughrock</title>
+    <title>Doughrock | Live Cameras &amp; Timelapses</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+        :root {
+            --ink: #172033;
+            --muted: #667085;
+            --surface: rgba(255,255,255,0.96);
+            --accent: #5b64dd;
+            --accent-deep: #4a3ca7;
+            --line: rgba(23,32,51,0.11);
         }
-        .header { text-align: center; color: white; margin-bottom: 12px; }
-        .header h1 { font-size: 2em; font-weight: bold; margin-bottom: 4px; }
-        .status { color: white; font-size: 0.9em; }
+        body {
+            font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 12% -10%, rgba(158, 185, 255, 0.65), transparent 34%),
+                linear-gradient(145deg, #536bda 0%, #6d43a2 54%, #412d76 100%);
+            min-height: 100vh;
+            padding: 24px;
+        }
+        .header { text-align: center; color: white; margin: 8px auto 18px; max-width: 1120px; }
+        .header h1 { font-size: clamp(2rem, 5vw, 3.35rem); line-height: 1.04; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 12px; }
+        .status { color: rgba(255,255,255,0.9); font-size: 1rem; line-height: 1.6; }
         .header-stats { color: white; font-weight: bold; margin-top: 6px; font-size: 1.1em; }
 
         /* ── Mini sections under header ── */
         .mini-section {
-            margin-top: 10px;
+            margin-top: 18px;
             color: white;
             text-align: center;
         }
@@ -55,9 +66,10 @@
         
         .main-container { max-width: 1400px; margin: 0 auto; }
         .sensor-section {
-            background: rgba(255,255,255,0.95);
-            border-radius: 16px; padding: 12px 16px;
-            margin-bottom: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.42);
+            border-radius: 20px; padding: 14px 16px;
+            margin-bottom: 16px; box-shadow: 0 18px 46px rgba(22,20,63,0.18);
         }
         .control-box {
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
@@ -88,150 +100,54 @@
         .firebase-status { text-align: center; margin-top: 6px; padding: 5px; border-radius: 5px; font-size: 0.8em; }
         .firebase-connected { background: rgba(40, 167, 69, 0.1); color: #155724; border: 1px solid rgba(40, 167, 69, 0.2); }
         .firebase-disconnected { background: rgba(220, 53, 69, 0.1); color: #721c24; border: 1px solid rgba(220, 53, 69, 0.2); }
+        .sensor-readings { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .sensor-chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 7px 11px; color: var(--ink); font-size: 0.875rem; font-weight: 700; }
 
-        /* ── Timelapse Section ── */
-        .timelapse-section {
-            background: rgba(255,255,255,0.95);
-            border-radius: 16px; padding: 16px;
-            margin-bottom: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        /* Unified live and timelapse camera surface */
+        .camera-section {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.42);
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: 0 18px 46px rgba(22,20,63,0.18);
         }
-        .timelapse-section h2 {
-            font-size: 1.3em; font-weight: 400; margin-bottom: 12px;
-        }
-        .timelapse-grid {
-            display: grid;
-            gap: 12px;
-            /* Desktop / landscape: 4 columns */
-            grid-template-columns: repeat(4, 1fr);
-        }
-        .timelapse-cell {
-            border-radius: 10px;
-            overflow: hidden;
-            background: #1a1a2e;
-            position: relative;
-            aspect-ratio: 4 / 3;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .timelapse-cell:hover { transform: scale(1.03); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
-        .timelapse-cell img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .timelapse-cell .tl-label {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.75));
-            color: white;
-            font-size: 0.75em;
-            font-weight: 600;
-            padding: 16px 8px 6px;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
-        .timelapse-cell .tl-loading {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            color: rgba(255,255,255,0.6); font-size: 0.8em; gap: 8px;
-        }
-        .tl-spinner {
-            width: 28px; height: 28px;
-            border: 3px solid rgba(255,255,255,0.15);
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        .tl-load-button {
-            appearance: none;
-            border: 1px solid rgba(255,255,255,0.35);
-            background: rgba(102,126,234,0.9);
-            color: white;
-            padding: 9px 12px;
-            border-radius: 8px;
-            font-size: 0.8em;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-        }
-        .tl-load-button:hover {
-            background: rgba(118,75,162,0.95);
-            transform: translateY(-1px);
-        }
-        .tl-loading span {
-            text-align: center;
-            padding: 8px;
-        }
-        .timelapse-cell .tl-error {
-            position: absolute; inset: 0;
-            display: flex; align-items: center; justify-content: center;
-            color: rgba(255,255,255,0.4); font-size: 0.75em; text-align: center; padding: 8px;
-        }
-        .timelapse-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: linear-gradient(135deg, rgba(102,126,234,0.15), rgba(118,75,162,0.15));
-            border: 1px solid rgba(102,126,234,0.3);
-            color: #667eea; font-size: 0.75em; font-weight: 700;
-            padding: 3px 10px; border-radius: 20px; margin-bottom: 12px;
-            letter-spacing: 0.5px; text-transform: uppercase;
-        }
-        .timelapse-badge::before { content: '⏱'; }
-
-        /* Portrait / mobile: 2 columns */
-        @media (max-width: 768px) and (orientation: portrait),
-               (max-width: 600px) {
-            .timelapse-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* ── Rest of original styles ── */
-        .main-image-section {
-            background: rgba(255,255,255,0.95); border-radius: 16px; padding: 16px;
-            margin-bottom: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative;
-        }
-        .image-container-wrapper { position: relative; display: inline-block; width: 100%; }
-        .tap-instruction {
-            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7); color: white;
-            font-size: 1.2em; font-weight: bold; padding: 8px 16px;
-            border-radius: 8px; z-index: 10; pointer-events: none;
-            backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .main-image {
-            width: 100%; height: auto; border-radius: 15px; min-height: 300px;
-            background: #f0f0f0; object-fit: contain; max-height: 70vh; cursor: pointer; display: block;
-        }
-        .thumbnails-section {
-            background: rgba(255,255,255,0.95); border-radius: 16px;
-            padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .thumbnails-section h2 { font-size: 1.3em; font-weight: 400; }
-        #image-container { display: grid; gap: 15px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-        .thumbnail-wrapper {
-            border: 3px solid transparent; border-radius: 10px; overflow: hidden;
-            cursor: pointer; transition: all 0.3s; position: relative;
-            background: #f8f9fa; aspect-ratio: 4 / 3;
-        }
-        .thumbnail-wrapper:hover { transform: scale(1.05); }
-        .thumbnail-wrapper.selected { border-color: #667eea; }
-        .thumbnail { width: 100%; height: 100%; object-fit: cover; background: #ddd; }
+        .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+        .section-heading h2 { font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spacing: -0.025em; }
+        .section-heading p { color: var(--muted); font-size: 0.88rem; line-height: 1.4; text-align: right; }
+        .camera-viewer { background: #0d1220; border-radius: 18px; padding: 14px; margin-bottom: 16px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+        .viewer-titlebar { display: flex; justify-content: space-between; align-items: center; gap: 12px; color: white; padding: 2px 2px 12px; }
+        .viewer-titlebar h3 { font-size: 1.15rem; }
+        .viewer-meta { color: rgba(255,255,255,0.62); font-size: 0.78rem; }
+        .viewer-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+        .media-panel { position: relative; overflow: hidden; border-radius: 13px; background: #151c2d; min-width: 0; }
+        .media-label { position: absolute; top: 10px; left: 10px; z-index: 3; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 6px 10px; background: rgba(7,10,18,0.8); color: #fff; font-size: 0.78rem; font-weight: 800; backdrop-filter: blur(8px); }
+        .media-label .dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,0.18); }
+        .media-label.timelapse .dot { background: #a5b4fc; box-shadow: 0 0 0 3px rgba(165,180,252,0.18); }
+        .viewer-image { width: 100%; aspect-ratio: 4 / 3; display: block; object-fit: contain; cursor: zoom-in; background: #0a0f1b; transition: opacity 0.2s ease; }
+        .viewer-loading { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,0.68); text-align: center; padding: 24px; font-size: 0.9rem; pointer-events: none; }
+        .media-panel.is-hidden { display: none; }
+        .viewer-grid.live-only { grid-template-columns: minmax(0, 1fr); }
+        .viewer-grid.live-only .media-panel:first-child { max-width: 850px; width: 100%; margin: 0 auto; }
+        .camera-grid { display: grid; gap: 12px; grid-template-columns: repeat(4, minmax(0,1fr)); }
+        .camera-card { appearance: none; position: relative; padding: 0; border: 2px solid transparent; border-radius: 14px; overflow: hidden; background: #12192a; aspect-ratio: 4 / 3; cursor: pointer; color: white; text-align: left; box-shadow: 0 5px 14px rgba(23,32,51,0.14); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+        .camera-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(23,32,51,0.22); }
+        .camera-card:focus-visible { outline: 3px solid rgba(91,100,221,0.36); outline-offset: 3px; }
+        .camera-card.selected { border-color: #7c86f7; }
+        .camera-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .card-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; color: rgba(255,255,255,0.7); font-size: 0.78rem; text-align: center; padding: 16px; }
+        .card-footer { position: absolute; inset: auto 0 0; display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; padding: 24px 10px 9px; background: linear-gradient(transparent, rgba(5,8,15,0.9)); }
+        .card-name { font-size: 0.875rem; font-weight: 800; line-height: 1.2; }
+        .card-kind { flex: 0 0 auto; color: rgba(255,255,255,0.75); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.045em; }
+        .tl-spinner, .spinner { width: 28px; height: 28px; border: 3px solid rgba(255,255,255,0.2); border-top-color: #8f98ff; border-radius: 50%; animation: spin 1s linear infinite; }
         .loading {
             display: flex; align-items: center; justify-content: center; height: 100%;
             color: #666; flex-direction: column; gap: 10px;
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
         }
-        .spinner {
-            width: 30px; height: 30px; border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea; border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .info { position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 3px; font-size: 12px; }
-        .debug { margin-top: 20px; background: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
+        .diagnostics { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 10px; color: var(--muted); }
+        .diagnostics summary { cursor: pointer; font-size: 0.82rem; font-weight: 700; }
+        .debug { margin-top: 10px; background: #f5f6f8; padding: 10px; border-radius: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; max-height: 180px; overflow-y: auto; }
         .fullscreen-modal {
             display: none; position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.95);
@@ -291,21 +207,21 @@
         }
         @media (max-width: 768px) {
             body { padding: 15px; }
-            .header h1 { font-size: 2em; }
-            .sensor-section, .main-image-section, .thumbnails-section { padding: 20px; }
-            .main-image { max-height: 50vh; }
-            #image-container { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-            .tap-instruction { font-size: 1em; top: 10px; padding: 6px 12px; }
+            .sensor-section, .camera-section { padding: 14px; }
+            .viewer-grid { grid-template-columns: 1fr; }
+            .camera-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+            .section-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
+            .section-heading p { text-align: left; }
             .lamp-controls { flex-direction: column; gap: 10px; }
             .lamp-button { padding: 10px 20px; font-size: 0.9em; min-width: unset; }
         }
         @media (max-width: 480px) {
             body { padding: 10px; }
-            .header h1 { font-size: 1.8em; }
-            #image-container { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-            .sensor-section, .main-image-section, .thumbnails-section { padding: 15px; }
-            .main-image { max-height: 40vh; min-height: 200px; }
-            .tap-instruction { font-size: 0.9em; top: 8px; padding: 5px 10px; }
+            .camera-section { padding: 10px; border-radius: 16px; }
+            .camera-viewer { padding: 9px; border-radius: 13px; }
+            .viewer-titlebar { align-items: flex-start; flex-direction: column; gap: 3px; }
+            .media-label { top: 7px; left: 7px; font-size: 0.72rem; }
+            .aurora-row img { width: calc(50% - 4px); }
         }
     </style>
 </head>
@@ -313,7 +229,7 @@
     <div class="main-container">
         <div class="header">
             <h1>Doughrock: AI Wildlife Trap Network</h1>
-            <div class="status">A network of Raspberry Pi–based computer-vision wildlife traps with real-time object detection, environmental sensing, and automated climate control. The Pi's use temperature and humidity sensors to control a separate heater and dehumidifier, with conditions shown on the Climate Dashboard. A solar-powered outdoor camera also provides live views of the house, with its battery level tracked alongside the climate data. 
+            <div class="status">A network of Raspberry Pi–based computer-vision wildlife traps with real-time object detection, environmental sensing, and automated climate control. The Raspberry Pis use temperature and humidity sensors to control a separate heater and dehumidifier, with conditions shown on the Climate Dashboard. A solar-powered outdoor camera also provides live views of the house, with its battery level tracked alongside the climate data. 
                 <!-- Notable wildlife detections -->
                 <div class="mini-section">
                     <div class="mini-title">Notable guest appearances (with some dodgy misclassifications)</div>
@@ -355,32 +271,46 @@
                 </div>
             </div>
             <div class="firebase-status" id="firebase-status">Connecting to Firebase...</div>
-        </div>
-
-        <!-- ── Daily Timelapse Section ── -->
-        <div class="timelapse-section">
-            <div class="timelapse-badge">Daily Timelapses</div>
-            <h2 id="timelapse-heading">Today's Timelapses</h2>
-            <div class="timelapse-grid" id="timelapse-grid"></div>
-        </div>
-
-        <div style="text-align:center;margin-bottom:10px;">
-            <h2 style="color:white;font-size:1.8em;font-weight:700;letter-spacing:0.5px;text-shadow:0 2px 8px rgba(0,0,0,0.2);">Doughrock Live Views</h2>
-        </div>
-
-        <div class="main-image-section">
-            <div class="image-container-wrapper">
-                <div class="tap-instruction">Tap to make full screen</div>
-                <img id="main-image" class="main-image" alt="Main View">
+            <div class="sensor-readings" aria-live="polite">
+                <div class="sensor-chip" id="temperature-value">Temperature: Loading…</div>
+                <div class="sensor-chip" id="humidity-value">Humidity: Loading…</div>
             </div>
-            <div id="main-title">Loading main image...</div>
         </div>
 
-        <div class="thumbnails-section">
-            <h2>Live Cameras (Click to View)</h2>
-            <div id="image-container"></div>
-            <div id="debug-log" class="debug"></div>
-        </div>
+        <section class="camera-section" aria-labelledby="camera-heading">
+            <div class="section-heading">
+                <div>
+                    <h2 id="camera-heading">Camera views</h2>
+                </div>
+                <p id="timelapse-range">Live feeds refresh automatically · Timelapses cover the last 24 hours</p>
+            </div>
+
+            <div class="camera-viewer">
+                <div class="viewer-titlebar">
+                    <h3 id="main-title">Solar Powered Cam</h3>
+                    <span class="viewer-meta" id="viewer-meta">Select any preview below</span>
+                </div>
+                <div class="viewer-grid" id="viewer-grid">
+                    <div class="media-panel" id="live-panel">
+                        <div class="media-label"><span class="dot"></span>Live View</div>
+                        <img id="main-image" class="viewer-image" alt="Live camera view">
+                        <div class="viewer-loading" id="live-loading">Loading live view…</div>
+                    </div>
+                    <div class="media-panel" id="timelapse-panel">
+                        <div class="media-label timelapse"><span class="dot"></span>Timelapse (last 24h)</div>
+                        <img id="main-timelapse" class="viewer-image" alt="24-hour camera timelapse">
+                        <div class="viewer-loading" id="timelapse-loading">Loading timelapse…</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="camera-grid" id="image-container" aria-label="Camera selection"></div>
+
+            <details class="diagnostics">
+                <summary>Connection diagnostics</summary>
+                <div id="debug-log" class="debug"></div>
+            </details>
+        </section>
     </div>
 
     <div class="fullscreen-modal" id="fullscreen-modal">
@@ -475,8 +405,8 @@
             const fullscreenOverlay = document.getElementById('fullscreen-overlay');
             const closeButton = document.getElementById('close-modal');
 
-            if (driveIds[9]) {
-                extremeFetchImage(driveIds[9]).then(imageUrl => {
+            if (driveIds[10]) {
+                extremeFetchImage(driveIds[10]).then(imageUrl => {
                     if (imageUrl) fullscreenImg.src = imageUrl;
                 });
             }
@@ -583,16 +513,18 @@
 
         // ── Timelapse GIF data ──
         const timelapseGifs = [
-            { id: "1OhJ0KSujtuDkbf7nc5y84BPJcGa437tq", name: "Solar Powered Cam" },
-            { id: "1XVuUi7r7fgCMK8DRF40owJXTTysNkSvd", name: "Front of House" },
-            { id: "1pZEzNY2Aoa4ukYUFjSWtR7KK-OpBJ47i", name: "Shed" },
-            { id: "1KhHh5IZn5TLCIoRQXUi8N05XZgjaAErK", name: "Shed Tiny" },
-            { id: "1WxMwt0YTlW9k8QNep4bb_2YAhBZt9B-f", name: "Living Room" },
-            { id: "1V4GDb4xCsEewPcD2B06mcJZncfr5BJuP", name: "Back of House" },
-            { id: "1BUzgK8I-9RcN6_0LzEf68TJs8Apki2H0", name: "Side of House" },
-            { id: "1UD-LLgZWbgnMaxjrR85NIADO7XF16UDd", name: "Kitchen" },
-            { id: "1WogrpWiSc6t0ExsUrxa136t04xk-x81P", name: "Shed Inside" },
+            { id: "1OhJ0KSujtuDkbf7nc5y84BPJcGa437tq", name: "Solar Powered Cam", cameraIndex: 0 },
+            { id: "1XVuUi7r7fgCMK8DRF40owJXTTysNkSvd", name: "Front of House", cameraIndex: 1 },
+            { id: "1pZEzNY2Aoa4ukYUFjSWtR7KK-OpBJ47i", name: "Shed", cameraIndex: 2 },
+            { id: "1KhHh5IZn5TLCIoRQXUi8N05XZgjaAErK", name: "Shed Tiny", cameraIndex: 3 },
+            { id: "1WxMwt0YTlW9k8QNep4bb_2YAhBZt9B-f", name: "Living Room", cameraIndex: 4 },
+            { id: "1V4GDb4xCsEewPcD2B06mcJZncfr5BJuP", name: "Back of House", cameraIndex: 5 },
+            { id: "1BUzgK8I-9RcN6_0LzEf68TJs8Apki2H0", name: "Side of House", cameraIndex: 6 },
+            { id: "1UD-LLgZWbgnMaxjrR85NIADO7XF16UDd", name: "Kitchen", cameraIndex: 7 },
+            { id: "1WogrpWiSc6t0ExsUrxa136t04xk-x81P", name: "Shed Inside", cameraIndex: 8 },
         ];
+        const timelapseByCamera = new Map(timelapseGifs.map(item => [item.cameraIndex, item]));
+        const timelapseCache = new Map();
 
         const sensorIds = {
             humidity: "1Ajb8r6TB5aKkWDAr99iDAlo3TlqReT2O",
@@ -600,6 +532,7 @@
         };
 
         let selectedIndex = 0;
+        let selectionToken = 0;
         const debugLog = document.getElementById('debug-log');
 
         function log(message) {
@@ -653,13 +586,12 @@
             return urls[0];
         }
 
-        function getTimelapseHeading() {
+        function getTimelapseRange() {
             const now = new Date();
-            // "yesterday 9am" to "today 9am"
             const yesterday = new Date(now);
             yesterday.setDate(yesterday.getDate() - 1);
             const fmt = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-            return `Today's Timelapses <span style="font-size:0.75em;font-weight:400;color:#555;">(9am ${fmt(yesterday)} to 9am ${fmt(now)})</span>`;
+            return `Live feeds refresh automatically · Timelapses: 9am ${fmt(yesterday)}–9am ${fmt(now)}`;
         }
 
         window.timelapseFullscreenActive = false;
@@ -706,100 +638,63 @@
             return false;
         }
 
-        async function loadOneTimelapse(cell, id, name) {
-            if (cell.dataset.loading === 'true' || cell.dataset.loaded === 'true') return;
-
-            cell.dataset.loading = 'true';
-            const loadingDiv = cell.querySelector('.tl-loading');
-
-            if (loadingDiv) {
-                loadingDiv.innerHTML = `
-                    <div class="tl-spinner"></div>
-                    <span>Loading ${name}…</span>
-                `;
+        function getTimelapseSrc(item) {
+            if (!timelapseCache.has(item.id)) {
+                const request = fetchGif(item.id).catch(error => {
+                    timelapseCache.delete(item.id);
+                    throw error;
+                });
+                timelapseCache.set(item.id, request);
             }
+            return timelapseCache.get(item.id);
+        }
 
+        async function loadCameraCardPreview(card, index) {
+            const item = timelapseByCamera.get(index);
+            const loading = card.querySelector('.card-loading');
             try {
-                const src = await fetchGif(id);
+                const src = item ? await getTimelapseSrc(item) : await extremeFetchImage(driveIds[index]);
+                if (!src) throw new Error('No image returned');
                 const img = document.createElement('img');
-                img.alt = name;
-
+                img.alt = item ? `${cameraNames[index]} 24-hour timelapse` : `${cameraNames[index]} live preview`;
                 img.onload = () => {
-                    cell.dataset.loading = 'false';
-                    cell.dataset.loaded = 'true';
-                    const loading = cell.querySelector('.tl-loading');
                     if (loading) loading.remove();
-                    log(`Timelapse GIF loaded: ${name}`);
+                    log(`${item ? 'Timelapse' : 'Live'} preview loaded: ${cameraNames[index]}`);
                 };
-
                 img.onerror = () => {
-                    cell.dataset.loading = 'false';
-                    const loading = cell.querySelector('.tl-loading');
-                    if (loading) {
-                        loading.innerHTML = `<button class="tl-load-button">Retry GIF</button>`;
-                    }
-                    log(`Timelapse GIF error: ${name}`);
+                    if (loading) loading.textContent = 'Preview unavailable';
                 };
-
                 img.src = src;
-                cell.insertBefore(img, cell.querySelector('.tl-label'));
-
-                cell.onclick = () => {
-                    if (cell.dataset.loaded === 'true') openTimelapseFullscreen(src, name);
-                };
-            } catch (e) {
-                cell.dataset.loading = 'false';
-                if (loadingDiv) {
-                    loadingDiv.innerHTML = `<button class="tl-load-button">Retry GIF</button>`;
-                }
-                log(`Timelapse fetch error for ${name}: ${e.message}`);
+                card.insertBefore(img, card.querySelector('.card-footer'));
+            } catch (error) {
+                if (loading) loading.textContent = 'Preview unavailable';
+                log(`Preview error for ${cameraNames[index]}: ${error.message}`);
             }
         }
 
-        function buildTimelapseGrid() {
-            const grid = document.getElementById('timelapse-grid');
-            const heading = document.getElementById('timelapse-heading');
-            const slow = isSlowConnection();
-
-            if (heading) {
-                heading.innerHTML = getTimelapseHeading() + (
-                    slow
-                        ? ` <span style="font-size:0.7em;font-weight:400;color:#888;font-style:italic;">— Slow connection detected. Tap a GIF to load it.</span>`
-                        : ` <span style="font-size:0.7em;font-weight:400;color:#888;font-style:italic;">— Live cameras loading first…</span>`
-                );
-            }
-
+        function buildCameraGrid() {
+            const grid = document.getElementById('image-container');
             grid.innerHTML = '';
-
-            const cells = timelapseGifs.map(({ id, name }) => {
-                const cell = document.createElement('div');
-                cell.className = 'timelapse-cell';
-                cell.dataset.loaded = 'false';
-                cell.dataset.loading = 'false';
-                cell.title = slow ? `Click to load – ${name}` : `Waiting for live views – ${name}`;
-
-                cell.innerHTML = `
-                    <div class="tl-loading">
-                        ${slow
-                            ? `<button class="tl-load-button">▶ Load ${name} GIF</button>`
-                            : `<span>Waiting for live views…</span>`
-                        }
-                    </div>
-                    <div class="tl-label">${name}</div>
+            const cards = driveIds.map((driveId, index) => {
+                const paired = timelapseByCamera.has(index);
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'camera-card';
+                card.dataset.index = index;
+                card.dataset.paired = String(paired);
+                card.setAttribute('aria-label', `View ${cameraNames[index]}${paired ? ' live and timelapse' : ' live view'}`);
+                card.innerHTML = `
+                    <span class="card-loading"><span class="tl-spinner"></span>${paired ? 'Loading timelapse…' : 'Loading live preview…'}</span>
+                    <span class="card-footer">
+                        <span class="card-name">${cameraNames[index]}</span>
+                        <span class="card-kind">${paired ? 'Live + 24h' : 'Live only'}</span>
+                    </span>
                 `;
-
-                grid.appendChild(cell);
-
-                if (slow) {
-                    cell.addEventListener('click', () => {
-                        if (cell.dataset.loaded !== 'true') loadOneTimelapse(cell, id, name);
-                    });
-                }
-
-                return { cell, id, name };
+                card.addEventListener('click', () => selectThumbnail(index, true));
+                grid.appendChild(card);
+                return card;
             });
-
-            return { cells, slow };
+            return cards;
         }
 
         async function fetchSensorData(fileId, sensorType) {
@@ -872,7 +767,7 @@
             const tempEl = document.getElementById('temperature-value');
             if (temperatureData) {
                 const val = parseFloat(temperatureData);
-                tempEl.textContent = `Temperature: ${isNaN(val) ? temperatureData : val.toFixed(1)}C`;
+                tempEl.textContent = `Temperature: ${isNaN(val) ? temperatureData : val.toFixed(1)}°C`;
             } else {
                 tempEl.textContent = 'Temperature: Failed to load';
             }
@@ -973,7 +868,8 @@
         async function refreshMainImage() {
             const mainImage = document.getElementById('main-image');
             const fullscreenImg = document.getElementById('fullscreen-image');
-            const mainTitle = document.getElementById('main-title');
+            const viewerMeta = document.getElementById('viewer-meta');
+            const liveLoading = document.getElementById('live-loading');
 
             log(`Refreshing ${cameraNames[selectedIndex]}...`);
             mainImage.style.opacity = '0.5';
@@ -984,7 +880,6 @@
             if (newMainUrl) {
                 const oldSrc = mainImage.src;
                 if (oldSrc && oldSrc.startsWith('blob:')) URL.revokeObjectURL(oldSrc);
-                mainImage.src = newMainUrl;
                 if (
                     document.getElementById('fullscreen-modal').classList.contains('active') &&
                     !window.timelapseFullscreenActive &&
@@ -994,10 +889,12 @@
                 }
                 mainImage.onload = () => {
                     mainImage.style.opacity = '1';
-                    mainTitle.textContent = `${cameraNames[selectedIndex]} - Updated ${new Date().toLocaleTimeString()}`;
+                    liveLoading.style.display = 'none';
+                    viewerMeta.textContent = `Live view updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
                     log(`Main image refreshed`);
                 };
                 mainImage.onerror = () => { mainImage.style.opacity = '1'; log(`Main image load error`); };
+                mainImage.src = newMainUrl;
             } else {
                 mainImage.style.opacity = '1';
                 log(`Main refresh failed`);
@@ -1007,96 +904,85 @@
         function startAutoRefresh() {
             log('Starting auto-refresh (every 10 seconds)...');
             setInterval(async () => {
-                log('--- Refresh cycle starting ---');
                 await refreshMainImage();
-
-                const thumbnailWrappers = document.querySelectorAll('.thumbnail-wrapper');
-                const refreshPromises = [];
-
-                for (let index = 0; index < thumbnailWrappers.length && index < driveIds.length; index++) {
-                    const wrapper = thumbnailWrappers[index];
-                    const img = wrapper.querySelector('.thumbnail');
-                    if (!img) { log(`Thumbnail ${index + 1} - no img, skip`); continue; }
-
-                    const loadingDiv = wrapper.querySelector('.loading');
-                    if (loadingDiv && (loadingDiv.textContent.includes('failed') || loadingDiv.textContent.includes('Error'))) {
-                        log(`Thumbnail ${index + 1} - error state, skip`); continue;
-                    }
-
-                    const refreshPromise = (async (idx, imgElement) => {
-                        let newUrl = await forceClearCacheAndRefresh(driveIds[idx]);
-                        if (!newUrl) newUrl = await extremeFetchImage(driveIds[idx], true);
-                        if (!newUrl) { log(`Thumbnail ${idx + 1} - keeping current`); return; }
-
-                        imgElement.style.opacity = '0.7';
-                        const oldSrc = imgElement.src;
-                        if (oldSrc && oldSrc.startsWith('blob:')) URL.revokeObjectURL(oldSrc);
-                        imgElement.src = newUrl;
-                        imgElement.onload = () => { imgElement.style.opacity = '1'; log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) ok`); };
-                        imgElement.onerror = () => { imgElement.style.opacity = '1'; log(`Thumbnail ${idx + 1} (${cameraNames[idx]}) error`); };
-                    })(index, img);
-
-                    refreshPromises.push(refreshPromise);
-                }
-
-                await Promise.all(refreshPromises);
-                log('--- Refresh cycle complete ---');
             }, 10000);
         }
 
-        async function createThumbnail(driveId, index) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'thumbnail-wrapper';
-            wrapper.innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <div>Loading ${cameraNames[index]}...</div>
-                </div>
-                <div class="info">${cameraNames[index]}</div>
-            `;
-            wrapper.addEventListener('click', () => selectThumbnail(index));
+        async function selectThumbnail(index, userInitiated = false) {
+            selectedIndex = index;
+            const token = ++selectionToken;
+            const mainImage = document.getElementById('main-image');
+            const mainTimelapse = document.getElementById('main-timelapse');
+            const mainTitle = document.getElementById('main-title');
+            const viewerMeta = document.getElementById('viewer-meta');
+            const liveLoading = document.getElementById('live-loading');
+            const timelapseLoading = document.getElementById('timelapse-loading');
+            const timelapsePanel = document.getElementById('timelapse-panel');
+            const viewerGrid = document.getElementById('viewer-grid');
+            const timelapse = timelapseByCamera.get(index);
 
-            extremeFetchImage(driveId).then(imageUrl => {
-                if (imageUrl) {
-                    const img = document.createElement('img');
-                    img.className = 'thumbnail';
-                    img.src = imageUrl;
-                    img.onload = () => {
-                        wrapper.innerHTML = `<div class="info">${cameraNames[index]}</div>`;
-                        wrapper.insertBefore(img, wrapper.firstChild);
-                    };
-                    img.onerror = () => {
-                        wrapper.innerHTML = `<div class="loading">Load failed</div><div class="info">${cameraNames[index]} - Error</div>`;
-                    };
-                } else {
-                    wrapper.innerHTML = `<div class="loading">Failed</div><div class="info">${cameraNames[index]} - Error</div>`;
-                }
+            mainTitle.textContent = cameraNames[index];
+            viewerMeta.textContent = timelapse ? 'Live view + 24-hour timelapse' : 'Live view only';
+            mainImage.alt = `${cameraNames[index]} live view`;
+            mainImage.style.opacity = '0.5';
+            liveLoading.style.display = 'grid';
+            liveLoading.textContent = 'Loading live view…';
+
+            timelapsePanel.classList.toggle('is-hidden', !timelapse);
+            viewerGrid.classList.toggle('live-only', !timelapse);
+
+            document.querySelectorAll('.camera-card').forEach((card) => {
+                const active = Number(card.dataset.index) === index;
+                card.classList.toggle('selected', active);
+                card.setAttribute('aria-pressed', String(active));
             });
 
-            return wrapper;
-        }
-
-        async function selectThumbnail(index) {
-            selectedIndex = index;
-            const mainImage = document.getElementById('main-image');
-            const mainTitle = document.getElementById('main-title');
-
-            mainTitle.textContent = `Loading ${cameraNames[index]}...`;
-            mainImage.style.opacity = '0.5';
-
-            const imageUrl = await extremeFetchImage(driveIds[index]);
-            if (imageUrl) {
-                mainImage.src = imageUrl;
-                mainImage.onload = () => { mainImage.style.opacity = '1'; mainTitle.textContent = `${cameraNames[index]} - Loaded`; };
-                mainImage.onerror = () => { mainTitle.textContent = `${cameraNames[index]} - Failed`; };
+            if (timelapse) {
+                mainTimelapse.alt = `${cameraNames[index]} timelapse for the last 24 hours`;
+                mainTimelapse.style.opacity = '0.35';
+                timelapseLoading.style.display = 'grid';
+                timelapseLoading.textContent = 'Loading 24-hour timelapse…';
+                getTimelapseSrc(timelapse).then((src) => {
+                    if (token !== selectionToken) return;
+                    mainTimelapse.onload = () => {
+                        mainTimelapse.style.opacity = '1';
+                        timelapseLoading.style.display = 'none';
+                    };
+                    mainTimelapse.onerror = () => {
+                        mainTimelapse.style.opacity = '1';
+                        timelapseLoading.textContent = 'Timelapse unavailable';
+                    };
+                    mainTimelapse.src = src;
+                }).catch((error) => {
+                    if (token === selectionToken) timelapseLoading.textContent = 'Timelapse unavailable';
+                    log(`Timelapse fetch error for ${cameraNames[index]}: ${error.message}`);
+                });
             } else {
-                mainImage.style.opacity = '1';
-                mainTitle.textContent = `${cameraNames[index]} - Could not load`;
+                mainTimelapse.removeAttribute('src');
             }
 
-            document.querySelectorAll('.thumbnail-wrapper').forEach((w, i) => {
-                w.classList.toggle('selected', i === index);
-            });
+            const imageUrl = await extremeFetchImage(driveIds[index]);
+            if (token !== selectionToken) return;
+            if (imageUrl) {
+                const oldSrc = mainImage.src;
+                if (oldSrc && oldSrc.startsWith('blob:')) URL.revokeObjectURL(oldSrc);
+                mainImage.onload = () => {
+                    mainImage.style.opacity = '1';
+                    liveLoading.style.display = 'none';
+                };
+                mainImage.onerror = () => {
+                    mainImage.style.opacity = '1';
+                    liveLoading.textContent = 'Live view unavailable';
+                };
+                mainImage.src = imageUrl;
+            } else {
+                mainImage.style.opacity = '1';
+                liveLoading.textContent = 'Live view unavailable';
+            }
+
+            if (userInitiated && window.innerWidth <= 768) {
+                document.querySelector('.camera-viewer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         function setupFullscreenModal() {
@@ -1104,10 +990,13 @@
             const fullscreenImg = document.getElementById('fullscreen-image');
             const closeButton = document.getElementById('close-modal');
             const mainImage = document.getElementById('main-image');
+            const mainTimelapse = document.getElementById('main-timelapse');
 
-            function openFullscreen() {
-                if (!mainImage.src) return;
-                fullscreenImg.src = mainImage.src;
+            function openFullscreen(sourceImage, isTimelapse = false) {
+                if (!sourceImage.src) return;
+                fullscreenImg.src = sourceImage.src;
+                fullscreenImg.classList.toggle('timelapse', isTimelapse);
+                window.timelapseFullscreenActive = isTimelapse;
 
                 const updateRotation = () => applyFullscreenRotation(fullscreenImg, closeButton);
                 if (fullscreenImg.complete && fullscreenImg.naturalWidth) updateRotation();
@@ -1125,7 +1014,8 @@
                 window.heaterFullscreenActive = false;
             }
 
-            mainImage.addEventListener('click', openFullscreen);
+            mainImage.addEventListener('click', () => openFullscreen(mainImage, false));
+            mainTimelapse.addEventListener('click', () => openFullscreen(mainTimelapse, true));
             closeButton.addEventListener('click', closeFullscreen);
             modal.addEventListener('click', (e) => { if (e.target === modal) closeFullscreen(); });
             document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeFullscreen(); });
@@ -1140,45 +1030,20 @@
 
         async function init() {
             log('Starting Doughrock...');
-            const container = document.getElementById('image-container');
-
-            // Build timelapse placeholders immediately, but do not download GIFs yet.
-            const timelapseState = buildTimelapseGrid();
-
-            log('Step 1: Loading main live image...');
-            await selectThumbnail(0);
-
-            log('Step 2: Starting live camera thumbnails...');
-            const thumbnailPromises = driveIds.map(async (driveId, i) => {
-                const thumbnail = await createThumbnail(driveId, i);
-                container.appendChild(thumbnail);
-            });
-            await Promise.all(thumbnailPromises);
-
-            startAutoRefresh();
+            document.getElementById('timelapse-range').textContent = getTimelapseRange();
+            const cards = buildCameraGrid();
             setupFullscreenModal();
             loadMiniSectionImages();
+            await selectThumbnail(0);
 
-            if (timelapseState.slow) {
-                log('Slow connection detected — GIFs are click-to-load.');
-            } else {
-                log('Live views prioritised. Starting GIFs shortly...');
+            (async () => {
+                for (let index = 0; index < cards.length; index++) {
+                    await loadCameraCardPreview(cards[index], index);
+                    await new Promise(resolve => setTimeout(resolve, 150));
+                }
+            })();
 
-                setTimeout(() => {
-                    const heading = document.getElementById('timelapse-heading');
-                    if (heading) {
-                        heading.innerHTML = getTimelapseHeading() +
-                            ` <span style="font-size:0.7em;font-weight:400;color:#888;font-style:italic;">— Click GIF for fullscreen</span>`;
-                    }
-
-                    (async () => {
-                        for (const item of timelapseState.cells) {
-                            await loadOneTimelapse(item.cell, item.id, item.name);
-                            await new Promise(resolve => setTimeout(resolve, 300));
-                        }
-                    })();
-                }, 3000);
-            }
+            startAutoRefresh();
 
             log('Core initialization complete!');
             log('Loading sensors in background...');
