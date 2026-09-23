@@ -79,6 +79,18 @@
       background: #111;
       border: 1px solid #222;
       border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.12s ease;
+    }
+
+    .sighting-tile:hover {
+      transform: scale(1.015);
+      border-color: #555;
+    }
+
+    .sighting-tile:focus-visible {
+      outline: 3px solid white;
+      outline-offset: -3px;
     }
 
     .sighting-image {
@@ -100,6 +112,121 @@
       font-size: 10px;
       font-weight: bold;
       pointer-events: none;
+    }
+
+
+    /* --------------------------------------------------
+       FULLSCREEN RECENT-SIGHTINGS GALLERY
+       -------------------------------------------------- */
+
+    .gallery-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.96);
+      overflow: hidden;
+      touch-action: pan-y;
+    }
+
+    .gallery-overlay.open {
+      display: flex;
+    }
+
+    .gallery-stage {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 56px 74px 54px;
+    }
+
+    .gallery-image {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      background: #000;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .gallery-close,
+    .gallery-nav {
+      position: absolute;
+      z-index: 10001;
+      border: 0;
+      color: white;
+      background: rgba(20, 20, 20, 0.72);
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      line-height: 1;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .gallery-close:hover,
+    .gallery-nav:hover {
+      background: rgba(55, 55, 55, 0.9);
+    }
+
+    .gallery-close:focus-visible,
+    .gallery-nav:focus-visible {
+      outline: 3px solid white;
+      outline-offset: 2px;
+    }
+
+    .gallery-close {
+      top: 14px;
+      right: 14px;
+      min-width: 48px;
+      height: 48px;
+      padding: 0 15px;
+      border-radius: 24px;
+      font-size: 30px;
+    }
+
+    .gallery-nav {
+      top: 50%;
+      width: 56px;
+      height: 72px;
+      margin-top: -36px;
+      border-radius: 8px;
+      font-size: 46px;
+      font-weight: normal;
+    }
+
+    .gallery-prev {
+      left: 12px;
+    }
+
+    .gallery-next {
+      right: 12px;
+    }
+
+    .gallery-counter {
+      position: absolute;
+      z-index: 10001;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      padding: 7px 12px;
+      border-radius: 14px;
+      background: rgba(20, 20, 20, 0.72);
+      color: #ddd;
+      font-size: 13px;
+      font-weight: bold;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    body.gallery-open {
+      overflow: hidden;
     }
 
     .heatmap-box {
@@ -129,6 +256,40 @@
         padding: 2px 4px;
         font-size: 8px;
       }
+
+
+      .gallery-stage {
+        padding: 54px 48px 50px;
+      }
+
+      .gallery-nav {
+        width: 42px;
+        height: 64px;
+        margin-top: -32px;
+        font-size: 38px;
+      }
+
+      .gallery-prev {
+        left: 4px;
+      }
+
+      .gallery-next {
+        right: 4px;
+      }
+
+      .gallery-close {
+        top: 8px;
+        right: 8px;
+        min-width: 44px;
+        height: 44px;
+        padding: 0 12px;
+        font-size: 27px;
+      }
+
+      .gallery-counter {
+        bottom: 9px;
+        font-size: 12px;
+      }
     }
   </style>
 </head>
@@ -154,7 +315,7 @@
     </div>
 
     <div class="sightings-grid">
-      <div class="sighting-tile">
+      <div class="sighting-tile" data-gallery-index="0" role="button" tabindex="0" aria-label="Open latest cat sighting">
         <img
           id="cat-sighting-1"
           class="sighting-image"
@@ -163,7 +324,7 @@
         <div class="sighting-rank">Latest</div>
       </div>
 
-      <div class="sighting-tile">
+      <div class="sighting-tile" data-gallery-index="1" role="button" tabindex="0" aria-label="Open cat sighting 2">
         <img
           id="cat-sighting-2"
           class="sighting-image"
@@ -172,7 +333,7 @@
         <div class="sighting-rank">2</div>
       </div>
 
-      <div class="sighting-tile">
+      <div class="sighting-tile" data-gallery-index="2" role="button" tabindex="0" aria-label="Open cat sighting 3">
         <img
           id="cat-sighting-3"
           class="sighting-image"
@@ -181,7 +342,7 @@
         <div class="sighting-rank">3</div>
       </div>
 
-      <div class="sighting-tile">
+      <div class="sighting-tile" data-gallery-index="3" role="button" tabindex="0" aria-label="Open cat sighting 4">
         <img
           id="cat-sighting-4"
           class="sighting-image"
@@ -190,7 +351,7 @@
         <div class="sighting-rank">4</div>
       </div>
 
-      <div class="sighting-tile">
+      <div class="sighting-tile" data-gallery-index="4" role="button" tabindex="0" aria-label="Open oldest recent cat sighting">
         <img
           id="cat-sighting-5"
           class="sighting-image"
@@ -211,6 +372,58 @@
       />
     </div>
 
+  </div>
+
+
+  <!-- FULLSCREEN RECENT CAT SIGHTINGS GALLERY -->
+  <div
+    id="gallery-overlay"
+    class="gallery-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Recent Cat Sightings gallery"
+    aria-hidden="true"
+  >
+    <div
+      id="gallery-stage"
+      class="gallery-stage"
+    >
+      <img
+        id="gallery-image"
+        class="gallery-image"
+        alt="Cat sighting enlarged"
+      />
+    </div>
+
+    <button
+      id="gallery-close"
+      class="gallery-close"
+      type="button"
+      aria-label="Exit gallery view"
+      title="Exit gallery view"
+    >×</button>
+
+    <button
+      id="gallery-prev"
+      class="gallery-nav gallery-prev"
+      type="button"
+      aria-label="Previous sighting"
+      title="Previous sighting"
+    >‹</button>
+
+    <button
+      id="gallery-next"
+      class="gallery-nav gallery-next"
+      type="button"
+      aria-label="Next sighting"
+      title="Next sighting"
+    >›</button>
+
+    <div
+      id="gallery-counter"
+      class="gallery-counter"
+      aria-live="polite"
+    ></div>
   </div>
 
   <script>
@@ -265,6 +478,235 @@
 
     // Keep track of current blob URLs.
     const activeBlobUrls = {};
+
+
+    // --------------------------------------------------
+    // FULLSCREEN RECENT-SIGHTINGS GALLERY
+    // --------------------------------------------------
+
+    let galleryIndex = 0;
+    let galleryIsOpen = false;
+    let galleryTouchStartX = null;
+
+    function getGalleryElements() {
+      return {
+        overlay: document.getElementById("gallery-overlay"),
+        image: document.getElementById("gallery-image"),
+        counter: document.getElementById("gallery-counter"),
+        close: document.getElementById("gallery-close"),
+        prev: document.getElementById("gallery-prev"),
+        next: document.getElementById("gallery-next"),
+        stage: document.getElementById("gallery-stage")
+      };
+    }
+
+    function normaliseGalleryIndex(index) {
+      const total = CAT_SIGHTING_IMAGES.length;
+      return ((index % total) + total) % total;
+    }
+
+    function showGalleryImage(index) {
+      const elements = getGalleryElements();
+      galleryIndex = normaliseGalleryIndex(index);
+
+      const config = CAT_SIGHTING_IMAGES[galleryIndex];
+      const sourceImage = document.getElementById(config.imgId);
+
+      if (sourceImage && sourceImage.src) {
+        elements.image.src = sourceImage.src;
+        elements.image.alt =
+          sourceImage.alt || `Cat sighting ${galleryIndex + 1}`;
+      }
+
+      const label =
+        galleryIndex === 0
+          ? "Latest"
+          : `${galleryIndex + 1} of ${CAT_SIGHTING_IMAGES.length}`;
+
+      elements.counter.textContent =
+        `${label} — ${galleryIndex + 1} / ${CAT_SIGHTING_IMAGES.length}`;
+    }
+
+    function openGallery(index) {
+      const elements = getGalleryElements();
+
+      galleryIsOpen = true;
+      showGalleryImage(index);
+
+      elements.overlay.classList.add("open");
+      elements.overlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("gallery-open");
+
+      // Put keyboard focus on the close button.
+      elements.close.focus({ preventScroll: true });
+    }
+
+    function closeGallery() {
+      if (!galleryIsOpen) {
+        return;
+      }
+
+      const elements = getGalleryElements();
+
+      galleryIsOpen = false;
+      elements.overlay.classList.remove("open");
+      elements.overlay.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("gallery-open");
+
+      const tile =
+        document.querySelector(
+          `.sighting-tile[data-gallery-index="${galleryIndex}"]`
+        );
+
+      if (tile) {
+        tile.focus({ preventScroll: true });
+      }
+    }
+
+    function previousGalleryImage() {
+      showGalleryImage(galleryIndex - 1);
+    }
+
+    function nextGalleryImage() {
+      showGalleryImage(galleryIndex + 1);
+    }
+
+    function initGallery() {
+      const elements = getGalleryElements();
+
+      document
+        .querySelectorAll(".sighting-tile")
+        .forEach((tile) => {
+          const index =
+            Number(tile.dataset.galleryIndex);
+
+          tile.addEventListener(
+            "click",
+            () => openGallery(index)
+          );
+
+          tile.addEventListener(
+            "keydown",
+            (event) => {
+              if (
+                event.key === "Enter" ||
+                event.key === " "
+              ) {
+                event.preventDefault();
+                openGallery(index);
+              }
+            }
+          );
+        });
+
+      elements.close.addEventListener(
+        "click",
+        closeGallery
+      );
+
+      elements.prev.addEventListener(
+        "click",
+        previousGalleryImage
+      );
+
+      elements.next.addEventListener(
+        "click",
+        nextGalleryImage
+      );
+
+      // Clicking the black area outside the image exits gallery view.
+      elements.stage.addEventListener(
+        "click",
+        (event) => {
+          if (event.target === elements.stage) {
+            closeGallery();
+          }
+        }
+      );
+
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          if (!galleryIsOpen) {
+            return;
+          }
+
+          if (event.key === "Escape") {
+            event.preventDefault();
+            closeGallery();
+          } else if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            previousGalleryImage();
+          } else if (event.key === "ArrowRight") {
+            event.preventDefault();
+            nextGalleryImage();
+          }
+        }
+      );
+
+      // Simple swipe navigation on phones/tablets.
+      elements.overlay.addEventListener(
+        "touchstart",
+        (event) => {
+          if (event.touches.length === 1) {
+            galleryTouchStartX =
+              event.touches[0].clientX;
+          }
+        },
+        { passive: true }
+      );
+
+      elements.overlay.addEventListener(
+        "touchend",
+        (event) => {
+          if (
+            galleryTouchStartX === null ||
+            event.changedTouches.length !== 1
+          ) {
+            galleryTouchStartX = null;
+            return;
+          }
+
+          const endX =
+            event.changedTouches[0].clientX;
+
+          const deltaX =
+            endX - galleryTouchStartX;
+
+          galleryTouchStartX = null;
+
+          if (Math.abs(deltaX) < 50) {
+            return;
+          }
+
+          if (deltaX > 0) {
+            previousGalleryImage();
+          } else {
+            nextGalleryImage();
+          }
+        },
+        { passive: true }
+      );
+    }
+
+    function syncOpenGalleryImage(imgElement, newSrc) {
+      if (!galleryIsOpen) {
+        return;
+      }
+
+      const currentConfig =
+        CAT_SIGHTING_IMAGES[galleryIndex];
+
+      if (
+        currentConfig &&
+        imgElement.id === currentConfig.imgId
+      ) {
+        const galleryImage =
+          document.getElementById("gallery-image");
+
+        galleryImage.src = newSrc;
+      }
+    }
 
     // --------------------------------------------------
     // DRIVE URLS
@@ -426,6 +868,11 @@
         imgElement.src =
           newSrc;
 
+        syncOpenGalleryImage(
+          imgElement,
+          newSrc
+        );
+
         if (
           activeBlobUrls[imgKey] &&
           activeBlobUrls[imgKey].startsWith('blob:') &&
@@ -560,6 +1007,7 @@
     // --------------------------------------------------
 
     async function init() {
+      initGallery();
       await loadInitialImages();
       startAutoRefresh();
     }
