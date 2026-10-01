@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="RELF — Remote Extraction of Latent Fingerprints. Patented contactless computer-vision technology for extracting latent fingerprints from difficult curved, reflective and transparent surfaces." />
+  <title>🫆 RELF — Remote Extraction of Latent Fingerprints</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: rgba(255,255,255,.055);
+      --panel2: rgba(255,255,255,.035);
+      --border: rgba(255,255,255,.11);
+      --text: #f5f8fc;
+      --muted: #aab8c8;
+      --accent: #7dd3fc;
+      --accent2: #a7f3d0;
+      --shadow: 0 24px 70px rgba(0,0,0,.28);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(56,189,248,.13), transparent 34rem),
+        radial-gradient(circle at 85% 15%, rgba(167,243,208,.09), transparent 28rem),
+        linear-gradient(180deg, #07111f 0%, #091522 55%, #08101a 100%);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(1100px, calc(100% - 36px)); margin: 0 auto; }
+    header {
+      min-height: 72vh;
+      display: grid;
+      align-items: center;
+      padding: 72px 0 48px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 7px 11px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      color: #d9e7f4;
+      font-size: .82rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-size: clamp(2.7rem, 7vw, 6.2rem);
+      line-height: .98;
+      letter-spacing: -.055em;
+      margin: 0;
+      max-width: 900px;
+    }
+    .accent { color: var(--accent); }
+    .lead {
+      max-width: 780px;
+      font-size: clamp(1.08rem, 2.2vw, 1.34rem);
+      color: #c8d5e3;
+      margin: 26px 0 26px;
+    }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.055);
+      font-weight: 700;
+      transition: .18s ease;
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(125,211,252,.98), rgba(167,243,208,.95));
+      color:#06111e;
+      border:0;
+    }
+    .btn:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.25); }
+    .metrics {
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:12px;
+      margin-top:36px;
+    }
+    .metric {
+      border:1px solid var(--border);
+      background: var(--panel);
+      border-radius:16px;
+      padding:18px;
+      box-shadow: var(--shadow);
+    }
+    .metric strong { display:block; font-size:1.1rem; margin-bottom:4px; }
+    .metric span { color:var(--muted); font-size:.9rem; }
+    section { padding: 34px 0; }
+    .section-title {
+      font-size: clamp(1.65rem,3vw,2.4rem);
+      letter-spacing:-.035em;
+      margin:0 0 8px;
+    }
+    .section-copy { color:var(--muted); max-width:800px; margin:0 0 22px; }
+    .grid {
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:16px;
+    }
+    .card {
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, var(--panel), var(--panel2));
+      border-radius:18px;
+      padding:22px;
+      box-shadow: var(--shadow);
+    }
+    .card h3 { margin:0 0 9px; font-size:1.08rem; }
+    .card p { color:#c6d1dc; margin:0; }
+    .tag {
+      display:inline-block;
+      padding:5px 9px;
+      border-radius:999px;
+      background:rgba(125,211,252,.10);
+      border:1px solid rgba(125,211,252,.2);
+      color:#ccefff;
+      font-size:.78rem;
+      margin-bottom:11px;
+    }
+    .pub {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .pub-title { font-size:1.04rem; font-weight:800; line-height:1.35; }
+    .pub-meta { color:var(--muted); font-size:.9rem; }
+    .links { display:flex; flex-wrap:wrap; gap:9px; margin-top:3px; }
+    .link {
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.035);
+      font-size:.87rem;
+      font-weight:700;
+    }
+    .link:hover { border-color:rgba(125,211,252,.55); }
+    .feature-list {
+      display:grid;
+      grid-template-columns: repeat(3,1fr);
+      gap:12px;
+    }
+    .feature {
+      padding:17px;
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+    }
+    .feature b { display:block; margin-bottom:5px; }
+    .feature span { color:var(--muted); font-size:.91rem; }
+    .quote {
+      font-size: clamp(1.25rem,2.6vw,1.8rem);
+      line-height:1.35;
+      letter-spacing:-.025em;
+      padding:26px 0 4px;
+      max-width:900px;
+    }
+    footer {
+      padding: 48px 0 54px;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+    .footer-line {
+      border-top:1px solid var(--border);
+      padding-top:20px;
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    @media (max-width: 800px) {
+      .metrics { grid-template-columns: repeat(2,1fr); }
+      .grid, .feature-list { grid-template-columns: 1fr; }
+      header { min-height:auto; padding-top:52px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">🫆 Patented AI & Computer Vision</div>
+      <h1>RELF <span class="accent">Remote Extraction of Latent Fingerprints</span></h1>
+      <p class="lead">
+        Contactless forensic imaging technology for automatically extracting latent fingerprints from difficult
+        curved, reflective and transparent surfaces, while preserving the evidence for subsequent forensic analysis.
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="https://patents.google.com/patent/US12315289B2" target="_blank" rel="noopener">View US Patent ↗</a>
+        <a class="btn" href="https://ieeexplore.ieee.org/abstract/document/9207376/" target="_blank" rel="noopener">IEEE paper ↗</a>
+        <a class="btn" href="https://www.sciencedirect.com/science/article/pii/S0923596522001370" target="_blank" rel="noopener">Elsevier paper ↗</a>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><strong>Zero-contact</strong><span>No powders, chemicals or physical lifting required.</span></div>
+        <div class="metric"><strong>Curved surfaces</strong><span>Designed for difficult specular and transparent objects.</span></div>
+        <div class="metric"><strong>US patent granted</strong><span>US12315289B2, active.</span></div>
+        <div class="metric"><strong>Research → deployment</strong><span>Developed from published research into production-ready technology.</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2 class="section-title">What RELF does</h2>
+      <p class="section-copy">
+        RELF uses controlled multi-light imaging, computer vision and machine learning to recover latent fingerprint detail
+        without contaminating the evidence. The system can estimate surface curvature remotely and correct geometric distortion
+        before the recovered print is passed to conventional fingerprint matching workflows.
+      </p>
+      <div class="feature-list">
+        <div class="feature"><b>Contactless extraction</b><span>Preserves the fingerprint for downstream forensic work, including potential DNA recovery.</span></div>
+        <div class="feature"><b>Automatic curvature correction</b><span>Corrects distortion caused by cylindrical and spherical surfaces without physically measuring them.</span></div>
+        <div class="feature"><b>Hard surfaces, not easy demos</b><span>Demonstrated on curved, specular and transparent objects such as glass lightbulbs, jars and chrome taps.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Published research</h2>
+      <p class="section-copy">The underlying techniques were developed through peer-reviewed research led by Matthew McGuigan and Jacqueline Christmas.</p>
+
+      <div class="grid">
+        <article class="card pub">
+          <span class="tag">IEEE · IJCNN 2020</span>
+          <div class="pub-title">Remote Extraction of Latent Fingerprints (RELF)</div>
+          <div class="pub-meta">Matthew McGuigan, Jacqueline Christmas · 2020 International Joint Conference on Neural Networks · pp. 1–8</div>
+          <p>
+            Introduced a robust, non-invasive method for extracting latent fingerprints from challenging surfaces using
+            off-the-shelf cameras and statistical analysis, including transparent, curved and specular objects.
+          </p>
+          <div class="links">
+            <a class="link" href="https://ieeexplore.ieee.org/abstract/document/9207376/" target="_blank" rel="noopener">IEEE ↗</a>
+            <a class="link" href="https://ore.exeter.ac.uk/articles/conference_contribution/Remote_Extraction_of_Latent_Fingerprints_RELF_/29774003/1/files/56805197.pdf" target="_blank" rel="noopener">Open PDF ↗</a>
+          </div>
+        </article>
+
+        <article class="card pub">
+          <span class="tag">Elsevier · 2022</span>
+          <div class="pub-title">Contactless automated lifting of latent fingerprints from difficult curved surfaces</div>
+          <div class="pub-meta">Matthew McGuigan, Jacqueline Christmas · Signal Processing: Image Communication · Vol. 109 · 116858</div>
+          <p>
+            Presented a fully automated zero-contact pipeline that extracts latent fingerprints and corrects surface-curvature
+            distortion, improving matching performance across difficult real-world objects.
+          </p>
+          <div class="links">
+            <a class="link" href="https://www.sciencedirect.com/science/article/pii/S0923596522001370" target="_blank" rel="noopener">ScienceDirect ↗</a>
+            <a class="link" href="https://ore.exeter.ac.uk/articles/journal_contribution/Contactless_automated_lifting_of_latent_fingerprints_from_difficult_curved_surfaces/29790032/1/files/56827508.pdf" target="_blank" rel="noopener">Open PDF ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Patent portfolio</h2>
+      <p class="section-copy">
+        The patented system covers remote curvature estimation and correction for latent-print extraction, together with
+        automated multi-light image analysis and machine-learning based identification of fingerprint regions.
+      </p>
+
+      <div class="grid">
+        <article class="card pub">
+          <span class="tag">United States · Granted</span>
+          <div class="pub-title">US12315289B2 · Latent print extraction apparatus and method</div>
+          <div class="pub-meta">Inventors: Matthew McGuigan, Jacqueline Christmas · Granted 27 May 2025 · Active</div>
+          <p>
+            Covers remote surface-curvature estimation and correction of latent-print imagery without physically measuring
+            or contacting the evidence.
+          </p>
+          <div class="links">
+            <a class="link" href="https://patents.google.com/patent/US12315289B2" target="_blank" rel="noopener">Google Patents ↗</a>
+          </div>
+        </article>
+
+        <article class="card pub">
+          <span class="tag">Europe · Patent family</span>
+          <div class="pub-title">EP4377877 · Latent print extraction apparatus and method</div>
+          <div class="pub-meta">Inventors: Matthew McGuigan, Jacqueline Christmas · European Patent Office</div>
+          <p>
+            European protection for the RELF latent-print extraction and curvature-correction technology.
+          </p>
+          <div class="links">
+            <a class="link" href="https://patents.google.com/patent/EP4377877" target="_blank" rel="noopener">Google Patents ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="quote">
+        “The goal is simple: recover more useful forensic information while touching the evidence less.”
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-line">
+      <span>RELF · Remote Extraction of Latent Fingerprints</span>
+      <span>Lead inventor & author: Dr Matthew McGuigan</span>
+    </div>
+  </footer>
+</body>
+</html>
