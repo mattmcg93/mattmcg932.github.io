@@ -229,7 +229,7 @@
     <div class="main-container">
         <div class="header">
             <h1>Doughrock: AI Wildlife Trap Network</h1>
-            <div class="status">A network of Raspberry Pi–based computer-vision wildlife traps with real-time object detection, environmental sensing, and automated climate control. The Raspberry Pis use temperature and humidity sensors to control a separate heater and dehumidifier, with conditions shown on the Climate Dashboard. A solar-powered outdoor camera also provides live views of the house, with its battery level tracked alongside the climate data. 
+            <div class="status">Doughrock is a distributed agentic AI system I designed and built to autonomously monitor and manage a geographically remote farm in Ireland. It runs across five Raspberry Pis and a remote orchestration host, combining a locally hosted LLM with deterministic Python services, computer vision, environmental sensors, camera feeds, historical climate data and infrastructure telemetry. The agent reasons across those observations, can invoke permitted tools for heating and dehumidification, and closes the loop by observing whether real-world actions actually took effect. The LLM handles ambiguity, planning and natural-language interaction, while deterministic software remains the authority layer for permissions, validation, safety and execution. Physical actions are tracked separately as requested, authorised, transmitted, observed and verified rather than assuming that a successful command means the appliance actually changed state. 
                 <!-- Notable wildlife detections -->
                 <div class="mini-section">
                     <div class="mini-title">Notable guest appearances (with some dodgy misclassifications)</div>
