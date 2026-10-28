@@ -287,7 +287,7 @@
 
             <div class="camera-viewer">
                 <div class="viewer-titlebar">
-                    <h3 id="main-title">Solar Powered Cam</h3>
+                    <h3 id="main-title">Front of House</h3>
                     <span class="viewer-meta" id="viewer-meta">Select any preview below</span>
                 </div>
                 <div class="viewer-grid" id="viewer-grid">
@@ -511,12 +511,28 @@
             "Kitchen", "raspi-zero-w-shed-inside", "Router Usage", "Climate Dashboard"
         ];
 
+        // Visible camera indexes. Commented-out entries are disabled from the viewer and thumbnails.
+        // Keep driveIds/cameraNames in their original order: other features rely on those indexes.
+        const visibleCameraIndices = [
+            // 0, // Solar Powered Cam — disabled
+            1, // Front of House
+            2, // raspi-zero-w-shed
+            // 3, // raspi-zero-w-shed-tiny — disabled
+            4, // Living Room
+            5, // Back of House
+            6, // Side of House
+            7, // Kitchen
+            8, // raspi-zero-w-shed-inside
+            9, // Router Usage
+            10 // Climate Dashboard
+        ];
+
         // ── Timelapse GIF data ──
         const timelapseGifs = [
-            { id: "1OhJ0KSujtuDkbf7nc5y84BPJcGa437tq", name: "Solar Powered Cam", cameraIndex: 0 },
+            // { id: "1OhJ0KSujtuDkbf7nc5y84BPJcGa437tq", name: "Solar Powered Cam", cameraIndex: 0 }, // disabled
             { id: "1XVuUi7r7fgCMK8DRF40owJXTTysNkSvd", name: "Front of House", cameraIndex: 1 },
             { id: "1pZEzNY2Aoa4ukYUFjSWtR7KK-OpBJ47i", name: "Shed", cameraIndex: 2 },
-            { id: "1KhHh5IZn5TLCIoRQXUi8N05XZgjaAErK", name: "Shed Tiny", cameraIndex: 3 },
+            // { id: "1KhHh5IZn5TLCIoRQXUi8N05XZgjaAErK", name: "Shed Tiny", cameraIndex: 3 }, // disabled
             { id: "1WxMwt0YTlW9k8QNep4bb_2YAhBZt9B-f", name: "Living Room", cameraIndex: 4 },
             { id: "1V4GDb4xCsEewPcD2B06mcJZncfr5BJuP", name: "Back of House", cameraIndex: 5 },
             { id: "1BUzgK8I-9RcN6_0LzEf68TJs8Apki2H0", name: "Side of House", cameraIndex: 6 },
@@ -531,7 +547,7 @@
             temperature: "1GPWSQIFjLR25lmuP-ljgIFriLNBS-FyQ"
         };
 
-        let selectedIndex = 0;
+        let selectedIndex = visibleCameraIndices[0];
         let selectionToken = 0;
         const debugLog = document.getElementById('debug-log');
 
@@ -675,7 +691,7 @@
         function buildCameraGrid() {
             const grid = document.getElementById('image-container');
             grid.innerHTML = '';
-            const cards = driveIds.map((driveId, index) => {
+            const cards = visibleCameraIndices.map(index => {
                 const paired = timelapseByCamera.has(index);
                 const card = document.createElement('button');
                 card.type = 'button';
@@ -1034,11 +1050,11 @@
             const cards = buildCameraGrid();
             setupFullscreenModal();
             loadMiniSectionImages();
-            await selectThumbnail(0);
+            await selectThumbnail(visibleCameraIndices[0]);
 
             (async () => {
                 for (let index = 0; index < cards.length; index++) {
-                    await loadCameraCardPreview(cards[index], index);
+                    await loadCameraCardPreview(cards[index], Number(cards[index].dataset.index));
                     await new Promise(resolve => setTimeout(resolve, 150));
                 }
             })();
