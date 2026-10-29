@@ -781,16 +781,97 @@
       return null;
     }
 
+    async function responseToSafeInsightText(response) {
+      if (!response || !response.ok) return null;
+
+      const contentType =
+        (response.headers.get("content-type") || "").toLowerCase();
+
+      // Never interpret an image response as insight text.
+      if (contentType.startsWith("image/")) {
+        return null;
+      }
+
+      const buffer = await response.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
+
+      // PNG signature: 89 50 4E 47 0D 0A 1A 0A
+      const isPng =
+        bytes.length >= 8 &&
+        bytes[0] === 0x89 &&
+        bytes[1] === 0x50 &&
+        bytes[2] === 0x4e &&
+        bytes[3] === 0x47 &&
+        bytes[4] === 0x0d &&
+        bytes[5] === 0x0a &&
+        bytes[6] === 0x1a &&
+        bytes[7] === 0x0a;
+
+      // JPEG signature.
+      const isJpeg =
+        bytes.length >= 3 &&
+        bytes[0] === 0xff &&
+        bytes[1] === 0xd8 &&
+        bytes[2] === 0xff;
+
+      // GIF87a / GIF89a signature.
+      const isGif =
+        bytes.length >= 6 &&
+        bytes[0] === 0x47 &&
+        bytes[1] === 0x49 &&
+        bytes[2] === 0x46 &&
+        bytes[3] === 0x38 &&
+        (bytes[4] === 0x37 || bytes[4] === 0x39) &&
+        bytes[5] === 0x61;
+
+      if (isPng || isJpeg || isGif) {
+        return null;
+      }
+
+      const decoded =
+        new TextDecoder("utf-8", { fatal: false })
+          .decode(buffer)
+          .trim();
+
+      if (!decoded) return null;
+
+      // Don't display a Google login/HTML error page as the "insight".
+      const lower = decoded.slice(0, 500).toLowerCase();
+      if (
+        lower.includes("<!doctype html") ||
+        lower.includes("<html")
+      ) {
+        return null;
+      }
+
+      // A normal insight is short plain text. This also protects the page
+      // against accidentally decoding arbitrary binary data.
+      if (decoded.length > 6000) {
+        return null;
+      }
+
+      return decoded;
+    }
+
     async function extremeFetchText(driveId, isRefresh = false) {
       if (!driveIdConfigured(driveId)) return null;
 
       const timestamp = Date.now();
       const randomParam = Math.random().toString(36).substring(2, 10);
+
+      /*
+        IMPORTANT:
+        Do NOT use lh3.googleusercontent.com for text files.
+        That is Google's image-serving endpoint and can return a PNG preview
+        for a Drive text file. If response.text() is then called on it, the
+        insight box fills with "PNG / IHDR / IDAT" binary garbage.
+      */
       const urls = [
-        `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
-        `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`
+        `https://drive.usercontent.google.com/download?id=${driveId}&export=download&confirm=t&t=${timestamp}&r=${randomParam}`,
+        `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`
       ];
 
+      // Try the real Drive download endpoints directly first.
       for (const url of urls) {
         try {
           const response = await fetch(url, {
@@ -800,15 +881,20 @@
             cache: "no-store"
           });
 
-          if (response.ok) {
-            const text = (await response.text()).trim();
-            if (text) return text;
+          const safeText =
+            await responseToSafeInsightText(response);
+
+          if (safeText) {
+            return safeText;
           }
         } catch (e) {}
       }
 
+      // During automatic refresh, keep the last good insight rather than
+      // starting slow third-party proxy requests every minute.
       if (isRefresh) return null;
 
+      // Initial page load fallback through the existing CORS proxies.
       for (const proxy of getCORSProxies()) {
         for (const url of urls) {
           try {
@@ -816,9 +902,12 @@
               proxy + encodeURIComponent(url),
               { cache: "no-store" }
             );
-            if (response.ok) {
-              const text = (await response.text()).trim();
-              if (text) return text;
+
+            const safeText =
+              await responseToSafeInsightText(response);
+
+            if (safeText) {
+              return safeText;
             }
           } catch (e) {}
         }
@@ -939,4 +1028,5 @@
   </script>
 </body>
 </html>
+
 
