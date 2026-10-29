@@ -12,64 +12,131 @@
       padding: 0;
     }
 
-    html, body {
-      width: 100%;
-      min-height: 100%;
-      background: #000;
-      font-family: Arial, sans-serif;
+    :root {
+      color-scheme: dark;
+      --bg: #050505;
+      --panel: #101010;
+      --panel-2: #171717;
+      --line: #292929;
+      --muted: #9b9b9b;
+      --text: #f5f5f5;
+      --soft: #d6d6d6;
     }
 
+    html,
     body {
-      color: white;
+      width: 100%;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body.gallery-open {
+      overflow: hidden;
     }
 
     .page {
-      width: 100%;
+      width: min(1500px, 100%);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      margin: 0 auto;
+      padding-bottom: 36px;
     }
 
-    .section-label {
-      width: 100%;
-      padding: 10px 16px;
-      background: #111;
-      font-size: 13px;
-      font-weight: bold;
-      color: #aaa;
+    .topbar {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 18px 10px;
+      border-bottom: 1px solid #181818;
+    }
+
+    .brand {
+      font-size: clamp(20px, 3vw, 31px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .topbar-note {
+      color: #777;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .section {
+      padding: 0 12px;
+      margin-top: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 4px 8px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #d8d8d8;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    .images-wrap {
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0;
-      background: #000;
+    .section-note {
+      color: #777;
+      font-size: 11px;
+      text-align: right;
     }
 
-    .image-box {
-      width: 100%;
-      background: #000;
-      overflow: hidden;
+    /* --------------------------------------------------
+       INSIGHT
+       -------------------------------------------------- */
+
+    .insight-card {
+      margin: 14px 12px 4px;
+      padding: 18px 20px;
+      border: 1px solid #242424;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,0.045), transparent 38%),
+        linear-gradient(180deg, #151515, #0d0d0d);
+      box-shadow: 0 8px 34px rgba(0, 0, 0, 0.3);
     }
 
-    .camera-image {
-      display: block;
-      width: 100%;
-      height: auto;
-      object-fit: contain;
-      background: #000;
+    .insight-kicker {
+      color: #858585;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
     }
+
+    .insight-text {
+      color: #f2f2f2;
+      font-size: clamp(16px, 2vw, 22px);
+      line-height: 1.42;
+      font-weight: 600;
+    }
+
+    .insight-source {
+      margin-top: 9px;
+      color: #666;
+      font-size: 10px;
+    }
+
+    /* --------------------------------------------------
+       RECENT VISIT GIFS
+       -------------------------------------------------- */
 
     .sightings-grid {
       width: 100%;
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 6px;
-      padding: 6px;
-      background: #000;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
     }
 
     .sighting-tile {
@@ -77,15 +144,16 @@
       min-width: 0;
       overflow: hidden;
       background: #111;
-      border: 1px solid #222;
-      border-radius: 6px;
+      border: 1px solid #262626;
+      border-radius: 11px;
       cursor: pointer;
-      transition: transform 0.12s ease, border-color 0.12s ease;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.26);
+      transition: transform 0.13s ease, border-color 0.13s ease;
     }
 
     .sighting-tile:hover {
-      transform: scale(1.015);
-      border-color: #555;
+      transform: translateY(-1px);
+      border-color: #505050;
     }
 
     .sighting-tile:focus-visible {
@@ -98,25 +166,87 @@
       width: 100%;
       aspect-ratio: 4 / 3;
       object-fit: cover;
-      background: white;
+      background: #111;
     }
 
     .sighting-rank {
       position: absolute;
-      right: 6px;
-      bottom: 6px;
-      padding: 3px 6px;
-      border-radius: 4px;
-      background: rgba(0, 0, 0, 0.72);
+      right: 8px;
+      bottom: 8px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.74);
       color: white;
-      font-size: 10px;
-      font-weight: bold;
+      font-size: 11px;
+      font-weight: 800;
+      pointer-events: none;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .sighting-placeholder {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      color: #8c8c8c;
+      background: #111;
+      font-size: 13px;
+      line-height: 1.4;
       pointer-events: none;
     }
 
+    .sighting-tile.waiting .sighting-placeholder {
+      display: flex;
+    }
 
     /* --------------------------------------------------
-       FULLSCREEN RECENT-SIGHTINGS GALLERY
+       COMPACT LIVE VIEW
+       -------------------------------------------------- */
+
+    .live-shell {
+      width: min(720px, 100%);
+      margin: 0 auto;
+      border: 1px solid #222;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0b0b0b;
+    }
+
+    .camera-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      background: #000;
+    }
+
+    /* --------------------------------------------------
+       HEATMAP
+       -------------------------------------------------- */
+
+    .heatmap-box {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid #222;
+      border-radius: 10px;
+      background: #0b0b0b;
+    }
+
+    .heatmap-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: white;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    /* --------------------------------------------------
+       FULLSCREEN GALLERY
        -------------------------------------------------- */
 
     .gallery-overlay {
@@ -126,7 +256,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.96);
+      background: rgba(0, 0, 0, 0.97);
       overflow: hidden;
       touch-action: pan-y;
     }
@@ -141,7 +271,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 56px 74px 54px;
+      padding: 58px 76px 56px;
     }
 
     .gallery-image {
@@ -162,23 +292,17 @@
       z-index: 10001;
       border: 0;
       color: white;
-      background: rgba(20, 20, 20, 0.72);
+      background: rgba(20, 20, 20, 0.75);
       cursor: pointer;
       font-family: Arial, sans-serif;
       line-height: 1;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
 
     .gallery-close:hover,
     .gallery-nav:hover {
-      background: rgba(55, 55, 55, 0.9);
-    }
-
-    .gallery-close:focus-visible,
-    .gallery-nav:focus-visible {
-      outline: 3px solid white;
-      outline-offset: 2px;
+      background: rgba(65, 65, 65, 0.92);
     }
 
     .gallery-close {
@@ -198,16 +322,10 @@
       margin-top: -36px;
       border-radius: 8px;
       font-size: 46px;
-      font-weight: normal;
     }
 
-    .gallery-prev {
-      left: 12px;
-    }
-
-    .gallery-next {
-      right: 12px;
-    }
+    .gallery-prev { left: 12px; }
+    .gallery-next { right: 12px; }
 
     .gallery-counter {
       position: absolute;
@@ -217,7 +335,7 @@
       transform: translateX(-50%);
       padding: 7px 12px;
       border-radius: 14px;
-      background: rgba(20, 20, 20, 0.72);
+      background: rgba(20, 20, 20, 0.76);
       color: #ddd;
       font-size: 13px;
       font-weight: bold;
@@ -225,57 +343,45 @@
       pointer-events: none;
     }
 
-    body.gallery-open {
-      overflow: hidden;
-    }
-
-    .heatmap-box {
-      width: 100%;
-      padding: 8px;
-      background: #000;
-    }
-
-    .heatmap-image {
-      display: block;
-      width: 100%;
-      height: auto;
-      background: white;
-      object-fit: contain;
-      border-radius: 6px;
-    }
-
     @media (max-width: 700px) {
-      .sightings-grid {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
         gap: 3px;
-        padding: 3px;
       }
 
-      .sighting-rank {
-        right: 3px;
-        bottom: 3px;
-        padding: 2px 4px;
-        font-size: 8px;
+      .section {
+        padding: 0 7px;
       }
 
+      .insight-card {
+        margin-left: 7px;
+        margin-right: 7px;
+        padding: 15px;
+      }
+
+      .sightings-grid {
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+
+      .section-note {
+        display: none;
+      }
 
       .gallery-stage {
-        padding: 54px 48px 50px;
+        padding: 54px 46px 50px;
       }
 
       .gallery-nav {
-        width: 42px;
-        height: 64px;
-        margin-top: -32px;
-        font-size: 38px;
+        width: 40px;
+        height: 62px;
+        margin-top: -31px;
+        font-size: 36px;
       }
 
-      .gallery-prev {
-        left: 4px;
-      }
-
-      .gallery-next {
-        right: 4px;
-      }
+      .gallery-prev { left: 3px; }
+      .gallery-next { right: 3px; }
 
       .gallery-close {
         top: 8px;
@@ -285,174 +391,148 @@
         padding: 0 12px;
         font-size: 27px;
       }
-
-      .gallery-counter {
-        bottom: 9px;
-        font-size: 12px;
-      }
     }
   </style>
 </head>
 
 <body>
   <div class="page">
+    <header class="topbar">
+      <div class="brand">BlueElephant Cat Monitor</div>
+      <div class="topbar-note">Visit clips • activity • live view</div>
+    </header>
 
-    <!-- LIVE VIEW -->
-    <div class="section-label">Live View</div>
-    <div class="images-wrap">
-      <div class="image-box">
-        <img
-          id="main-image"
-          class="camera-image"
-          alt="Live Camera"
-        />
+    <!-- INSIGHT FIRST -->
+    <section class="insight-card" aria-live="polite">
+      <div class="insight-kicker">Behavioural insight</div>
+      <div id="cat-insight-text" class="insight-text">
+        Learning the new routine…
       </div>
-    </div>
+      <div class="insight-source">
+        Based on completed visits; weather context via Open-Meteo when available.
+      </div>
+    </section>
 
-    <!-- RECENT CAT SIGHTINGS -->
-    <div class="section-label">
-      Recent Cat Sightings — newest to oldest
-    </div>
-
-    <div class="sightings-grid">
-      <div class="sighting-tile" data-gallery-index="0" role="button" tabindex="0" aria-label="Open latest cat sighting">
-        <img
-          id="cat-sighting-1"
-          class="sighting-image"
-          alt="Latest cat sighting"
-        />
-        <div class="sighting-rank">Latest</div>
+    <!-- RECENT VISIT GIFS -->
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">Recent Cat Visits</div>
+        <div class="section-note">Animated • newest to oldest • timestamps are burned into each frame</div>
       </div>
 
-      <div class="sighting-tile" data-gallery-index="1" role="button" tabindex="0" aria-label="Open cat sighting 2">
-        <img
-          id="cat-sighting-2"
-          class="sighting-image"
-          alt="Cat sighting 2"
-        />
-        <div class="sighting-rank">2</div>
+      <div class="sightings-grid">
+        <div class="sighting-tile" data-gallery-index="0" role="button" tabindex="0" aria-label="Open latest cat visit">
+          <img id="cat-sighting-1" class="sighting-image" alt="Latest cat visit" />
+          <div class="sighting-rank">Latest</div>
+          <div class="sighting-placeholder">Waiting for visit clip</div>
+        </div>
+
+        <div class="sighting-tile" data-gallery-index="1" role="button" tabindex="0" aria-label="Open cat visit 2">
+          <img id="cat-sighting-2" class="sighting-image" alt="Cat visit 2" />
+          <div class="sighting-rank">2</div>
+          <div class="sighting-placeholder">Waiting for visit clip</div>
+        </div>
+
+        <div class="sighting-tile" data-gallery-index="2" role="button" tabindex="0" aria-label="Open cat visit 3">
+          <img id="cat-sighting-3" class="sighting-image" alt="Cat visit 3" />
+          <div class="sighting-rank">3</div>
+          <div class="sighting-placeholder">Waiting for visit clip</div>
+        </div>
+
+        <div class="sighting-tile" data-gallery-index="3" role="button" tabindex="0" aria-label="Open cat visit 4">
+          <img id="cat-sighting-4" class="sighting-image" alt="Cat visit 4" />
+          <div class="sighting-rank">4</div>
+          <div class="sighting-placeholder">Waiting for visit clip</div>
+        </div>
+
+        <div class="sighting-tile" data-gallery-index="4" role="button" tabindex="0" aria-label="Open cat visit 5">
+          <img id="cat-sighting-5" class="sighting-image" alt="Cat visit 5" />
+          <div class="sighting-rank">5</div>
+          <div class="sighting-placeholder">Waiting for visit clip</div>
+        </div>
+
+        <div class="sighting-tile" data-gallery-index="5" role="button" tabindex="0" aria-label="Open cat visit 6">
+          <img id="cat-sighting-6" class="sighting-image" alt="Cat visit 6" />
+          <div class="sighting-rank">6</div>
+          <div class="sighting-placeholder">Paste the new slot-6 Drive ID into the HTML after first camera start.</div>
+        </div>
       </div>
+    </section>
 
-      <div class="sighting-tile" data-gallery-index="2" role="button" tabindex="0" aria-label="Open cat sighting 3">
-        <img
-          id="cat-sighting-3"
-          class="sighting-image"
-          alt="Cat sighting 3"
-        />
-        <div class="sighting-rank">3</div>
+    <!-- SMALLER LIVE VIEW -->
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">Live View</div>
+        <div class="section-note">Compact current frame</div>
       </div>
-
-      <div class="sighting-tile" data-gallery-index="3" role="button" tabindex="0" aria-label="Open cat sighting 4">
-        <img
-          id="cat-sighting-4"
-          class="sighting-image"
-          alt="Cat sighting 4"
-        />
-        <div class="sighting-rank">4</div>
+      <div class="live-shell">
+        <img id="main-image" class="camera-image" alt="Live Camera" />
       </div>
+    </section>
 
-      <div class="sighting-tile" data-gallery-index="4" role="button" tabindex="0" aria-label="Open oldest recent cat sighting">
-        <img
-          id="cat-sighting-5"
-          class="sighting-image"
-          alt="Oldest recent cat sighting"
-        />
-        <div class="sighting-rank">5</div>
+    <!-- HEATMAP -->
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">Cat Activity</div>
+        <div class="section-note">Clean activity record after reset</div>
       </div>
-    </div>
-
-    <!-- CAT ACTIVITY / HEATMAP -->
-    <div class="section-label">Cat Activity</div>
-
-    <div class="heatmap-box">
-      <img
-        id="heatmap-image"
-        class="heatmap-image"
-        alt="Cat Activity Heatmap"
-      />
-    </div>
-
+      <div class="heatmap-box">
+        <img id="heatmap-image" class="heatmap-image" alt="Cat Activity Heatmap" />
+      </div>
+    </section>
   </div>
 
-
-  <!-- FULLSCREEN RECENT CAT SIGHTINGS GALLERY -->
+  <!-- FULLSCREEN VISIT GALLERY -->
   <div
     id="gallery-overlay"
     class="gallery-overlay"
     role="dialog"
     aria-modal="true"
-    aria-label="Recent Cat Sightings gallery"
+    aria-label="Recent Cat Visits gallery"
     aria-hidden="true"
   >
-    <div
-      id="gallery-stage"
-      class="gallery-stage"
-    >
-      <img
-        id="gallery-image"
-        class="gallery-image"
-        alt="Cat sighting enlarged"
-      />
+    <div id="gallery-stage" class="gallery-stage">
+      <img id="gallery-image" class="gallery-image" alt="Cat visit enlarged" />
     </div>
 
-    <button
-      id="gallery-close"
-      class="gallery-close"
-      type="button"
-      aria-label="Exit gallery view"
-      title="Exit gallery view"
-    >×</button>
-
-    <button
-      id="gallery-prev"
-      class="gallery-nav gallery-prev"
-      type="button"
-      aria-label="Previous sighting"
-      title="Previous sighting"
-    >‹</button>
-
-    <button
-      id="gallery-next"
-      class="gallery-nav gallery-next"
-      type="button"
-      aria-label="Next sighting"
-      title="Next sighting"
-    >›</button>
-
-    <div
-      id="gallery-counter"
-      class="gallery-counter"
-      aria-live="polite"
-    ></div>
+    <button id="gallery-close" class="gallery-close" type="button" aria-label="Exit gallery" title="Exit gallery">×</button>
+    <button id="gallery-prev" class="gallery-nav gallery-prev" type="button" aria-label="Previous visit" title="Previous visit">‹</button>
+    <button id="gallery-next" class="gallery-nav gallery-next" type="button" aria-label="Next visit" title="Next visit">›</button>
+    <div id="gallery-counter" class="gallery-counter" aria-live="polite"></div>
   </div>
 
   <script>
     // --------------------------------------------------
-    // GOOGLE DRIVE IMAGE IDS
+    // GOOGLE DRIVE IDS
     // --------------------------------------------------
 
     const LIVE_DRIVE_ID =
       "1ylnOsWs3prkiBh0Hgla9pVikjnORba-i";
 
-    /*
-      This was previously called TIMELAPSE_DRIVE_ID.
-      That Drive file is now the Cat Activity heatmap.
-      MGM_cat_heatmap.py writes PNG image data into it.
-    */
     const HEATMAP_DRIVE_ID =
       "10VCEPnwHztf655SuBe3VmxzXE5P4YeO6";
 
+    // Existing five IDs stay valid. The camera script changes their CONTENT
+    // from still JPEGs to animated GIF visit clips.
     const CAT_SIGHTING_DRIVE_IDS = [
       "1vX3Xpp61fxR7p9b74AUs_ORi-9WzmIIh",
       "1BeOogvsuiLzAdfirIhfWODZEDrrlt--M",
       "1BxXs1uXWEDfP1vh1L0J8CBsWGzrggcsE",
       "1AUWnURBSrE1B4WMXhs-iKSscDR1z8EXo",
-      "1aAwCe-0vN4pnw-3rx_7Uj9A0Ugm5BuiU"
+      "1aAwCe-0vN4pnw-3rx_7Uj9A0Ugm5BuiU",
+      "1biDPuIM4ofbrl2yATTGI5BGlhirxM-QY"
     ];
 
-    // --------------------------------------------------
-    // IMAGE CONFIG
-    // --------------------------------------------------
+    const CAT_INSIGHT_DRIVE_ID =
+      "1P9e3TOu0vaQLn0XkK0_ESnlhb5l-7aMd";
+
+    function driveIdConfigured(id) {
+      return Boolean(
+        id &&
+        !id.startsWith("PASTE_") &&
+        id.length > 10
+      );
+    }
 
     const LIVE_IMAGE = {
       driveId: LIVE_DRIVE_ID,
@@ -476,12 +556,10 @@
       HEATMAP_IMAGE
     ];
 
-    // Keep track of current blob URLs.
     const activeBlobUrls = {};
 
-
     // --------------------------------------------------
-    // FULLSCREEN RECENT-SIGHTINGS GALLERY
+    // FULLSCREEN VISIT GALLERY
     // --------------------------------------------------
 
     let galleryIndex = 0;
@@ -514,53 +592,44 @@
 
       if (sourceImage && sourceImage.src) {
         elements.image.src = sourceImage.src;
-        elements.image.alt =
-          sourceImage.alt || `Cat sighting ${galleryIndex + 1}`;
+        elements.image.alt = sourceImage.alt || `Cat visit ${galleryIndex + 1}`;
+      } else {
+        elements.image.removeAttribute("src");
       }
 
-      const label =
-        galleryIndex === 0
-          ? "Latest"
-          : `${galleryIndex + 1} of ${CAT_SIGHTING_IMAGES.length}`;
-
-      elements.counter.textContent =
-        `${label} — ${galleryIndex + 1} / ${CAT_SIGHTING_IMAGES.length}`;
+      const label = galleryIndex === 0 ? "Latest" : `${galleryIndex + 1}`;
+      elements.counter.textContent = `${label} — ${galleryIndex + 1} / ${CAT_SIGHTING_IMAGES.length}`;
     }
 
     function openGallery(index) {
-      const elements = getGalleryElements();
-
-      galleryIsOpen = true;
-      showGalleryImage(index);
-
-      elements.overlay.classList.add("open");
-      elements.overlay.setAttribute("aria-hidden", "false");
-      document.body.classList.add("gallery-open");
-
-      // Put keyboard focus on the close button.
-      elements.close.focus({ preventScroll: true });
-    }
-
-    function closeGallery() {
-      if (!galleryIsOpen) {
+      const config = CAT_SIGHTING_IMAGES[index];
+      const sourceImage = document.getElementById(config.imgId);
+      if (!sourceImage || !sourceImage.src) {
         return;
       }
 
       const elements = getGalleryElements();
+      galleryIsOpen = true;
+      showGalleryImage(index);
+      elements.overlay.classList.add("open");
+      elements.overlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("gallery-open");
+      elements.close.focus({ preventScroll: true });
+    }
 
+    function closeGallery() {
+      if (!galleryIsOpen) return;
+
+      const elements = getGalleryElements();
       galleryIsOpen = false;
       elements.overlay.classList.remove("open");
       elements.overlay.setAttribute("aria-hidden", "true");
       document.body.classList.remove("gallery-open");
 
-      const tile =
-        document.querySelector(
-          `.sighting-tile[data-gallery-index="${galleryIndex}"]`
-        );
-
-      if (tile) {
-        tile.focus({ preventScroll: true });
-      }
+      const tile = document.querySelector(
+        `.sighting-tile[data-gallery-index="${galleryIndex}"]`
+      );
+      if (tile) tile.focus({ preventScroll: true });
     }
 
     function previousGalleryImage() {
@@ -574,437 +643,291 @@
     function initGallery() {
       const elements = getGalleryElements();
 
-      document
-        .querySelectorAll(".sighting-tile")
-        .forEach((tile) => {
-          const index =
-            Number(tile.dataset.galleryIndex);
+      document.querySelectorAll(".sighting-tile").forEach((tile) => {
+        const index = Number(tile.dataset.galleryIndex);
 
-          tile.addEventListener(
-            "click",
-            () => openGallery(index)
-          );
-
-          tile.addEventListener(
-            "keydown",
-            (event) => {
-              if (
-                event.key === "Enter" ||
-                event.key === " "
-              ) {
-                event.preventDefault();
-                openGallery(index);
-              }
-            }
-          );
+        tile.addEventListener("click", () => openGallery(index));
+        tile.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openGallery(index);
+          }
         });
+      });
 
-      elements.close.addEventListener(
-        "click",
-        closeGallery
-      );
+      elements.close.addEventListener("click", closeGallery);
+      elements.prev.addEventListener("click", previousGalleryImage);
+      elements.next.addEventListener("click", nextGalleryImage);
 
-      elements.prev.addEventListener(
-        "click",
-        previousGalleryImage
-      );
+      elements.stage.addEventListener("click", (event) => {
+        if (event.target === elements.stage) closeGallery();
+      });
 
-      elements.next.addEventListener(
-        "click",
-        nextGalleryImage
-      );
+      document.addEventListener("keydown", (event) => {
+        if (!galleryIsOpen) return;
 
-      // Clicking the black area outside the image exits gallery view.
-      elements.stage.addEventListener(
-        "click",
-        (event) => {
-          if (event.target === elements.stage) {
-            closeGallery();
-          }
+        if (event.key === "Escape") {
+          event.preventDefault();
+          closeGallery();
+        } else if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          previousGalleryImage();
+        } else if (event.key === "ArrowRight") {
+          event.preventDefault();
+          nextGalleryImage();
         }
-      );
+      });
 
-      document.addEventListener(
-        "keydown",
-        (event) => {
-          if (!galleryIsOpen) {
-            return;
-          }
-
-          if (event.key === "Escape") {
-            event.preventDefault();
-            closeGallery();
-          } else if (event.key === "ArrowLeft") {
-            event.preventDefault();
-            previousGalleryImage();
-          } else if (event.key === "ArrowRight") {
-            event.preventDefault();
-            nextGalleryImage();
-          }
+      elements.overlay.addEventListener("touchstart", (event) => {
+        if (event.touches.length === 1) {
+          galleryTouchStartX = event.touches[0].clientX;
         }
-      );
+      }, { passive: true });
 
-      // Simple swipe navigation on phones/tablets.
-      elements.overlay.addEventListener(
-        "touchstart",
-        (event) => {
-          if (event.touches.length === 1) {
-            galleryTouchStartX =
-              event.touches[0].clientX;
-          }
-        },
-        { passive: true }
-      );
-
-      elements.overlay.addEventListener(
-        "touchend",
-        (event) => {
-          if (
-            galleryTouchStartX === null ||
-            event.changedTouches.length !== 1
-          ) {
-            galleryTouchStartX = null;
-            return;
-          }
-
-          const endX =
-            event.changedTouches[0].clientX;
-
-          const deltaX =
-            endX - galleryTouchStartX;
-
+      elements.overlay.addEventListener("touchend", (event) => {
+        if (
+          galleryTouchStartX === null ||
+          event.changedTouches.length !== 1
+        ) {
           galleryTouchStartX = null;
+          return;
+        }
 
-          if (Math.abs(deltaX) < 50) {
-            return;
-          }
+        const deltaX = event.changedTouches[0].clientX - galleryTouchStartX;
+        galleryTouchStartX = null;
 
-          if (deltaX > 0) {
-            previousGalleryImage();
-          } else {
-            nextGalleryImage();
-          }
-        },
-        { passive: true }
-      );
+        if (Math.abs(deltaX) < 50) return;
+        if (deltaX > 0) previousGalleryImage();
+        else nextGalleryImage();
+      }, { passive: true });
     }
 
     function syncOpenGalleryImage(imgElement, newSrc) {
-      if (!galleryIsOpen) {
-        return;
-      }
+      if (!galleryIsOpen) return;
 
-      const currentConfig =
-        CAT_SIGHTING_IMAGES[galleryIndex];
-
-      if (
-        currentConfig &&
-        imgElement.id === currentConfig.imgId
-      ) {
-        const galleryImage =
-          document.getElementById("gallery-image");
-
-        galleryImage.src = newSrc;
+      const currentConfig = CAT_SIGHTING_IMAGES[galleryIndex];
+      if (currentConfig && imgElement.id === currentConfig.imgId) {
+        document.getElementById("gallery-image").src = newSrc;
       }
     }
 
     // --------------------------------------------------
-    // DRIVE URLS
+    // DRIVE FETCHING
     // --------------------------------------------------
 
     function generateAllPossibleUrls(driveId) {
       const timestamp = Date.now();
-
-      const randomParam =
-        Math.random()
-          .toString(36)
-          .substring(2, 10);
+      const randomParam = Math.random().toString(36).substring(2, 10);
 
       return [
-        `https://lh3.googleusercontent.com/d/${driveId}=w2000&t=${timestamp}&r=${randomParam}`,
+        `https://lh3.googleusercontent.com/d/${driveId}=w2200&t=${timestamp}&r=${randomParam}`,
         `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
         `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`
       ];
     }
 
-    // --------------------------------------------------
-    // FALLBACK CORS PROXIES
-    // --------------------------------------------------
-
     function getCORSProxies() {
       return [
-        'https://api.allorigins.win/raw?url=',
-        'https://api.codetabs.com/v1/proxy?quest=',
-        'https://corsproxy.io/?',
-        'https://thingproxy.freeboard.io/fetch/'
+        "https://api.allorigins.win/raw?url=",
+        "https://api.codetabs.com/v1/proxy?quest=",
+        "https://corsproxy.io/?",
+        "https://thingproxy.freeboard.io/fetch/"
       ];
     }
 
-    // --------------------------------------------------
-    // FETCH IMAGE
-    // --------------------------------------------------
+    async function extremeFetchImage(driveId, isRefresh = false) {
+      if (!driveIdConfigured(driveId)) return null;
 
-    async function extremeFetchImage(
-      driveId,
-      isRefresh = false
-    ) {
-      const urls =
-        generateAllPossibleUrls(driveId);
+      const urls = generateAllPossibleUrls(driveId);
 
-      // Try Google URLs directly first.
       for (const url of urls) {
         try {
-          const response =
-            await fetch(
-              url,
-              {
-                mode: 'cors',
-                credentials: 'omit',
-                referrerPolicy: 'no-referrer',
-                cache: 'no-store'
-              }
-            );
+          const response = await fetch(url, {
+            mode: "cors",
+            credentials: "omit",
+            referrerPolicy: "no-referrer",
+            cache: "no-store"
+          });
 
           if (response.ok) {
-            const blob =
-              await response.blob();
-
-            if (
-              blob.size > 0 &&
-              blob.type.startsWith('image/')
-            ) {
+            const blob = await response.blob();
+            if (blob.size > 1000 && (blob.type.startsWith("image/") || blob.type === "application/octet-stream")) {
               return URL.createObjectURL(blob);
             }
           }
-        } catch (e) {
-          // Try next URL.
-        }
+        } catch (e) {}
       }
 
-      /*
-        During automatic refresh we don't use
-        proxies. This prevents a slow proxy request
-        every refresh cycle.
-      */
-      if (isRefresh) {
-        return null;
-      }
+      if (isRefresh) return null;
 
-      // Initial load fallback through proxies.
-      const proxies =
-        getCORSProxies();
-
-      for (const proxy of proxies) {
+      for (const proxy of getCORSProxies()) {
         for (const url of urls.slice(0, 2)) {
           try {
-            const proxyUrl =
-              proxy + encodeURIComponent(url);
-
-            const response =
-              await fetch(
-                proxyUrl,
-                {
-                  cache: 'no-store'
-                }
-              );
+            const response = await fetch(
+              proxy + encodeURIComponent(url),
+              { cache: "no-store" }
+            );
 
             if (response.ok) {
-              const blob =
-                await response.blob();
-
-              if (
-                blob.size > 1000 &&
-                blob.type.startsWith('image/')
-              ) {
+              const blob = await response.blob();
+              if (blob.size > 1000 && (blob.type.startsWith("image/") || blob.type === "application/octet-stream")) {
                 return URL.createObjectURL(blob);
               }
             }
-          } catch (e) {
-            // Try next proxy.
-          }
+          } catch (e) {}
         }
       }
 
       return null;
     }
 
-    // --------------------------------------------------
-    // PRELOAD IMAGE
-    // --------------------------------------------------
+    async function extremeFetchText(driveId, isRefresh = false) {
+      if (!driveIdConfigured(driveId)) return null;
 
-    function preloadImage(src) {
-      return new Promise(
-        (resolve, reject) => {
-          const img =
-            new Image();
+      const timestamp = Date.now();
+      const randomParam = Math.random().toString(36).substring(2, 10);
+      const urls = [
+        `https://drive.google.com/uc?id=${driveId}&export=download&t=${timestamp}&r=${randomParam}`,
+        `https://lh3.googleusercontent.com/d/${driveId}?t=${timestamp}&r=${randomParam}`
+      ];
 
-          img.onload =
-            () => resolve();
+      for (const url of urls) {
+        try {
+          const response = await fetch(url, {
+            mode: "cors",
+            credentials: "omit",
+            referrerPolicy: "no-referrer",
+            cache: "no-store"
+          });
 
-          img.onerror =
-            reject;
+          if (response.ok) {
+            const text = (await response.text()).trim();
+            if (text) return text;
+          }
+        } catch (e) {}
+      }
 
-          img.src =
-            src;
+      if (isRefresh) return null;
+
+      for (const proxy of getCORSProxies()) {
+        for (const url of urls) {
+          try {
+            const response = await fetch(
+              proxy + encodeURIComponent(url),
+              { cache: "no-store" }
+            );
+            if (response.ok) {
+              const text = (await response.text()).trim();
+              if (text) return text;
+            }
+          } catch (e) {}
         }
-      );
+      }
+
+      return null;
     }
 
-    // --------------------------------------------------
-    // SWAP IMAGE WITHOUT FLASHING
-    // --------------------------------------------------
+    function preloadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
 
-    async function swapImageWithoutFlash(
-      imgElement,
-      newSrc,
-      imgKey
-    ) {
+    async function swapImageWithoutFlash(imgElement, newSrc, imgKey) {
       try {
         await preloadImage(newSrc);
 
-        const oldSrc =
-          imgElement.src;
+        const oldSrc = imgElement.src;
+        imgElement.src = newSrc;
+        syncOpenGalleryImage(imgElement, newSrc);
 
-        imgElement.src =
-          newSrc;
-
-        syncOpenGalleryImage(
-          imgElement,
-          newSrc
-        );
+        const tile = imgElement.closest(".sighting-tile");
+        if (tile) tile.classList.remove("waiting");
 
         if (
           activeBlobUrls[imgKey] &&
-          activeBlobUrls[imgKey].startsWith('blob:') &&
+          activeBlobUrls[imgKey].startsWith("blob:") &&
           activeBlobUrls[imgKey] !== newSrc
         ) {
-          URL.revokeObjectURL(
-            activeBlobUrls[imgKey]
-          );
+          URL.revokeObjectURL(activeBlobUrls[imgKey]);
         }
 
-        activeBlobUrls[imgKey] =
-          newSrc;
+        activeBlobUrls[imgKey] = newSrc;
 
         if (
           oldSrc &&
-          oldSrc.startsWith('blob:') &&
+          oldSrc.startsWith("blob:") &&
           oldSrc !== newSrc &&
           oldSrc !== activeBlobUrls[imgKey]
         ) {
-          try {
-            URL.revokeObjectURL(oldSrc);
-          } catch (e) {}
+          try { URL.revokeObjectURL(oldSrc); } catch (e) {}
         }
       } catch (error) {
-        if (
-          newSrc &&
-          newSrc.startsWith('blob:')
-        ) {
+        if (newSrc && newSrc.startsWith("blob:")) {
           URL.revokeObjectURL(newSrc);
         }
       }
     }
 
-    // --------------------------------------------------
-    // REFRESH ONE IMAGE
-    // --------------------------------------------------
+    async function refreshImage(imageConfig, isRefresh = true) {
+      const imgElement = document.getElementById(imageConfig.imgId);
+      if (!imgElement || !driveIdConfigured(imageConfig.driveId)) return;
 
-    async function refreshImage(
-      imageConfig
-    ) {
-      const imgElement =
-        document.getElementById(
-          imageConfig.imgId
-        );
+      const newUrl = await extremeFetchImage(imageConfig.driveId, isRefresh);
+      if (!newUrl) return;
+      await swapImageWithoutFlash(imgElement, newUrl, imageConfig.imgId);
+    }
 
-      if (!imgElement) {
+    async function refreshInsight(isRefresh = true) {
+      const element = document.getElementById("cat-insight-text");
+
+      if (!driveIdConfigured(CAT_INSIGHT_DRIVE_ID)) {
+        element.textContent =
+          "The Pi is ready to generate behavioural insights. Paste CAT_INSIGHT_DRIVE_ID from the camera journal into this HTML after the first start.";
         return;
       }
 
-      const newUrl =
-        await extremeFetchImage(
-          imageConfig.driveId,
-          true
-        );
+      const text = await extremeFetchText(CAT_INSIGHT_DRIVE_ID, isRefresh);
+      if (text) element.textContent = text;
+    }
 
-      // If fetch failed, leave current image visible.
-      if (!newUrl) {
-        return;
-      }
-
-      await swapImageWithoutFlash(
-        imgElement,
-        newUrl,
-        imageConfig.imgId
-      );
+    function markUnconfiguredVisitSlots() {
+      CAT_SIGHTING_IMAGES.forEach((config, index) => {
+        const img = document.getElementById(config.imgId);
+        const tile = img?.closest(".sighting-tile");
+        if (!driveIdConfigured(config.driveId) && tile) {
+          tile.classList.add("waiting");
+        }
+      });
     }
 
     // --------------------------------------------------
-    // INITIAL LOAD
+    // INITIAL LOAD + REFRESH
     // --------------------------------------------------
 
     async function loadInitialImages() {
+      markUnconfiguredVisitSlots();
+
       for (const imageConfig of IMAGES) {
-        const imgElement =
-          document.getElementById(
-            imageConfig.imgId
-          );
-
-        const initialUrl =
-          await extremeFetchImage(
-            imageConfig.driveId,
-            false
-          );
-
-        if (
-          initialUrl &&
-          imgElement
-        ) {
-          await swapImageWithoutFlash(
-            imgElement,
-            initialUrl,
-            imageConfig.imgId
-          );
-        }
+        await refreshImage(imageConfig, false);
       }
-    }
 
-    // --------------------------------------------------
-    // AUTO REFRESH
-    // --------------------------------------------------
+      await refreshInsight(false);
+    }
 
     function startAutoRefresh() {
-      // Live camera: every 10 seconds.
-      setInterval(
-        () => {
-          refreshImage(LIVE_IMAGE);
-        },
-        10000
-      );
+      setInterval(() => refreshImage(LIVE_IMAGE, true), 10000);
 
-      // Recent cat sightings: every 30 seconds.
-      setInterval(
-        () => {
-          CAT_SIGHTING_IMAGES.forEach(
-            refreshImage
-          );
-        },
-        30000
-      );
+      setInterval(() => {
+        CAT_SIGHTING_IMAGES.forEach((config) => refreshImage(config, true));
+      }, 30000);
 
-      // Cat Activity heatmap: every 60 seconds.
-      setInterval(
-        () => {
-          refreshImage(HEATMAP_IMAGE);
-        },
-        60000
-      );
+      setInterval(() => refreshImage(HEATMAP_IMAGE, true), 60000);
+      setInterval(() => refreshInsight(true), 60000);
     }
-
-    // --------------------------------------------------
-    // START
-    // --------------------------------------------------
 
     async function init() {
       initGallery();
@@ -1012,11 +935,8 @@
       startAutoRefresh();
     }
 
-    window.addEventListener(
-      'load',
-      init
-    );
+    window.addEventListener("load", init);
   </script>
-
 </body>
 </html>
+
